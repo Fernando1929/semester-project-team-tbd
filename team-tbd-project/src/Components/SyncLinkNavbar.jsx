@@ -12,7 +12,7 @@ class SyncLinkNavbar extends Component {
 
     return (
       <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
-        <Navbar.Brand href="#home">
+        <Navbar.Brand href="/">
           <h2
             style={{
               fontFamily: "'Roboto Mono', monospace",
