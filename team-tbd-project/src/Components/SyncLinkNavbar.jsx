@@ -14,6 +14,7 @@ class SyncLinkNavbar extends Component {
       <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
         <Navbar.Brand href="/">
           <h2
+            className="phoneDisplayNoText"
             style={{
               fontFamily: "'Roboto Mono', monospace",
               alignItems: "center",
@@ -30,6 +31,24 @@ class SyncLinkNavbar extends Component {
             />
             {""}
             SYNCLINK
+          </h2>
+          <h2
+            className="phoneDisplayLogo"
+            style={{
+              fontFamily: "'Roboto Mono', monospace",
+              alignItems: "center",
+              marginBottom: "0",
+            }}
+          >
+            <img
+              alt=""
+              src={mainLogo}
+              width="108"
+              height="62"
+              className="d-inline-block"
+              style={{ marginRight: "10px" }}
+            />
+            {""}
           </h2>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
