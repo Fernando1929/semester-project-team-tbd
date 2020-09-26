@@ -1,28 +1,28 @@
 import React from "react";
-import logo from "./logo.svg";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.css";
+import SyncLinkNavbar from "./Components/SyncLinkNavbar";
+import Home from "./Pages/Home";
+import Services from "./Pages/Services";
+import SignUp from "./Pages/SignUp";
+import AboutUs from "./Pages/AboutUs";
+import ContactUs from "./Pages/ContactUs";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>Welcome to our project!</p>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>Sincerely, Team TBD</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Router>
+        <SyncLinkNavbar />
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/Services" component={Services} />
+          <Route path="/SignUp" component={SignUp} />
+          <Route path="/AboutUs" component={AboutUs} />
+          <Route path="/ContactUs" component={ContactUs} />
+        </Switch>
+      </Router>
+    </>
   );
 }
 
