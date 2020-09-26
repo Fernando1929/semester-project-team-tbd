@@ -1,29 +1,9 @@
 body {
   background: #36d1dc;
-  background: -moz-linear-gradient(
-    to right,
-    #36d1dc 0%,
-    #5b86e5 51%,
-    #36d1dc 100%
-  );
-  background: -webkit-gradient(to right, #36d1dc 0%, #5b86e5 51%, #36d1dc 100%);
-  background: -webkit-linear-gradient(
-    to right,
-    #36d1dc 0%,
-    #5b86e5 51%,
-    #36d1dc 100%
-  );
-  background: -o-linear-gradient(
-    to right,
-    #36d1dc 0%,
-    #5b86e5 51%,
-    #36d1dc 100%
-  );
-  background: -ms-linear-gradient(
-    to right,
-    #36d1dc 0%,
-    #5b86e5 51%,
-    #36d1dc 100%
-  );
-  background: linear-gradient(to right, #36d1dc 0%, #5b86e5 51%, #36d1dc 100%);
+  background: -moz-linear-gradient(to left, #5b86e5 30%, #36d1dc 100%);
+  background: -webkit-gradient(to left, #5b86e5 30%, #36d1dc 100%);
+  background: -webkit-linear-gradient(to left, #5b86e5 30%, #36d1dc 100%);
+  background: -o-linear-gradient(to left, #5b86e5 30%, #36d1dc 100%);
+  background: -ms-linear-gradient(to left, #5b86e5 30%, #36d1dc 100%);
+  background: linear-gradient(to left, #5b86e5 30%, #36d1dc 100%);
 }

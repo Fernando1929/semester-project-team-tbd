@@ -6,7 +6,6 @@ import "./SignUp.css";
 function SignUp() {
   return (
     <div className="SignUp">
-      Sign Up Page
       <SignUpForm />
     </div>
   );

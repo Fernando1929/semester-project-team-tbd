@@ -28,3 +28,17 @@ html {
   background-position: right center; /* change the direction of the change here */
   color: #fff;
 }
+
+.phoneDisplayLogo {
+  display: none;
+}
+
+@media screen and (max-width: 380px) {
+  .phoneDisplayNoText {
+    display: none;
+  }
+
+  .phoneDisplayLogo {
+    display: flex;
+  }
+}

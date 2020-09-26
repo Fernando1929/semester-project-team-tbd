@@ -1,6 +1,6 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import SyncLinkNavbar from "./Components/SyncLinkNavbar";
 import Home from "./Pages/Home";
