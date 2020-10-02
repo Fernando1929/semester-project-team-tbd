@@ -77,6 +77,11 @@ function SyncLinkNavbar() {
               CONTACT US
             </Link>
           </Nav.Link>
+          <Link to="/LogIn" style={{ textDecoration: "none", color: "white" }}>
+            <Button className="btn--primary" variant="primary">
+              LOG IN
+            </Button>
+          </Link>
           <Link to="/SignUp" style={{ textDecoration: "none", color: "white" }}>
             <Button className="btn--primary" variant="primary">
               SIGN UP
