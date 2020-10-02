@@ -21,6 +21,9 @@ html {
   outline: none;
   border: none;
   background-size: 200% auto;
+  margin-right: 5px;
+  margin-left: 5px;
+  margin-bottom: 5px;
 }
 
 .btn--primary:hover {

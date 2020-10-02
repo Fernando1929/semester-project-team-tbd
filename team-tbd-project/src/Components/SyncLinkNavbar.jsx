@@ -80,6 +80,14 @@ class SyncLinkNavbar extends Component {
             </Nav.Link>
             <Button className="btn--primary" variant="primary">
               <Link
+                to="/LogIn" //Change to log in
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                LOG IN
+              </Link>
+            </Button>{" "}
+            <Button className="btn--primary" variant="primary">
+              <Link
                 to="/SignUp"
                 style={{ textDecoration: "none", color: "white" }}
               >
