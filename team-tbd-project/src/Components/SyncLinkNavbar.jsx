@@ -9,53 +9,6 @@ function SyncLinkNavbar() {
     textDecoration: "none",
   };
 
-<<<<<<< HEAD
-    return (
-      <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
-        <Navbar.Brand href="/">
-          <h2
-            className="phoneDisplayNoText"
-            style={{
-              fontFamily: "'Roboto Mono', monospace",
-              alignItems: "center",
-              marginBottom: "0",
-            }}
-          >
-            <img
-              alt=""
-              src={mainLogo}
-              width="108"
-              height="62"
-              className="d-inline-block"
-              style={{ marginRight: "10px" }}
-            />
-            {""}
-            SYNCLINK
-          </h2>
-          <h2
-            className="phoneDisplayLogo"
-            style={{
-              fontFamily: "'Roboto Mono', monospace",
-              alignItems: "center",
-              marginBottom: "0",
-            }}
-          >
-            <img
-              alt=""
-              src={mainLogo}
-              width="108"
-              height="62"
-              className="d-inline-block"
-              style={{ marginRight: "10px" }}
-            />
-            {""}
-          </h2>
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse
-          id="responsive-navbar-nav"
-          style={{ textAlign: "center" }}
-=======
   return (
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
       <Navbar.Brand href="/">
@@ -66,7 +19,6 @@ function SyncLinkNavbar() {
             alignItems: "center",
             marginBottom: "0",
           }}
->>>>>>> e308f9d0f2275391e2a76c4ecb1e13af34d64cdf
         >
           <img
             alt=""
