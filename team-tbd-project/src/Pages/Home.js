@@ -27,6 +27,13 @@ function Home() {
             </Button>
             </li>
           </Link>
+          <Link to="/ContactUs" style={{ textDecoration: "none", color: "white" }}>
+            <li>
+            <Button className="btn--secondary" variant="primary">
+              HELP
+            </Button>
+            </li>
+          </Link>
           </ol>
     </div>
     

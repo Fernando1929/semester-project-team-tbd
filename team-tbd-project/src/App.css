@@ -36,6 +36,7 @@ html {
   outline: none;
   border: none;
   background-size: 200% auto;
+  margin: 30px;
   margin-right: 5px;
   margin-left: 5px;
   margin-bottom: 7px;
@@ -51,7 +52,7 @@ html {
   margin-bottom: 7px; */
   size: 10em;
   
-  padding-top: 13em;
+  padding-top: 10em;
   padding-right: 3em;
   list-style: none;
   display: block;
