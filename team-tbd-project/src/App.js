@@ -9,14 +9,20 @@ import SignUp from "./Pages/SignUp";
 import AboutUs from "./Pages/AboutUs";
 import ContactUs from "./Pages/ContactUs";
 import LogIn from "./Pages/LogIn";
+import LoggedHome from "./Pages/LoggedHome";
 
 function App() {
+  var user = {isLogged: true}//testing purposes
+  var HomePage = Home
+  if(user.isLogged){
+    HomePage = LoggedHome
+  }
   return (
     <>
       <Router>
         <SyncLinkNavbar />
         <Switch>
-          <Route path="/" exact component={Home} />
+          <Route path="/" exact component={HomePage} />
           <Route path="/Services" component={Services} />
           <Route path="/SignUp" component={SignUp} />
           <Route path="/LogIn" component={LogIn} />
