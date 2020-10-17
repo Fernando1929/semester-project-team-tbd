@@ -2,6 +2,7 @@
 // 10/1/2020
 
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import {
   Container,
   Row,
@@ -61,10 +62,14 @@ class LogInForm extends Component {
                     />
                   </InputGroup>
                 </Card.Text>
+                {/* By Yeran L Concepcion 10/17/2020
+                For test porpuses when ever you click log in button it sent you to the logged user page */}
                 <div className="text-center">
-                  <Button className="btn--primary" variant="primary">
-                    LOG IN
-                  </Button>
+                  <Link to="/LoggedHome" style={{ textDecoration: "none", color: "white" }}>
+                    <Button className="btn--primary" variant="primary">
+                      LOG IN
+                    </Button>
+                  </Link>
                 </div>
               </Card.Body>
             </Card>

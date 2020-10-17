@@ -12,11 +12,11 @@ import LogIn from "./Pages/LogIn";
 import LoggedHome from "./Pages/LoggedHome";
 
 function App() {
-  var user = {isLogged: true}//testing purposes
-  var HomePage = Home
-  if(user.isLogged){
-    HomePage = LoggedHome
-  }
+  var user = { isLogged: true }; //testing purposes
+  var HomePage = Home;
+  // if (user.isLogged) {
+  //   HomePage = LoggedHome;
+  // }
   return (
     <>
       <Router>
@@ -26,6 +26,9 @@ function App() {
           <Route path="/Services" component={Services} />
           <Route path="/SignUp" component={SignUp} />
           <Route path="/LogIn" component={LogIn} />
+          {/*By Yeran:  To test the logged home page */}
+          <Route path="/LoggedHome" component={LoggedHome} />
+
           <Route path="/AboutUs" component={AboutUs} />
           <Route path="/ContactUs" component={ContactUs} />
         </Switch>
