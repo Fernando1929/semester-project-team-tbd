@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Profiler } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -9,6 +9,7 @@ import SignUp from "./Pages/SignUp";
 import AboutUs from "./Pages/AboutUs";
 import ContactUs from "./Pages/ContactUs";
 import LogIn from "./Pages/LogIn";
+import Profile from "./Pages/Profile";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/LogIn" component={LogIn} />
           <Route path="/AboutUs" component={AboutUs} />
           <Route path="/ContactUs" component={ContactUs} />
+          <Route path="/Profile" component={Profile} />
         </Switch>
       </Router>
     </>
