@@ -26,7 +26,7 @@ class ProfileComponent extends Component {
     return (
 <Container>
 
-<Card>
+<Card style={{marginTop: "5rem"}}>
   <Card.Header>
   <Nav fill variant="tabs" defaultActiveKey="#first">
     <Nav.Item>
@@ -49,7 +49,7 @@ class ProfileComponent extends Component {
                       <Button variant="dark">Upload Picture</Button>
                     </center>
                   </Col>
-                  <Col  className="justify-content-center">
+                  <Col  className="justify-content-center" style={{marginTop: "2rem"}}>
                     <h1>
                       Job/Bachelor Title
                     </h1>

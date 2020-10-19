@@ -25,7 +25,7 @@ class Settings extends Component {
   render() {
     return (
 <Container>
-  <Card>
+  <Card style={{marginTop: "5rem"}}>
     <Card.Header>
       <Nav fill variant="tabs" defaultActiveKey="#first">
         <Nav.Item>
@@ -38,14 +38,16 @@ class Settings extends Component {
     </Card.Header>
         
     <Card style={{ borderRadius: "15px", marginTop: "1rem"}}>
-                  <CardDeck>
-                    <center>
+                  
+                  <CardDeck style={{marginLeft: "4rem"}}>
+                  <center>
                       <Card
                         style={{
                           marginTop: "1rem",
                           marginBottom: "1rem",
                           backgroundColor: "#66D6F5",
-                          width: "15em"
+                          width: "10em",
+                         
                         }}
                       >
                         <i
@@ -65,7 +67,7 @@ class Settings extends Component {
                           marginTop: "1rem",
                           marginBottom: "1rem",
                           backgroundColor: "#66D6F5",
-                          width: "15em"
+                          width: "10em"
                         }}
                       >
                         <i
@@ -85,7 +87,129 @@ class Settings extends Component {
                           marginTop: "1rem",
                           marginBottom: "1rem",
                           backgroundColor: "#66D6F5",
-                          width: "15em"
+                          width: "10em"
+                        }}
+                      >
+                        <i
+                          className="fas fa-users fa-5x"
+                          style={{ color: "white", marginTop: "2rem" }}
+                        ></i>
+                        <Card.Body>
+                          <Card.Title style={{ color: "white" }}>TEAM 1</Card.Title>
+                          <Button variant="light">ACCESS</Button>
+                        </Card.Body>
+                      </Card>
+                    </center>
+
+                    <center>
+                      <Card
+                        style={{
+                          marginTop: "1rem",
+                          marginBottom: "1rem",
+                          backgroundColor: "#66D6F5",
+                          width: "10em",
+                         
+                        }}
+                      >
+                        <i
+                          className="fas fa-users fa-5x"
+                          style={{ color: "white", marginTop: "2rem" }}
+                        ></i>
+                        <Card.Body>
+                          <Card.Title style={{ color: "white" }}>TEAM 1</Card.Title>
+                          <Button variant="light">ACCESS</Button>
+                        </Card.Body>
+                      </Card>
+                    </center>
+
+                    <center>
+                      <Card
+                        style={{
+                          marginTop: "1rem",
+                          marginBottom: "1rem",
+                          backgroundColor: "#66D6F5",
+                          width: "10em"
+                        }}
+                      >
+                        <i
+                          className="fas fa-users fa-5x"
+                          style={{ color: "white", marginTop: "2rem" }}
+                        ></i>
+                        <Card.Body>
+                          <Card.Title style={{ color: "white" }}>TEAM 1</Card.Title>
+                          <Button variant="light">ACCESS</Button>
+                        </Card.Body>
+                      </Card>
+                    </center>
+                    
+                    <center>
+                      <Card
+                        style={{
+                          marginTop: "1rem",
+                          marginBottom: "1rem",
+                          backgroundColor: "#66D6F5",
+                          width: "10em"
+                        }}
+                      >
+                        <i
+                          className="fas fa-users fa-5x"
+                          style={{ color: "white", marginTop: "2rem" }}
+                        ></i>
+                        <Card.Body>
+                          <Card.Title style={{ color: "white" }}>TEAM 1</Card.Title>
+                          <Button variant="light">ACCESS</Button>
+                        </Card.Body>
+                      </Card>
+                    </center>
+
+                    <center>
+                      <Card
+                        style={{
+                          marginTop: "1rem",
+                          marginBottom: "1rem",
+                          backgroundColor: "#66D6F5",
+                          width: "10em",
+                         
+                        }}
+                      >
+                        <i
+                          className="fas fa-users fa-5x"
+                          style={{ color: "white", marginTop: "2rem" }}
+                        ></i>
+                        <Card.Body>
+                          <Card.Title style={{ color: "white" }}>TEAM 1</Card.Title>
+                          <Button variant="light">ACCESS</Button>
+                        </Card.Body>
+                      </Card>
+                    </center>
+
+                    <center>
+                      <Card
+                        style={{
+                          marginTop: "1rem",
+                          marginBottom: "1rem",
+                          backgroundColor: "#66D6F5",
+                          width: "10em"
+                        }}
+                      >
+                        <i
+                          className="fas fa-users fa-5x"
+                          style={{ color: "white", marginTop: "2rem" }}
+                        ></i>
+                        <Card.Body>
+                          <Card.Title style={{ color: "white" }}>TEAM 1</Card.Title>
+                          <Button variant="light">ACCESS</Button>
+                        </Card.Body>
+                      </Card>
+                    </center>
+                    
+                    <center>
+                      <Card
+                        style={{
+                          marginTop: "1rem",
+                          marginBottom: "1rem",
+                          backgroundColor: "#66D6F5",
+                          width: "10em"
                         }}
                       >
                         <i
