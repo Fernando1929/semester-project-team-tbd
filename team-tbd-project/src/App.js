@@ -10,6 +10,7 @@ import AboutUs from "./Pages/AboutUs";
 import ContactUs from "./Pages/ContactUs";
 import LogIn from "./Pages/LogIn";
 import Profile from "./Pages/Profile";
+import Settings from "./Pages/Settings";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/AboutUs" component={AboutUs} />
           <Route path="/ContactUs" component={ContactUs} />
           <Route path="/Profile" component={Profile} />
+          <Route path="/Settings" component={Settings} />
         </Switch>
       </Router>
     </>
