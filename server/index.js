@@ -1,9 +1,11 @@
+//import { getHashedPassword, generateAuthToken} from "../server/utils";//
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const db = require("./db");
-
 const morgan = require("morgan");
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 
 const app = express();
 
@@ -12,66 +14,66 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev")); // for logging HTTP requests in console
 
-app.get("/login", async (req,res) => {//verify this method when is called 
-    //Doing just  the logic of things once here
-    // const { username, password, email } = req.body;
-    // const user_exists = await db.query("SELECT * FROM account where username = $1 or email = $2",[username, email]);
+const  authTokens =  {};
 
-    // try {
-    //     const { username, password, email } = req.body;
-    //     const newAccount = await db.query(
-    //         "INSERT INTO account (username, password, email) VALUES ($1, $2, $3) RETURNING *",
-    //         [username, password, email]
-    //     );
+const getHashedPassword = (password) => {
+    const hash = bcrypt.hashSync('somePassword', bcrypt.genSaltSync(10));
+    return hash;
+}
 
-    //     res.status(201).json(newAccount.rows[0]);
-    // } catch (err) {
-    //     console.log(err);
-    // }
-    // console.log("login done")
-});
-
+const generateAuthToken = () => {
+    return crypto.randomBytes(30).toString('hex');
+}
 
 // create an account (sign up)
 app.post("/api/signup", async (req,res) => {
-    //needs to verify the username if it already exists
     try {
+        //needs to verify the username if it already exists
+        //const user_exists = await db.query("SELECT * FROM account where username = $1 OR email = $2",[username, email]);
+        
         const { username, password, email } = req.body.user;
         // const oldAccount = await db.query(
         //     "SELECT * FROM account WHERE username = $1", [username]
         // );
         
         const newAccount = await db.query(
-            "INSERT INTO account (username, password, email) VALUES ($1, $2, $3) RETURNING *",
-            [username, password, email]
-        );
-
+            "INSERT INTO account (username, password, email) VALUES ($1, $2, $3) RETURNING *",[username, password, email]);
         res.status(201).json(newAccount.rows[0]);
     } catch (err) {
         console.log(err);
     }
 });
-// app.route("/signup")
-//     .post(async (req,res) => {
-//         try {
-//             const { username, password, user_firstname, user_lastname, user_email, user_phone } = req.body;
-//             const newAccount = await db.query(
-//                 "INSERT INTO account (username, password) VALUES ($1, $2) RETURNING account_id;",
-//                 [username, password]
-//             );
-//             if (newAccount) {
-//                 const newUser = await db.query(
-//                     "INSERT INTO users (user_firstname, user_lastname, user_email, user_phone, account_id) VALUES ($1,$2,$3,$4,$5) RETURNING *;",
-//                     [user_firstname, user_lastname, user_email, user_phone, newAccount]
-//                 );
 
-//                 res.status(201).json(newUser.rows[0]);
-//             }
+app.post("/login", async (req,res) => {//verify this method when is called 
+    try{
+    const { username, email, password,} = req.body.user;
+    const hashedPassword = getHashedPassword(password);
+    /////Verify either of this ways 
+    const user_exists = await db.query("SELECT * FROM account where username = $1 OR email = $2",[username, email]); //Verify if User exists***
+    const user = (user_exists) =>{ 
+        return (user_exists["username"] === username || user_exists["email"] === email) && user_exists["password"] === hashedPassword;
+    };
+    ////////////////////
+        if(user){
+            authToken = generateAuthToken();
 
-//         } catch (err) {
-//             console.error(err.message);
-//         }
-//     });
+            // Store authentication token
+            authTokens[authToken] = user;
+
+            // Setting the auth token in cookies
+            res.cookie('AuthToken', authToken);
+            //res.redirect("3000/");
+            res.status(200).json(authToken);
+            return res;
+        }
+        else{
+            console.log("user does not exist")
+        }
+    }
+    catch (err){
+       console.log(err);
+    }
+});
 
 // get all accounts
 app.get("/api/accounts", async (req,res) => {
