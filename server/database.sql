@@ -1,5 +1,12 @@
 CREATE DATABASE synclink;
 
+CREATE TABLE account (
+    account_id serial primary key, 
+    username varchar(30), 
+    password varchar(30),
+    email varchar(30)),
+    account_validation boolean;
+
 CREATE TABLE users (
     user_id serial primary key, 
     user_firstname varchar(20), 
@@ -7,12 +14,6 @@ CREATE TABLE users (
     user_phone integer,
     user_location varchar(75),
     account_id integer references account(account_id));
-
-CREATE TABLE account (
-    account_id serial primary key, 
-    username varchar(30), 
-    password varchar(30),
-    email varchar(30));
 
 CREATE TABLE user_schedule (
     user_schedule_id serial primary key, 
