@@ -45,3 +45,8 @@ html {
     display: flex;
   }
 }
+.error_message{
+  color: red;
+  padding: .5rem;
+  list-style-type: none;
+}

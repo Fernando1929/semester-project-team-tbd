@@ -1,7 +1,7 @@
 // By Yeran L Concepcion
 // 10/1/2020
 
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Row,
@@ -13,11 +13,60 @@ import {
 } from "react-bootstrap";
 
 import "../App.css";
+import { loginHandler } from "../Apis/Login"
 
-class LogInForm extends Component {
-  emailIcon = (<i className="fab fa-user"></i>);
+function LogInForm() {
+  //emailIcon = (<i className="fab fa-user"></i>); why is this here?? Have no clue
 
-  render() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error_message, setErrors] = useState([]);
+
+  const submit = e => {
+    e.preventDefault();
+    if(validateForm()){//validate the form and fix it 
+      const user = {
+        username: username,
+        email: email,
+        password: password
+      }
+      //have to finish the implementation on the other side for the returned response
+      // loginHandler(user).then( response =>{
+      //   if(response.status === '200'){
+      //     //here you authenticate the response you recieve the responde and the access token 
+      //     //Authenticate();
+      //     //This.props.succes();
+      //   }else{//here you manage the error messages
+      //     let errors  = {
+      //       invalid: response.data["msg"]
+      //     };
+      //     setErrors(errors);
+      //   }
+      // });
+    }
+
+  };
+
+  const validateForm = () => {
+    let errors = [];
+    let isValid =  true;
+    if(username.indexOf("@") > 0 && username.charAt(username.length-4) === '.'){
+      setEmail(username);
+      setUsername(""); 
+    }
+    if(!(username.length > 0)){
+      isValid = false;
+      errors.push("*Please enter your username.");
+    }
+    if(!(password.length > 0)){
+      isValid = false;
+      errors.push("*Please enter your password.");
+    }
+    setErrors(errors);
+    return isValid;
+  };
+
     return (
       <Container>
         <Row className="justify-content-center">
@@ -32,11 +81,12 @@ class LogInForm extends Component {
                       fontFamily: "'Open Sans', sans-serif",
                     }}
                   >
-                    Welcome back !
+                    Welcome Back!
                   </h1>
                 </Card.Title>
                 <Card.Text>
-                  <InputGroup style={{ marginBottom: "1rem" }}>
+                  <InputGroup
+                  style={{ marginBottom: "1rem" }}>
                     <InputGroup.Prepend>
                       <InputGroup.Text>
                         <i class="far fa-user"></i>
@@ -45,6 +95,8 @@ class LogInForm extends Component {
                     <FormControl
                       id="Username"
                       placeholder="Username or email"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                     />
                   </InputGroup>
 
@@ -58,11 +110,18 @@ class LogInForm extends Component {
                       type="password"
                       id="Password"
                       placeholder="Password"
+                      value ={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </InputGroup>
                 </Card.Text>
+                <div className="error_message">
+                  {error_message.map(error => (
+                    <h5>{error}</h5>))
+                    }
+                </div>
                 <div className="text-center">
-                  <Button className="btn--primary" variant="primary">
+                  <Button className="btn--primary" variant="primary" onClick={submit}>
                     LOG IN
                   </Button>
                 </div>
@@ -72,7 +131,6 @@ class LogInForm extends Component {
         </Row>
       </Container>
     );
-  }
 }
 
 export default LogInForm;
