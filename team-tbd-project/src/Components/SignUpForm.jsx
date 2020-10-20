@@ -1,6 +1,6 @@
 //import React, { Component, useState } from "react";
 import React, { useState } from "react";
-import SignUp from "../Apis/SignUp";
+import {signupHandler} from "../Apis/SignUp";
 import {
   Container,
   Row,
@@ -21,36 +21,20 @@ function SignUpForm() {
   const [password_rep, setPassword_rep] = useState("");
   const [error_message, setErrors] =  useState([]);
 
-  ///Maybe take this and move it to its own file ??(handler)
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if(password === password_rep){
-        const response = await SignUp.post("/signup", {
-          username: username,
-          email: email,
-          password: password
-        });
-        console.log(response);
-      }
-
-    } catch (err) {
-      console.log(err);
-    }
-  }
-//////////////////////////////////////////////////
-
-////////////////////////////////////Maria verify what you like
 const submit = (e) => {
   e.preventDefault();
   if(validateForm()){
     console.log("validated")
     const user = {
       username: username,
-      user_email: email,
+      email: email,
       password: password,
     };
+
     //Here send things to the handler
+    signupHandler(user).then(res => {
+      console.log(res);
+    });
   }
 };
 

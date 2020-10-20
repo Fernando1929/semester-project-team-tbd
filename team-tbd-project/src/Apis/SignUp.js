@@ -1,5 +1,12 @@
 import axios from "axios";
 
-export default axios.create({
-    baseURL: "http://localhost:3001/api"
-});
+export const signupHandler = user => { 
+    return axios
+        .post('http://localhost:3001/api/signup', {user})
+        .then( response => {
+            return response
+        })
+        .catch(err => {
+            return err.response
+        })
+}

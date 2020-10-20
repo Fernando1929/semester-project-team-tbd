@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev")); // for logging HTTP requests in console
 
-Rapp.get("/login", async (req,res) => {//verify this method when is called 
+app.get("/login", async (req,res) => {//verify this method when is called 
     //Doing just  the logic of things once here
     // const { username, password, email } = req.body;
     // const user_exists = await db.query("SELECT * FROM account where username = $1 or email = $2",[username, email]);
@@ -36,7 +36,11 @@ Rapp.get("/login", async (req,res) => {//verify this method when is called
 app.post("/api/signup", async (req,res) => {
     //needs to verify the username if it already exists
     try {
-        const { username, password, email } = req.body;
+        const { username, password, email } = req.body.user;
+        // const oldAccount = await db.query(
+        //     "SELECT * FROM account WHERE username = $1", [username]
+        // );
+        
         const newAccount = await db.query(
             "INSERT INTO account (username, password, email) VALUES ($1, $2, $3) RETURNING *",
             [username, password, email]
