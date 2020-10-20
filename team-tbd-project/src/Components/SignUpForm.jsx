@@ -1,4 +1,5 @@
-import React, { Component, useState } from "react";
+//import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import SignUp from "../Apis/SignUp";
 import {
   Container,
@@ -18,11 +19,13 @@ function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password_rep, setPassword_rep] = useState("");
+  const [error_message, setErrors] =  useState([]);
 
+  ///Maybe take this and move it to its own file ??(handler)
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if(password == password_rep){
+      if(password === password_rep){
         const response = await SignUp.post("/signup", {
           username: username,
           email: email,
@@ -35,7 +38,49 @@ function SignUpForm() {
       console.log(err);
     }
   }
+//////////////////////////////////////////////////
 
+////////////////////////////////////Maria verify what you like
+const submit = (e) => {
+  e.preventDefault();
+  if(validateForm()){
+    console.log("validated")
+    const user = {
+      username: username,
+      user_email: email,
+      password: password,
+    };
+    //Here send things to the handler
+  }
+};
+
+const validateForm = () =>{
+  let errors = [];
+  let isValid = true;
+  if(!(username.length > 0)){
+    isValid = false;
+    errors.push("*Please enter your username.");
+  }
+  if(!(email.length > 0)){
+    isValid = false;
+    errors.push("*Please enter your email.");
+  }
+  if((!(email.indexOf("@") > 0) || !(email.charAt(email.length-4)) === '.') && email.length > 0){
+    isValid = false;
+    errors.push("*Please enter a proper email address.");
+  }
+  if(!(password.length > 0)){
+    isValid = false;
+    errors.push("*Please enter your password ");
+  }
+  if(!(password === password_rep) && (password.length > 0)){
+    isValid = false;
+    errors.push("*Passwords doesn't match.");
+  }
+  setErrors(errors);
+  return isValid;
+}
+////////////////////////////////////////////////
   return (
     <Container>
       <Row className="justify-content-center">
@@ -99,8 +144,11 @@ function SignUpForm() {
                   />
                 </InputGroup>
               </Card.Text>
+                <div className="error_message">{
+                error_message.map(error =>(<h5>{error}</h5>))}
+                </div>
               <div className="text-center">
-                <Button onClick={(e) => handleSubmit(e)} type="submit" className="btn--primary" variant="primary">
+                <Button onClick={(e) => submit(e)} type="submit" className="btn--primary" variant="primary">
                   CREATE ACCOUNT
                 </Button>
               </div>
