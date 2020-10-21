@@ -27,21 +27,13 @@ html {
 }
 
 .btn--secondary {
-  background-image: linear-gradient(
-    to right,
-    #36d1dc 0%,
-    #5b86e5 51%,
-    #36d1dc 100%
-  );
+  background-color: #91e037;
   outline: none;
   border: none;
   background-size: 200% auto;
-  margin: 30px;
   margin-right: 5px;
   margin-left: 5px;
   margin-bottom: 7px;
-  width: 15em;
-  height: 3em;
 }
 
 .homeButtons {
@@ -64,6 +56,9 @@ html {
   transition: 0.5s;
   background-position: right center; /* change the direction of the change here */
   color: #fff;
+}
+.btn--secondary:hover {
+  background-color: #83ca31;
 }
 
 .phoneDisplayLogo {
