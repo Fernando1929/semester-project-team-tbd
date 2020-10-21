@@ -13,11 +13,10 @@ import {
 } from "react-bootstrap";
 
 import "../App.css";
-import { loginHandler } from "../Apis/Login"
+import { loginHandler } from "../Apis/Login";
+import Auth from "../Pages/Auth";
 
 function LogInForm() {
-  //emailIcon = (<i className="fab fa-user"></i>); why is this here?? Have no clue
-
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,21 +30,17 @@ function LogInForm() {
         email: email,
         password: password
       }
-      //have to finish the implementation on the other side for the returned response
-      // loginHandler(user).then( response =>{
-      //   if(response.status === '200'){
-      //     //here you authenticate the response you recieve the responde and the access token 
-      //     //Authenticate();
-      //     //This.props.succes();
-      //   }else{//here you manage the error messages
-      //     let errors  = {
-      //       invalid: response.data["msg"]
-      //     };
-      //     setErrors(errors);
-      //   }
-      // });
+      loginHandler(user).then( res =>{
+        if(res.status === 200){
+          Auth.authenticateUser(res.data);
+          console.log(res.data);
+        }else{//here you manage the error messages
+          let errors  = [];
+            errors.push(res.data);
+          setErrors(errors);
+        }
+      });
     }
-
   };
 
   const validateForm = () => {
@@ -89,7 +84,7 @@ function LogInForm() {
                   style={{ marginBottom: "1rem" }}>
                     <InputGroup.Prepend>
                       <InputGroup.Text>
-                        <i class="far fa-user"></i>
+                        <i className="far fa-user"></i>
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
@@ -99,11 +94,10 @@ function LogInForm() {
                       onChange={(e) => setUsername(e.target.value)}
                     />
                   </InputGroup>
-
                   <InputGroup style={{ marginBottom: "1rem" }}>
                     <InputGroup.Prepend>
                       <InputGroup.Text>
-                        <i class="fas fa-lock"></i>
+                         <i className="fas fa-lock"></i>
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
@@ -117,7 +111,7 @@ function LogInForm() {
                 </Card.Text>
                 <div className="error_message">
                   {error_message.map(error => (
-                    <h5>{error}</h5>))
+                    <h5 key={error_message.find(error)}>{error}</h5>))
                     }
                 </div>
                 <div className="text-center">

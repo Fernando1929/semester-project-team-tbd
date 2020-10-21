@@ -86,7 +86,7 @@ const validateForm = () =>{
                 <InputGroup style={{ marginBottom: "1rem" }}>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
-                      <i class="far fa-user"></i>
+                      <i className="far fa-user"></i>
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl id="Username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)}/>
@@ -94,7 +94,7 @@ const validateForm = () =>{
                 <InputGroup style={{ marginBottom: "1rem" }}>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
-                      <i class="far fa-envelope"></i>
+                      <i className="far fa-envelope"></i>
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl type="email" id="Email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
@@ -102,7 +102,7 @@ const validateForm = () =>{
                 <InputGroup style={{ marginBottom: "1rem" }}>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
-                      <i class="fas fa-lock"></i>
+                      <i className="fas fa-lock"></i>
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl
@@ -116,7 +116,7 @@ const validateForm = () =>{
                 <InputGroup style={{ marginBottom: "1rem" }}>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
-                      <i class="fas fa-lock"></i>
+                      <i className="fas fa-lock"></i>
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl
@@ -128,8 +128,8 @@ const validateForm = () =>{
                   />
                 </InputGroup>
               </Card.Text>
-                <div className="error_message">{
-                error_message.map(error =>(<h5>{error}</h5>))}
+                <div className="error_message" >{
+                error_message.map(error =>(<h5 key={error_message.find(error)}>{error}</h5>))}
                 </div>
               <div className="text-center">
                 <Button onClick={(e) => submit(e)} type="submit" className="btn--primary" variant="primary">

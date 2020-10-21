@@ -13,13 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev")); // for logging HTTP requests in console
-
-const  authTokens =  {};
-
-const getHashedPassword = (password) => {
-    const hash = bcrypt.hashSync('somePassword', bcrypt.genSaltSync(10));
-    return hash;
-}
+app.use('/api', accountRoutes);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {

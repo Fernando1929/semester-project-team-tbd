@@ -4,8 +4,8 @@ CREATE TABLE account (
     account_id serial primary key, 
     username varchar(30), 
     password varchar(30),
-    email varchar(30)),
-    account_validation boolean;
+    email varchar(30),
+    account_validation boolean);
 
 CREATE TABLE users (
     user_id serial primary key, 

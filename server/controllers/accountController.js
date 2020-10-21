@@ -1,4 +1,7 @@
 const db = require("../db/index");
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
+const  authTokens =  {};
 
 const signup = async (req,res) => {
     try {
@@ -14,7 +17,47 @@ const signup = async (req,res) => {
     }
 }
 
-const login = async (req,res) => {}
+const login = async (req,res) => {//verify this method when is called 
+    try{
+    const { username, email, password,} = req.body.user;
+    const hashedPassword = getHashedPassword(password);
+    /////Verify either of this ways 
+    const queryreturn = await db.query("SELECT * FROM account where username = $1 OR email = $2",[username, email]); //Verify if User exists***
+    const user_exist = queryreturn.rows[0];
+    const user = (user_exists) =>{ 
+        return (user_exists["username"] === username || user_exists["email"] === email) && user_exists["password"] === password
+    };
+    ////////////////////
+        if(user){
+            authToken = generateAuthToken();
+
+            // Store authentication token
+            authTokens[authToken] = user;
+
+            // Setting the auth token in cookies
+            //res.cookie('AuthToken', authToken);
+            //res.redirect("3000/");
+            res.status(200).json(authToken);
+            return res;
+        }
+        else{
+            console.log("user does not exist")
+        }
+    }
+    catch (err){
+       console.log(err);
+    }
+}
+
+const getHashedPassword = (password) => {
+    const hash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    return hash;
+}
+
+const generateAuthToken = () => {
+    return crypto.randomBytes(30).toString('hex');
+}
+
 
 const getAccountById = async (req,res) => {
     try {
@@ -65,5 +108,5 @@ module.exports = {
     login,
     getAccountById,
     updateAccount,
-    deleteAccount
+    deleteAccount,
 }
