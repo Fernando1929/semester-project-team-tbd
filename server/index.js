@@ -1,4 +1,8 @@
 const accountRoutes = require('./routes/accountRoutes');
+const userRoutes = require('./routes/userRoutes');
+const userScheduleRoutes = require('./routes/userScheduleRoutes');
+const teamScheduleRoutes = require('./routes/teamScheduleRoutes');
+const teamRoutes = require('./routes/teamRoutes');
 
 require("dotenv").config();
 const express = require("express");
@@ -15,25 +19,10 @@ app.use(morgan("dev")); // for logging HTTP requests in console
 
 // Adding routes to the application
 app.use('/api', accountRoutes);
-
-app.get("/login", async (req,res) => {//verify this method when is called 
-    //Doing just  the logic of things once here
-    // const { username, password, email } = req.body;
-    // const user_exists = await db.query("SELECT * FROM account where username = $1 or email = $2",[username, email]);
-
-    // try {
-    //     const { username, password, email } = req.body;
-    //     const newAccount = await db.query(
-    //         "INSERT INTO account (username, password, email) VALUES ($1, $2, $3) RETURNING *",
-    //         [username, password, email]
-    //     );
-
-    //     res.status(201).json(newAccount.rows[0]);
-    // } catch (err) {
-    //     console.log(err);
-    // }
-    // console.log("login done")
-});
+app.use('/api', userRoutes);
+app.use('/api', userScheduleRoutes);
+app.use('/api', teamScheduleRoutes);
+app.use('/api', teamRoutes);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
