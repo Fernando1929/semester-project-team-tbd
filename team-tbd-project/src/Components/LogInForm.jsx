@@ -111,7 +111,7 @@ function LogInForm() {
                 </Card.Text>
                 <div className="error_message">
                   {error_message.map(error => (
-                    <h5 key={error_message.find(error)}>{error}</h5>))
+                    <h5 key={error_message.indexOf(error)}>{error}</h5>))
                     }
                 </div>
                 <div className="text-center">
