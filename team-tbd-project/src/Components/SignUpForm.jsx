@@ -1,5 +1,6 @@
 //import React, { Component, useState } from "react";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {signupHandler} from "../Apis/SignUp";
 import {
   Container,
@@ -132,9 +133,11 @@ const validateForm = () =>{
                 error_message.map(error =>(<h5>{error}</h5>))}
                 </div>
               <div className="text-center">
-                <Button onClick={(e) => submit(e)} type="submit" className="btn--primary" variant="primary">
+                <Link to="/ProfileInfo">
+                  <Button onClick={(e) => submit(e)} type="submit" className="btn--primary" variant="primary">
                   CREATE ACCOUNT
-                </Button>
+                  </Button>
+                </Link>
               </div>
             </Card.Body>
           </Card>

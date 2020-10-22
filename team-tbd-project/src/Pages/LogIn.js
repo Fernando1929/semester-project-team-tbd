@@ -1,7 +1,7 @@
 import React from "react";
 import "../../src/App.css";
 import LogInForm from "../Components/LogInForm";
-import "./SignUp.css";
+import "./SignUp/SignUp.css";
 
 function LogIn() {
   return (
