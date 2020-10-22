@@ -39,6 +39,10 @@ function SignUpForm() {
                   <FormControl id="Username" placeholder="Username" />
                 </InputGroup>
                 <InputGroup style={{ marginBottom: "1rem" }}>
+                  <FormControl type="firstName" placeholder="Enter your first name" />
+                  <FormControl type="lastName" placeholder="Enter your last name" />
+                </InputGroup>
+                <InputGroup style={{ marginBottom: "1rem" }}>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
                       <i class="far fa-envelope"></i>
