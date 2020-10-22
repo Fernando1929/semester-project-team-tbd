@@ -6,12 +6,38 @@ const  authTokens =  {};
 const signup = async (req,res) => {
     try {
         const { username, password, email } = req.body.user;
-        const newAccount = await db.query(
-            "INSERT INTO account (username, password, email) VALUES ($1, $2, $3) RETURNING *",
-            [username, password, email]
-        );
+        const duplicated = (await accountExists(username)).valueOf();
 
-        res.status(201).json(newAccount.rows[0]);
+        if(!duplicated) {
+            const newAccount = await db.query(
+                "INSERT INTO account (username, password, email) VALUES ($1, $2, $3) RETURNING *",
+                [username, password, email]
+            );
+    
+            res.status(201).json(newAccount.rows[0]);
+        }
+        else {
+            res.status(404).json("Username already exists");
+        }
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+// Sign Up helper function
+const accountExists = async (req) => {
+    try {
+        const username = req;
+        console.log(username);
+        const account = await db.query("SELECT * FROM account WHERE username = $1", [username]);
+        console.log(account.rowCount);
+        if(account.rows.length !== 0) {
+            return true;
+        } else {
+            return false; 
+        }
+
     } catch (err) {
         console.log(err);
     }

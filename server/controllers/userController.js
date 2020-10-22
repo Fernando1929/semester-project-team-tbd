@@ -1,0 +1,83 @@
+const db = require("../db/index");
+
+const addUser = async (req,res) => {
+    try {
+        const { user_firstname, user_lastname, user_phone, user_location, account_id } = req.body;
+        const newUser = await db.query(
+            "INSERT INTO users (user_firstname, user_lastname, user_phone, user_location, account_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+            [user_firstname, user_lastname, user_phone, user_location, account_id]
+        );
+        res.status(201).json(newUser.rows[0]);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const getAllUsers = async (req,res) => {
+    try {
+        const allUsers = await db.query("SELECT * FROM users");
+        res.status(200).json({
+            status: "success",
+            results: allUsers.rows.length,
+            data: {
+                users: allUsers.rows
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const getUserById = async (req,res) => {
+    try {
+        const user = await db.query("SELECT * FROM users WHERE user_id = $1", [req.params.id]);
+        res.status(200).json({
+            status: "success",
+            data: {
+                user: user.rows[0]
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+// add search gets
+
+const updateUser = async (req,res) => {
+    try {
+        const { user_firstname, user_lastname, user_phone, user_location } = req.body;
+        const result = await db.query(
+            "UPDATE users SET user_firstname = $1, user_lastname = $2, user_phone = $3, user_location = $4 WHERE user_id = $5 RETURNING *",
+            [user_firstname, user_lastname, user_phone, user_location, req.params.id]
+            ); 
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                user: result.rows[0]
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const deleteUser = async (req,res) => {
+    try {
+        const result = await db.query("DELETE FROM user_schedule WHERE user_id = $1", [req.params.id])
+        res.status(204).json({
+            status: "success",
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+module.exports = {
+    addUser,
+    getAllUsers,
+    getUserById,
+    updateUser,
+    deleteUser
+}
