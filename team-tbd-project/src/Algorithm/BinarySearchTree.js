@@ -1,5 +1,12 @@
 // Node class
 class Node {
+  //data structure example
+  // {
+  //  title: 'Website Re-Design Plan', <- Name of the event
+  //  startDate: new Date(2018, 5, 25, 9, 35), <- Starting date/hour of the event
+  //  endDate: new Date(2018, 5, 25, 11, 30), <- Ending date/hour of the event
+  // }
+
   constructor(data) {
     this.data = data;
     this.left = null;
@@ -37,7 +44,7 @@ class BinarySearchTree {
   insertNode(node, newNode) {
     // if the data is less than the node
     // data move left of the tree
-    if (newNode.data < node.data) {
+    if (newNode.data.startDate < node.data.startDate) {
       // if left is null insert node here
       if (node.left === null) node.left = newNode;
       // if left is not null recur until
@@ -69,21 +76,21 @@ class BinarySearchTree {
   // given data
   // it recur over the tree to find the
   // data and removes it
-  removeNode(node, key) {
+  removeNode(node, hour) {
     // if the root is null then tree is
     // empty
     if (node === null) return null;
     // if data to be delete is less than
     // roots data then move to left subtree
-    else if (key < node.data) {
-      node.left = this.removeNode(node.left, key);
+    else if (hour < node.data.startDate) {
+      node.left = this.removeNode(node.left, hour);
       return node;
     }
 
     // if data to be delete is greater than
     // roots data then move to right subtree
-    else if (key > node.data) {
-      node.right = this.removeNode(node.right, key);
+    else if (hour > node.data.startDate) {
+      node.right = this.removeNode(node.right, hour);
       return node;
     }
 
@@ -106,7 +113,7 @@ class BinarySearchTree {
       }
 
       // Deleting node with two children
-      // minumum node of the rigt subtree
+      // minumum node of the right subtree
       // is stored in aux
       var aux = this.findMinNode(node.right);
       node.data = aux.data;
@@ -163,17 +170,19 @@ class BinarySearchTree {
     }
   }
 
-  // search(node, data)
-  // search for a node with given data
-  search(node, data) {
+  // search(node, startDate, endDate)
+  // search for a node with given data/startDate, endDate
+  search(node, startDate, endDate) {
     // if trees is empty return null
     if (node === null) return null;
     // if data is less than node's data
     // move left
-    else if (data < node.data) return this.search(node.left, data);
+    else if (startDate < node.data.startDate && endDate < node.data.endDate)
+      return this.search(node.left, startDate, endDate);
     // if data is less than node's data
     // move left
-    else if (data > node.data) return this.search(node.right, data);
+    else if (startDate > node.data.startDate && endDate > node.data.endDate)
+      return this.search(node.right, startDate, endDate);
     // if data is equal to the node data
     // return node
     else return node;
