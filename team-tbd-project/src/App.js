@@ -9,11 +9,10 @@ import SignUp from "./Pages/SignUp";
 import AboutUs from "./Pages/AboutUs";
 import ContactUs from "./Pages/ContactUs";
 import LogIn from "./Pages/LogIn";
-import LoggedHome from "./Pages/LoggedHome";
 
 function App() {
-  var user = { isLogged: true }; //testing purposes
-  var HomePage = Home;
+  // var user = { isLogged: true }; //testing purposes
+  // var HomePage = Home;
   // if (user.isLogged) {
   //   HomePage = LoggedHome;
   // }
@@ -22,13 +21,10 @@ function App() {
       <Router>
         <SyncLinkNavbar />
         <Switch>
-          <Route path="/" exact component={HomePage} />
+          <Route path="/" exact component={Home} />
           <Route path="/Services" component={Services} />
           <Route path="/SignUp" component={SignUp} />
           <Route path="/LogIn" component={LogIn} />
-          {/*By Yeran:  To test the logged home page */}
-          <Route path="/LoggedHome" component={LoggedHome} />
-
           <Route path="/AboutUs" component={AboutUs} />
           <Route path="/ContactUs" component={ContactUs} />
         </Switch>

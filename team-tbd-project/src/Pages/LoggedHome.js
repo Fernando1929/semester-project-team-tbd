@@ -1,16 +1,13 @@
 import React from "react";
 import "../../src/App.css";
 import "./Home.css";
-import { Container, Row, Col, Carousel, Card, Button} from "react-bootstrap";
-import CreateTeamForm from "../Components/CreateTeamForm"
+import { Container, Row, Col, Carousel, Card, Button } from "react-bootstrap";
+import CreateTeamForm from "../Components/CreateTeamForm";
 
 // TODO
 // 1. modificar texto para que cuando se achique la pantaya llege un punt que salgan 3... y tabien que suceda cuadno el nombre sea largo
-// 2. hacer los bordes mas redondos de los teams buttons
-// 10/18/2020 BY YERAN: ADDED THE MODAL(POP-UP) FOR THE TEAM CREATION.
 
 function LoggedHome() {
-
   const [modalShow, setModalShow] = React.useState(false);
 
   return (
