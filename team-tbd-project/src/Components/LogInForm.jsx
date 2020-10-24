@@ -24,7 +24,8 @@ function LogInForm() {
 
   const submit = e => {
     e.preventDefault();
-    if(validateForm()){//validate the form and fix it 
+    if(validateForm()){
+      let errors = [];
       const user = {
         username: username,
         email: email,
@@ -32,11 +33,10 @@ function LogInForm() {
       }
       loginHandler(user).then( res =>{
         if(res.status === 200){
-          Auth.authenticateUser(res.data);
+          //Auth.authenticateUser(res.data);
           console.log(res.data);
         }else{//here you manage the error messages
-          let errors  = [];
-            errors.push(res.data);
+          errors.push(res.data);
           setErrors(errors);
         }
       });

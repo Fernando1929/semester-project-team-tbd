@@ -1,17 +1,18 @@
 const db = require("../db/index");
-const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
+const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 const  authTokens =  {};
 
 const signup = async (req,res) => {
     try {
         const { username, password, email } = req.body.user;
         const duplicated = (await accountExists(username)).valueOf();
+        const hashedPassword = await getHashedPassword(password);
 
         if(!duplicated) {
             const newAccount = await db.query(
                 "INSERT INTO account (username, password, email) VALUES ($1, $2, $3) RETURNING *",
-                [username, password, email]
+                [username, hashedPassword, email]
             );
     
             res.status(201).json(newAccount.rows[0]);
@@ -19,7 +20,6 @@ const signup = async (req,res) => {
         else {
             res.status(404).json("Username already exists");
         }
-
     } catch (err) {
         console.log(err);
     }
@@ -43,18 +43,17 @@ const accountExists = async (req) => {
     }
 }
 
-const login = async (req,res) => {//verify this method when is called 
+const login = async (req,res) => {
     try{
-    const { username, email, password,} = req.body.user;
-    const hashedPassword = getHashedPassword(password);
-    /////Verify either of this ways 
-    const queryreturn = await db.query("SELECT * FROM account where username = $1 OR email = $2",[username, email]); //Verify if User exists***
-    const user_exist = queryreturn.rows[0];
-    const user = (user_exists) =>{ 
-        return (user_exists["username"] === username || user_exists["email"] === email) && user_exists["password"] === password
-    };
-    ////////////////////
-        if(user){
+        const { username, email, password,} = req.body.user;
+        const hashedPassword = await getHashedPassword(password);
+        const queryreturn = await db.query("SELECT * FROM account where username = $1 OR email = $2",[username, email]);
+        const user_exists = queryreturn.rows[0];
+        const user = (user) =>{ 
+            return (user["username"] === username || user["email"] === email) && user["password"] === password
+        };
+
+        if(user(user_exists)){
             authToken = generateAuthToken();
 
             // Store authentication token
@@ -63,27 +62,26 @@ const login = async (req,res) => {//verify this method when is called
             // Setting the auth token in cookies
             //res.cookie('AuthToken', authToken);
             //res.redirect("3000/");
+            console.log(user_exists);
             res.status(200).json(authToken);
-            return res;
         }
         else{
-            console.log("user does not exist")
+            res.status(404).json("Wrong password.");
         }
     }
     catch (err){
        console.log(err);
     }
 }
-
+//Hashes the password
 const getHashedPassword = (password) => {
-    const hash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    const hash = bcrypt.hash(password, 10);
     return hash;
 }
 
 const generateAuthToken = () => {
     return crypto.randomBytes(30).toString('hex');
 }
-
 
 const getAccountById = async (req,res) => {
     try {

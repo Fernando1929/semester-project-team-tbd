@@ -1,5 +1,4 @@
-import React, { Component, useState } from "react";
-//import React, { useState } from "react";
+import React, { useState } from "react";
 import {signupHandler} from "../Apis/SignUp";
 import {
   Container,
@@ -25,15 +24,21 @@ const submit = (e) => {
   e.preventDefault();
   if(validateForm()){
     console.log("validated")
+    let errors = []
     const user = {
       username: username,
       email: email,
       password: password,
     };
-
     //Here send things to the handler
     signupHandler(user).then(res => {
-      console.log(res);
+      if(res.status === 201){
+        //change to the other form to fill the profile info
+        console.log(res);
+      }else{
+        errors.push(res.data);
+        setErrors(errors);
+      }
     });
   }
 };
