@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import SyncLinkNavbar from "./Components/SyncLinkNavbar";
+import LoginNavbar from "./Components/LoginNavbar";
 import Home from "./Pages/Home";
 import Services from "./Pages/Services";
 import SignUp from "./Pages/SignUp";
@@ -13,10 +14,16 @@ import Profile from "./Pages/Profile";
 import Settings from "./Pages/Settings";
 
 function App() {
+var user = {isLoggedIn: true}
+
+const handleClick = () => {user.isLoggedIn = !user.isLoggedIn}
+
   return (
     <>
       <Router>
-        <SyncLinkNavbar />
+
+        {user.isLoggedIn ? <LoginNavbar /> : <SyncLinkNavbar />}
+        
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/Services" component={Services} />
