@@ -9,14 +9,35 @@ import SignUp from "./Pages/SignUp";
 import AboutUs from "./Pages/AboutUs";
 import ContactUs from "./Pages/ContactUs";
 import LogIn from "./Pages/LogIn";
+import axios from 'axios';
 
 function App() {
+  const state = {};
+  const componentDidMount= () => {
+    // const config = {
+    //   headers: {
+    //     Authorization: 'Bearer '+ localStorage.getItem('token')
+    //   }
+    // };
+    axios.get('account').then(
+      res => {
+        console.log(res);
+           this.setState({
+             user: res.data,
+           });
+      },
+      err =>{
+        console.log(err);
+      }
+    );
+  };
+
   return (
     <>
       <Router>
         <SyncLinkNavbar />
         <Switch>
-          <Route path="/" exact component={Home} />
+          <Route path="/" exact component={() => <Home user={state.data}/>}/>
           <Route path="/Services" component={Services} />
           <Route path="/SignUp" component={SignUp} />
           <Route path="/LogIn" component={LogIn} />
