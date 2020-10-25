@@ -2,9 +2,10 @@
 class Node {
   //data structure example
   // {
-  //  title: 'Website Re-Design Plan', <- Name of the event
-  //  startDate: new Date(2018, 5, 25, 9, 35), <- Starting date/hour of the event
-  //  endDate: new Date(2018, 5, 25, 11, 30), <- Ending date/hour of the event
+  //  event_name: 'Website Re-Design Plan', <- Name of the event
+  //  start_time: new Date(2018, 5, 25, 9, 35), <- Starting date/hour of the event
+  //  end_time: new Date(2018, 5, 25, 11, 30), <- Ending date/hour of the event
+  //  event_days: "LWV", <- Days of the event
   // }
 
   constructor(data) {
@@ -18,7 +19,23 @@ class Node {
 class BinarySearchTree {
   constructor() {
     // root of a binary search tree
-    this.root = null;
+    this.rootL = { day: "L", root: null }; //Monday schedule
+    this.rootM = { day: "M", root: null }; //Tuesday schedule
+    this.rootW = { day: "W", root: null }; //Wednesday schedule
+    this.rootJ = { day: "J", root: null }; //Thursday schedule
+    this.rootV = { day: "V", root: null }; //Friday schedule
+    this.rootS = { day: "S", root: null }; //Saturday schedule
+    this.rootD = { day: "D", root: null }; //Sunday schedule
+
+    this.roots = [
+      this.rootL,
+      this.rootM,
+      this.rootW,
+      this.rootJ,
+      this.rootV,
+      this.rootS,
+      this.rootD,
+    ];
   }
 
   // function to be implemented
@@ -32,10 +49,16 @@ class BinarySearchTree {
 
     // root is null then node will
     // be added to the tree and made root.
-    if (this.root === null) this.root = newNode;
-    // find the correct position in the
-    // tree and add the node
-    else this.insertNode(this.root, newNode);
+    if (data != null) {
+      this.roots.forEach((rootDay) => {
+        if (data.event_days.toUpperCase().contains(rootDay.day)) {
+          if (rootDay.root === null) rootDay.root = newNode;
+          // find the correct position in the
+          // tree and add the node
+          else this.insertNode(rootDay.root, newNode);
+        }
+      });
+    }
   }
 
   // Method to insert a node in a tree
@@ -44,7 +67,7 @@ class BinarySearchTree {
   insertNode(node, newNode) {
     // if the data is less than the node
     // data move left of the tree
-    if (newNode.data.startDate < node.data.startDate) {
+    if (newNode.data.start_time < node.data.start_time) {
       // if left is null insert node here
       if (node.left === null) node.left = newNode;
       // if left is not null recur until
@@ -65,15 +88,20 @@ class BinarySearchTree {
 
   // remove(data)
   // helper method that calls the
-  // removeNode with a given data
-  remove(data) {
-    // root is re-initialized with
-    // root of a modified tree.
-    this.root = this.removeNode(this.root, data);
+  // removeNode with a given hour and a given day (L,M,W,J,V,S,D).
+  remove(hour, day) {
+    this.roots.forEach((rootDay) => {
+      if (rootDay.day == day.toUpperCase()) {
+        // root is re-initialized with
+        // root of a modified tree.
+        rootDay = this.removeNode(rootDay, hour);
+        break;
+      }
+    });
   }
 
   // Method to remove node with a
-  // given data
+  // given hour
   // it recur over the tree to find the
   // data and removes it
   removeNode(node, hour) {
@@ -82,14 +110,14 @@ class BinarySearchTree {
     if (node === null) return null;
     // if data to be delete is less than
     // roots data then move to left subtree
-    else if (hour < node.data.startDate) {
+    else if (hour < node.data.start_time) {
       node.left = this.removeNode(node.left, hour);
       return node;
     }
 
     // if data to be delete is greater than
     // roots data then move to right subtree
-    else if (hour > node.data.startDate) {
+    else if (hour > node.data.start_time) {
       node.right = this.removeNode(node.right, hour);
       return node;
     }
@@ -137,7 +165,7 @@ class BinarySearchTree {
   // getRootNode()
   // returns root of the tree
   getRootNode() {
-    return this.root;
+    return this.roots;
   }
 
   // inorder(node)
@@ -177,11 +205,11 @@ class BinarySearchTree {
     if (node === null) return null;
     // if data is less than node's data
     // move left
-    else if (startDate < node.data.startDate && endDate < node.data.endDate)
+    else if (startDate < node.data.start_time && endDate < node.data.end_time)
       return this.search(node.left, startDate, endDate);
     // if data is less than node's data
     // move left
-    else if (startDate > node.data.startDate && endDate > node.data.endDate)
+    else if (startDate > node.data.start_time && endDate > node.data.end_time)
       return this.search(node.right, startDate, endDate);
     // if data is equal to the node data
     // return node
