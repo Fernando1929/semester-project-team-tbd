@@ -1,20 +1,16 @@
 import React from "react";
-import "../../src/App.css";
-import backgroundH from "../Images/SyncLinkLogged.gif";
-import RecentTeams from "../Components/RecentTeams";
+import "../../App.css"
+import backgroundH from "../../Images/SyncLinkLogged.gif";
+import RecentTeams from "../RecentTeams";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-import CreateTeamForm from "../Components/CreateTeamForm";
-// BY Yeran L Concepcion 10/20/2020:
-{
-  /* TO DOOOOOOOOOOOOOOOOOOOOOOOO CHANGE THE LINK PATH WHEN THE PROFILE SECTION IS COMPLETED */
-  /* ADD THE CORECT LINK PATH WHEN CREATED AT  MY SCHEDULE BUTTON */
-  /* MODIFy THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS LLINE 228*/
-}
+  /* TO DO CHANGE THE LINK PATH WHEN THE PROFILE SECTION IS COMPLETED LINE 90*/
+  /* ADD THE CORRECT LINK PATH WHEN CREATED AT MY SCHEDULE BUTTON LINE 147*/
+  /* MODIFY THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS LINE 212*/
+
 
 function HomeLogged() {
-  const [modalShow, setModalShow] = React.useState(false);
   return (
     <div>
       <div className="SyncLinkWelcome">
@@ -33,27 +29,14 @@ function HomeLogged() {
               style={{
                 textAlign: "center",
                 marginTop: "50%",
-                marginBottom: "35%",
+                marginBottom: "45%",
                 marginLeft: "18%",
               }}
               sm
             >
               <h1 style={{ fontSize: "7vw" }}>SYNCLINK</h1>
               <h3 style={{ fontSize: "2vw" }}>MEET AT THE PERFECT MOMENT</h3>
-              <div>
-                <Button
-                  className="btn--primary"
-                  variant="primary"
-                  onClick={() => setModalShow(true)}
-                  style={{ fontSize: "2vw", marginBottom: "1rem" }}
-                >
-                  CREATE A TEAM
-                </Button>
-                <CreateTeamForm
-                  show={modalShow}
-                  onHide={() => setModalShow(false)}
-                />
-              </div>
+              
             </Col>
           </Row>
         </Container>
@@ -99,10 +82,10 @@ function HomeLogged() {
                     fontSize: "2vw",
                   }}
                 >
-                  Lorem ipsum dolor sit amet
+                  Take the first step towards organizing your team
                 </div>
                 <div style={{ marginTop: "0.5rem", fontSize: "2vw" }}>
-                  {/* TO DOOOOOOOOOOOOOOOOOOOOOOOO CHANGE THE LINK PATH WHEN THE PROFILE SECTION IS COMPLETED */}
+                  {/* TO DO CHANGE THE LINK PATH WHEN THE PROFILE SECTION IS COMPLETED */}
                   <Link
                     // to="/LogIn"
                     style={{
@@ -156,7 +139,7 @@ function HomeLogged() {
                     fontSize: "2vw",
                   }}
                 >
-                  Lorem ipsum dolor sit amet
+                  Add the hours you are unavailable
                 </div>
                 <div>
                   {/* ADD THE CORECT LINK PATH WHEN CREATED AT  MY SCHEDULE BUTTON */}
@@ -189,13 +172,13 @@ function HomeLogged() {
               {" "}
               <img
                 className="d-block w-100"
-                src={require("../Images/LaptopSyncLink.gif")}
+                src={require("../../Images/LaptopSyncLink.gif")}
                 alt="Laptop"
               />
             </Col>
           </Row>
-          <Row className="CreateJoinTeam d-flex align-items-center">
-            <Col style={{ marginTop: "2rem", marginBottom: "2rem" }} xs={6}>
+          <Row className="ManageTeams d-flex justify-content-center align-items-center">
+            <Col style={{ marginTop: "2rem", marginBottom: "2rem" }} xs={5}>
               <text
                 style={{
                   textAlign: "right",
@@ -208,23 +191,23 @@ function HomeLogged() {
                     color: "white",
                   }}
                 >
-                  CREATE OR
+                  MANAGE
                 </div>
                 <div
                   style={{
                     fontSize: "5vw",
                   }}
                 >
-                  EDIT YOUR TEAMS
+                  TEAMS
                 </div>
                 <div
                   style={{
                     fontSize: "2vw",
                   }}
                 >
-                  Lorem ipsum dolor sit amet
+                  Create or edit a team and share it with your group or join a team that was shared to you
                   <div>
-                    {/* MODIFI THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS 228*/}
+                    {/* MODIFY THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS 212*/}
                     <Link
                       // to="/LogIn"
                       style={{
@@ -250,7 +233,7 @@ function HomeLogged() {
             <Col
               className="d-flex justify-content-center"
               style={{ margin: "3rem" }}
-              xs={4}
+              xs={3}
             >
               <i
                 class="fas fa-user-plus"
@@ -259,7 +242,7 @@ function HomeLogged() {
             </Col>
           </Row>
           <Row
-            className="HaveMeeting d-flex justify-content-center align-items-center"
+            className="HoldMeeting d-flex justify-content-center align-items-center"
             style={{ backgroundColor: "white" }}
           >
             <Col
@@ -270,7 +253,7 @@ function HomeLogged() {
               {" "}
               <img
                 className="d-block w-100"
-                src={require("../Images/TabletSyncLink.gif")}
+                src={require("../../Images/TabletSyncLink.gif")}
                 alt="Tablet"
               />
             </Col>
@@ -287,7 +270,7 @@ function HomeLogged() {
                     color: "#578DE4",
                   }}
                 >
-                  HAVE
+                  HOLD
                 </div>
                 <div
                   style={{
@@ -301,7 +284,7 @@ function HomeLogged() {
                     fontSize: "2vw",
                   }}
                 >
-                  Lorem ipsum dolor sit amet
+                  Get together as a team because this project is going to be less bumpy
                 </div>
               </text>
             </Col>

@@ -1,8 +1,9 @@
 import React from "react";
-import "../../src/App.css";
-import backgroundH from "../Images/newHomeBk.gif";
+import "../../App.css";
+import backgroundH from "../../Images/newHomeBk.gif";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+
 function HomeUnLogged() {
   return (
     <div>
@@ -105,10 +106,10 @@ function HomeUnLogged() {
                 </div>
                 <div
                   style={{
-                    fontSize: "2vw",
+                    fontSize: "1.7vw",
                   }}
                 >
-                  Lorem ipsum dolor sit amet
+                  Take the first step towards organizing your team
                 </div>
                 <div style={{ marginTop: "0.5rem", fontSize: "2vw" }}>
                   <Link
@@ -126,7 +127,7 @@ function HomeUnLogged() {
                         fontSize: "2vw",
                       }}
                     >
-                      SIGN UP
+                      LOG IN
                     </Button>
                   </Link>
                   <Link
@@ -183,7 +184,7 @@ function HomeUnLogged() {
                     fontSize: "2vw",
                   }}
                 >
-                  Lorem ipsum dolor sit amet
+                  Add the hours you are unavailable
                 </div>
               </text>
             </Col>
@@ -195,13 +196,13 @@ function HomeUnLogged() {
               {" "}
               <img
                 className="d-block w-100"
-                src={require("../Images/LaptopSyncLink.gif")}
+                src={require("../../Images/LaptopSyncLink.gif")}
                 alt="Laptop"
               />
             </Col>
           </Row>
-          <Row className="CreateJoinTeam d-flex align-items-center">
-            <Col style={{ marginTop: "2rem", marginBottom: "2rem" }} xs={6}>
+          <Row className="ManageTeams d-flex justify-content-center align-items-center">
+            <Col style={{ marginTop: "2rem", marginBottom: "2rem"}} xs={4}>
               <text
                 style={{
                   textAlign: "right",
@@ -214,28 +215,28 @@ function HomeUnLogged() {
                     color: "white",
                   }}
                 >
-                  CREATE OR
+                  MANAGE
                 </div>
                 <div
                   style={{
                     fontSize: "5vw",
                   }}
                 >
-                  JOIN A TEAM
+                  TEAMS
                 </div>
                 <div
                   style={{
                     fontSize: "2vw",
                   }}
                 >
-                  Lorem ipsum dolor sit amet
+                  Create a team and share it with your group or join a team that was shared to you
                 </div>
               </text>
             </Col>
             <Col
               className="d-flex justify-content-center"
               style={{ margin: "3rem" }}
-              xs={4}
+              xs={3}
             >
               <i
                 class="fas fa-user-plus"
@@ -244,7 +245,7 @@ function HomeUnLogged() {
             </Col>
           </Row>
           <Row
-            className="HaveMeeting d-flex justify-content-center align-items-center"
+            className="HoldMeeting d-flex justify-content-center align-items-center"
             style={{ backgroundColor: "white" }}
           >
             <Col
@@ -255,7 +256,7 @@ function HomeUnLogged() {
               {" "}
               <img
                 className="d-block w-100"
-                src={require("../Images/TabletSyncLink.gif")}
+                src={require("../../Images/TabletSyncLink.gif")}
                 alt="Tablet"
               />
             </Col>
@@ -272,7 +273,7 @@ function HomeUnLogged() {
                     color: "#578DE4",
                   }}
                 >
-                  HAVE
+                  HOLD
                 </div>
                 <div
                   style={{
@@ -286,7 +287,7 @@ function HomeUnLogged() {
                     fontSize: "2vw",
                   }}
                 >
-                  Lorem ipsum dolor sit amet
+                  Get together as a team because this project is going to be less bumpy
                 </div>
               </text>
             </Col>
