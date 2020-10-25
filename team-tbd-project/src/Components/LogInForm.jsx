@@ -1,7 +1,6 @@
 // By Yeran L Concepcion
 // 10/1/2020
 import React, { Component, useState  } from "react";
-import { Link } from "react-router-dom";
 import {
   Container,
   Row,
@@ -14,9 +13,10 @@ import {
 
 import "../App/App.css";
 import { loginHandler } from "../Apis/Login";
-import Auth from "../Pages/Auth";
+import Auth from '../utils/Auth';
 
 function LogInForm() {
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,10 +32,13 @@ function LogInForm() {
         password: password
       }
       loginHandler(user).then( res =>{
-        if(res.status === 200){
-          //Auth.authenticateUser(res.data);
-          console.log(res.data);
-        }else{//here you manage the error messages
+        if(res.status === 200){//Just for now 
+          Auth.authenticateUser(res.data.token);
+          Auth.setUserid(res.data.user_id);
+          Auth.setUsername(res.data.username);
+          window.location.assign("/");
+          console.log("User logged in", res.data);
+        }else{
           errors.push(res.data);
           setErrors(errors);
         }
@@ -121,11 +124,9 @@ function LogInForm() {
                 {/* By Yeran L Concepcion 10/17/2020
                 For test porpuses when ever you click log in button it sent you to the logged user page */}
                 <div className="text-center">
-                  <Link to="/LoggedHome" style={{ textDecoration: "none", color: "white" }}>
                     <Button className="btn--primary" variant="primary" onClick={(e) => submit(e)}>
                       LOG IN
                     </Button>
-                  </Link>
                 </div>
               </Card.Body>
             </Card>

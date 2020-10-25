@@ -45,25 +45,26 @@ const accountExists = async (req) => {
 
 const login = async (req,res) => {
     try{
-        const { username, email, password,} = req.body.user;
-        const hashedPassword = await getHashedPassword(password);
+        const { username, email, password} = req.body.user;
         const queryreturn = await db.query("SELECT * FROM account where username = $1 OR email = $2",[username, email]);
         const user_exists = queryreturn.rows[0];
         const user = (user) =>{ 
-            return (user["username"] === username || user["email"] === email) && user["password"] === password
+            return ((user['username'] === username || user['email'] === email) && bcrypt.compare(password,user['password']))
         };
 
         if(user(user_exists)){
             authToken = generateAuthToken();
-
             // Store authentication token
             authTokens[authToken] = user;
 
             // Setting the auth token in cookies
             //res.cookie('AuthToken', authToken);
             //res.redirect("3000/");
-            console.log(user_exists);
-            res.status(200).json(authToken);
+            res.status(200).json({
+                    token:authToken,
+                    user_id:user_exists['account_id'],
+                    username:user_exists['username']
+                });
         }
         else{
             res.status(404).json("Wrong password.");

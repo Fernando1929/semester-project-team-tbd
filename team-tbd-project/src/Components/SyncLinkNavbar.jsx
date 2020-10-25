@@ -3,6 +3,7 @@ import { Navbar, Nav, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import mainLogo from "../Images/synLogoNM.png";
 import "../App/App.css";
+import Auth from "../utils/Auth";
 
 function SyncLinkNavbar() {
   const navStyle = {
@@ -77,6 +78,13 @@ function SyncLinkNavbar() {
               CONTACT US
             </Link>
           </Nav.Link>
+          {Auth.isUserAuthenticated() ?
+          <Link to="/" onClick={() => window.location.assign("/")}>
+            <Button className="btn--primary" variant="primary" onClick={() => Auth.deauthenticateUser()}>
+              LOG OUT
+            </Button>
+          </Link>
+          :<>
           <Link to="/LogIn" style={{ textDecoration: "none", color: "white" }}>
             <Button className="btn--primary" variant="primary">
               LOG IN
@@ -87,6 +95,8 @@ function SyncLinkNavbar() {
               SIGN UP
             </Button>
           </Link>
+          </>
+          }
         </Nav>
       </Navbar.Collapse>
     </Navbar>
