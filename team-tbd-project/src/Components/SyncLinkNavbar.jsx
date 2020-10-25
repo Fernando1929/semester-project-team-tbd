@@ -71,7 +71,7 @@ function SyncLinkNavbar() {
   // }
 
   return (
-    <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+    <Navbar sticky="top" collapseOnSelect expand="lg" bg="light" variant="light">
       <Navbar.Brand href="/">
         <h2
           className="phoneDisplayNoText"

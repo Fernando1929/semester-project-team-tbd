@@ -11,6 +11,11 @@ import ContactUs from "./Pages/ContactUs";
 import LogIn from "./Pages/LogIn";
 
 function App() {
+  // var user = { isLogged: true }; //testing purposes
+  // var HomePage = Home;
+  // if (user.isLogged) {
+  //   HomePage = LoggedHome;
+  // }
   return (
     <>
       <Router>
