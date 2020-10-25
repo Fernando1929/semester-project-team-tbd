@@ -1,8 +1,8 @@
 import React from "react";
-import "../../src/App.css";
+import "../../App/App.css";
 import "./Home.css";
-import HomeLogged from "../Components/HomeComponents/HomeLogged";
-import HomeUnLogged from "../Components/HomeComponents/HomeUnLogged";
+import HomeLogged from "../../Components/HomeComponents/HomeLogged";
+import HomeUnLogged from "../../Components/HomeComponents/HomeUnLogged";
 function Home() {
   var user = { isLoggedIn: true };
   return (

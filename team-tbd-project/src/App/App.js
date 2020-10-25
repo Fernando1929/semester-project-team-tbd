@@ -2,13 +2,13 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import SyncLinkNavbar from "./Components/SyncLinkNavbar";
-import Home from "./Pages/Home";
-import Services from "./Pages/Services";
-import SignUp from "./Pages/SignUp";
-import AboutUs from "./Pages/AboutUs";
-import ContactUs from "./Pages/ContactUs";
-import LogIn from "./Pages/LogIn";
+import SyncLinkNavbar from "../Components/SyncLinkNavbar";
+import Home from "../Pages/Home/Home";
+import Services from "../Pages/Services";
+import SignUp from "../Pages/SignUp/SignUp";
+import AboutUs from "../Pages/AboutUs";
+import ContactUs from "../Pages/ContactUs";
+import LogIn from "../Pages/LogIn";
 import axios from 'axios';
 
 function App() {

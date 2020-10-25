@@ -1,5 +1,5 @@
 import React from "react";
-import "../../App.css"
+import "../../App/App.css"
 import backgroundH from "../../Images/SyncLinkLogged.gif";
 import RecentTeams from "../RecentTeams";
 import { Button, Col, Container, Row } from "react-bootstrap";

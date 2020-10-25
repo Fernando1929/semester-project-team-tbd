@@ -12,7 +12,7 @@ import {
   FormControl,
 } from "react-bootstrap";
 
-import "../App.css";
+import "../App/App.css";
 import { loginHandler } from "../Apis/Login";
 import Auth from "../Pages/Auth";
 

@@ -10,7 +10,7 @@ import {
   FormControl,
 } from "react-bootstrap";
 
-import "../App.css";
+import "../App/App.css";
 
 function SignUpForm() {
 
