@@ -1,22 +1,16 @@
 import React from "react";
 import "../App.css";
-import ProfileComponent from "../Components/ProfileComponent";
-import ProfilePages from "../Components/ProfilePages";
 import {
   Container,
   Row,
   Col,
   Card,
   Button,
-  Jumbotron,
-  InputGroup,
-  FormControl,
-  Badge,
-  Nav
-
+  Nav,
 } from "react-bootstrap";
 import mainLogo from "../Images/HomeBackground.jpg";
 import Image from 'react-bootstrap/Image';
+import UpdateProfileForm from "../Components/UpdateProfileForm";
 
 const PersonInfo = {
   name:"Orlando F. Marrero Soto",
@@ -38,7 +32,10 @@ marginLeft: "1rem"
 
 
 
+
+
 function Profile() {
+  const [modalShow, setModalShow] = React.useState(false);
   return (
 
     <Container>
@@ -62,8 +59,7 @@ function Profile() {
                   <Col>
                     <center>
                       <Image src={mainLogo} width="300" height="300" roundedCircle />
-                      <p></p>
-                      <Button variant="dark">Upload Picture</Button>
+                      {/* <Button variant="dark">Upload Picture</Button> */}
                     </center>
                   </Col>
                   <Col  className="justify-content-center" style={{marginTop: "4rem"}}>
@@ -110,6 +106,11 @@ function Profile() {
                     </h4>
                    </Row>
                     
+
+
+
+                   
+
                    
                     
                   </Col>
@@ -119,6 +120,23 @@ function Profile() {
               </Card.Text>
             </Card.Body>
       </Row>
+
+      <Row className="justify-content-center">
+
+              
+                      <Button
+                        className="btn--primary" 
+                        onClick={() => setModalShow(true)}
+                      >
+                        Update Profile
+                      </Button>
+
+                      <UpdateProfileForm
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                      />
+          
+      </Row>
     </Card>
 
     </Container>
@@ -127,3 +145,20 @@ function Profile() {
 }
 
 export default Profile;
+
+//Popup form 
+{/* <Col>
+              
+                      <Button
+                        variant="light"
+                        onClick={() => setModalShow(true)}
+                      >
+                        +
+                      </Button>
+
+                      <CreateTeamForm
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                      />
+                   
+            </Col> */}

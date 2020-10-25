@@ -5,8 +5,6 @@ import mainLogo from "../Images/synLogoNM.png";
 import profilePic from "../Images/HomeBackground.jpg";
 import "../App.css";
 import Image from 'react-bootstrap/Image';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
 
 function LoginNavbar() {
 
@@ -81,7 +79,7 @@ return(
       </Link>
     </Nav.Link>
     <Link to="/LogIn" style={{ textDecoration: "none", color: "white", alignItems: "center", marginTop: "10px" }}>
-      <Button className="btn--primary" variant="primary">
+      <Button className="btn--primary" variant="primary" style={{marginRight:"0.5rem"}}>
        CREATE NEW TEAM
       </Button>
     </Link>
