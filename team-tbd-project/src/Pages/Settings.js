@@ -4,10 +4,9 @@ import SettingsPage from "../Components/Settings.jsx";
 
 function Settings() {
   return (
-  <div className="Settings">
-    
-    <SettingsPage />
-  </div>
+    <div className="Settings">
+      <SettingsPage />
+    </div>
   );
 }
 

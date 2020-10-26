@@ -14,16 +14,17 @@ import Profile from "./Pages/Profile";
 import Settings from "./Pages/Settings";
 
 function App() {
-var user = {isLoggedIn: true}
+  var user = { isLoggedIn: true };
 
-const handleClick = () => {user.isLoggedIn = !user.isLoggedIn}
+  const handleClick = () => {
+    user.isLoggedIn = !user.isLoggedIn;
+  };
 
   return (
     <>
       <Router>
-
         {user.isLoggedIn ? <LoginNavbar /> : <SyncLinkNavbar />}
-        
+
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/Services" component={Services} />

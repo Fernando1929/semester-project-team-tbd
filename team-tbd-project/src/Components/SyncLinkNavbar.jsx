@@ -8,7 +8,7 @@ function SyncLinkNavbar() {
   const navStyle = {
     textDecoration: "none",
   };
-  //document.location.reload(); gatta find a home for this 
+  //document.location.reload(); gatta find a home for this
   // if (window.location.pathname==="/"){
   //   return (
 
