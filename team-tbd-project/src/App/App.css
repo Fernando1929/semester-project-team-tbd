@@ -80,8 +80,8 @@ html {
     display: flex;
   }
 }
-.error_message{
+
+.notice{
   color: red;
-  padding: .5rem;
-  list-style-type: none;
+  font-size: smaller;
 }

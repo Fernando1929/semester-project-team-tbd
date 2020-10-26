@@ -143,13 +143,7 @@ function HomeLogged() {
                 </div>
                 <div>
                   {/* ADD THE CORECT LINK PATH WHEN CREATED AT  MY SCHEDULE BUTTON */}
-                  <Link
-                    // to="/LogIn"
-                    style={{
-                      textDecoration: "none",
-                      color: "white",
-                    }}
-                  >
+                  <Link to="/UserSchedule" style={{textDecoration: "none",color: "white",}}>
                     <Button
                       className="btn--primary"
                       variant="primary"
