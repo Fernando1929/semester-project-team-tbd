@@ -2,10 +2,10 @@ const db = require("../db/index");
 
 const addUserScheduleEvent = async (req,res) => {
     try {
-        const { event_name, start_time, end_time, days, user_id } = req.body;
+        const { event_title, start_date_time, end_date_time, r_rule, ex_dates } = req.body.appointment;
         const newEvent = await db.query(
-            "INSERT INTO user_schedule (event_name, start_time, end_time, days, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-            [event_name, start_time, end_time, days, user_id]
+            "INSERT INTO user_schedule (event_title, start_date_time, end_date_time, r_rule, ex_dates, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+            [event_title, start_date_time, end_date_time, r_rule, ex_dates, req.params.id]
         );
         res.status(201).json(newEvent.rows[0]);
     } catch (err) {
@@ -48,10 +48,11 @@ const getUserScheduleEventById = async (req,res) => {
 
 const updateUserScheduleEvent = async (req,res) => {
     try {
-        const { event_name, start_time, end_time, days } = req.body;
+        console.log(req.body);
+        const { event_title, start_date_time, end_date_time, r_rule, ex_dates } = req.body.appointment;
         const result = await db.query(
-            "UPDATE user_schedule SET event_name = $1, start_time = $2, end_time = $3, days = $4 WHERE user_schedule_id = $5 RETURNING *",
-            [event_name, start_time, end_time, days, req.params.sid]
+            "UPDATE user_schedule SET event_title = $1, start_date_time = $2, end_date_time = $3, r_rule = $4, ex_dates = $5 WHERE user_schedule_id = $6 RETURNING *",
+            [event_title, start_date_time, end_date_time, r_rule, ex_dates, req.params.sid]
             ); 
 
         res.status(200).json({

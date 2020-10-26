@@ -13,14 +13,17 @@ CREATE TABLE users (
     user_lastname varchar(20), 
     user_phone integer,
     user_location varchar(75),
+    pref_start_work_hour TIME,
+    pref_end_work_hour TIME,
     account_id integer references account(account_id));
 
 CREATE TABLE user_schedule (
     user_schedule_id serial primary key, 
-    event_name varchar(50), 
-    start_time time, 
-    end_time time, 
-    days varchar(20), 
+    event_title varchar(50), 
+    start_date_time TIMESTAMP with time zone, 
+    end_date_time TIMESTAMP with time zone, 
+    r_rule varchar(40), 
+    ex_dates varchar(40),
     user_id integer references users(user_id));
 
 CREATE TABLE team_leader (
