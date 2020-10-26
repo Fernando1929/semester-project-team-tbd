@@ -119,7 +119,7 @@ const updateAccount = async (req,res) => {
 
 const deleteAccount = async (req,res) => {
     try {
-        const result = await db.query("DELETE FROM account WHERE account_id = $1", [req.params.id])
+        const result = await db.query("DELETE FROM account WHERE account_id = $1", [req.params.id]);
         res.status(204).json({
             status: "success",
         });
