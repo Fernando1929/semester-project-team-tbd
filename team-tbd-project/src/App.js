@@ -1,4 +1,4 @@
-import React, { Profiler } from "react";
+import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -14,11 +14,7 @@ import Profile from "./Pages/Profile";
 import Settings from "./Pages/Settings";
 
 function App() {
-  var user = { isLoggedIn: true };
-
-  const handleClick = () => {
-    user.isLoggedIn = !user.isLoggedIn;
-  };
+  var user = { isLogged: true }; //testing purposes
 
   return (
     <>

@@ -103,8 +103,8 @@ function Profile() {
 export default Profile;
 
 //Popup form
-{
-  /* <Col>
+
+/* <Col>
               
                       <Button
                         variant="light"
@@ -119,4 +119,3 @@ export default Profile;
                       />
                    
             </Col> */
-}

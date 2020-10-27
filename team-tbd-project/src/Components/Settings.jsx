@@ -1,20 +1,11 @@
 import React, { Component } from "react";
 import {
   Container,
-  Row,
-  Col,
   Card,
   Button,
-  Jumbotron,
-  InputGroup,
-  FormControl,
-  Badge,
   Nav,
 } from "react-bootstrap";
-
 import "../App.css";
-import mainLogo from "../Images/HomeBackground.jpg";
-import Image from "react-bootstrap/Image";
 import CardDeck from "react-bootstrap/CardDeck";
 
 class Settings extends Component {

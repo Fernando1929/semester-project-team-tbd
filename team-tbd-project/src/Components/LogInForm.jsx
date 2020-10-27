@@ -2,6 +2,7 @@
 // 10/1/2020
 
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import {
   Container,
   Row,
@@ -62,9 +63,14 @@ class LogInForm extends Component {
                   </InputGroup>
                 </Card.Text>
                 <div className="text-center">
-                  <Button className="btn--primary" variant="primary">
-                    LOG IN
-                  </Button>
+                  <Link
+                    to="/Home"
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
+                    <Button className="btn--primary" variant="primary">
+                      LOG IN
+                    </Button>
+                  </Link>
                 </div>
               </Card.Body>
             </Card>

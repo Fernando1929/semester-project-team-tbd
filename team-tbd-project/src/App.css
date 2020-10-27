@@ -27,21 +27,12 @@ html {
 }
 
 .btn--secondary {
-  background-image: linear-gradient(
-    to right,
-    #36d1dc 0%,
-    #5b86e5 51%,
-    #36d1dc 100%
-  );
+  background-color: #91e037;
   outline: none;
   border: none;
   background-size: 200% auto;
-  margin: 30px;
   margin-right: 5px;
   margin-left: 5px;
-  margin-bottom: 7px;
-  width: 15em;
-  height: 3em;
 }
 
 .homeButtons {
@@ -65,9 +56,19 @@ html {
   background-position: right center; /* change the direction of the change here */
   color: #fff;
 }
+.btn--secondary:hover {
+  background-color: #83ca31;
+}
 
 .phoneDisplayLogo {
   display: none;
+}
+
+.carousel-control-next-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+}
+.carousel-control-prev-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='grey' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
 }
 
 @media screen and (max-width: 380px) {

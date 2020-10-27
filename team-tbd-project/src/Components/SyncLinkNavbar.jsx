@@ -8,7 +8,7 @@ function SyncLinkNavbar() {
   const navStyle = {
     textDecoration: "none",
   };
-  //document.location.reload(); gatta find a home for this
+  //document.location.reload(); gatta find a home for this 
   // if (window.location.pathname==="/"){
   //   return (
 
@@ -71,7 +71,7 @@ function SyncLinkNavbar() {
   // }
 
   return (
-    <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+    <Navbar sticky="top" collapseOnSelect expand="lg" bg="light" variant="light">
       <Navbar.Brand href="/">
         <h2
           className="phoneDisplayNoText"
