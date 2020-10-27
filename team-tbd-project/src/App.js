@@ -11,15 +11,15 @@ import AboutUs from "./Pages/AboutUs";
 import ContactUs from "./Pages/ContactUs";
 import LogIn from "./Pages/LogIn";
 import Profile from "./Pages/Profile";
-import Settings from "./Pages/Settings";
+import Teams from "./Pages/Teams";
 
 function App() {
-  var user = { isLogged: true }; //testing purposes
+  var user = { isLogged: false }; //testing purposes
 
   return (
     <>
       <Router>
-        {user.isLoggedIn ? <LoginNavbar /> : <SyncLinkNavbar />}
+        {user.isLogged ? <LoginNavbar /> : <SyncLinkNavbar />}
 
         <Switch>
           <Route path="/" exact component={Home} />
@@ -29,7 +29,7 @@ function App() {
           <Route path="/AboutUs" component={AboutUs} />
           <Route path="/ContactUs" component={ContactUs} />
           <Route path="/Profile" component={Profile} />
-          <Route path="/Settings" component={Settings} />
+          <Route path="/Teams" component={Teams} />
         </Switch>
       </Router>
     </>

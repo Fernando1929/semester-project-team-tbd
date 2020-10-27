@@ -5,6 +5,7 @@ import mainLogo from "../Images/HomeBackground.jpg";
 import Image from "react-bootstrap/Image";
 import UpdateProfileForm from "../Components/UpdateProfileForm";
 
+//User info here please!
 const PersonInfo = {
   name: "Orlando F. Marrero Soto",
   email: "orlando.marrero6@upr.edu",
@@ -27,14 +28,14 @@ function Profile() {
   const [modalShow, setModalShow] = React.useState(false);
   return (
     <Container>
-      <Card style={{ marginTop: "5rem" }}>
+      <Card style={{ marginTop: "5rem", marginBottom: "5rem" }}>
         <Card.Header>
           <Nav fill variant="tabs" defaultActiveKey="#first">
             <Nav.Item>
               <Nav.Link href="#first">General Info</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link href="./Settings">Teams</Nav.Link>
+              <Nav.Link href="./Teams">Teams</Nav.Link>
             </Nav.Item>
           </Nav>
         </Card.Header>

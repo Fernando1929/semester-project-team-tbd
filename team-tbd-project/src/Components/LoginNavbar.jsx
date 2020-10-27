@@ -1,19 +1,26 @@
 import React from "react";
-import { Navbar, Nav, Button } from "react-bootstrap";
+import { Navbar, Nav, Button, Image, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import mainLogo from "../Images/synLogoNM.png";
 import profilePic from "../Images/HomeBackground.jpg";
 import "../App.css";
-import Image from "react-bootstrap/Image";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
+import CreateTeamForm from "../Components/CreateTeamForm";
 
 function LoginNavbar() {
+  const [modalShow, setModalShow] = React.useState(false);
+
   const navStyle = {
     textDecoration: "none",
     alignItems: "center",
     marginTop: "10px",
   };
+
+  //Poner los tres teams más recientes del usuario.
+  var mostRecent = [
+    { name: "Team1", link: "/Team1" },
+    { name: "Team2", link: "/Team2" },
+    { name: "Team3", link: "/Team3" },
+  ];
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
@@ -63,14 +70,14 @@ function LoginNavbar() {
       >
         <Nav className="mr-auto"></Nav>
         <Nav>
-          <Nav.Link style={navStyle}>
-            <Link to="/">HOME</Link>
+          <Nav.Link to="/" style={navStyle}>
+            HOME
           </Nav.Link>
-          <Nav.Link style={navStyle}>
-            <Link to="/Services">MY SCHEDULE</Link>
+          <Nav.Link to="/Schedule" style={navStyle}>
+            MY SCHEDULE
           </Nav.Link>
 
-          <Dropdown style={{ marginTop: "10px" }}>
+          <Dropdown style={navStyle}>
             <Dropdown.Toggle
               className="btn--primary"
               variant="primary"
@@ -80,29 +87,32 @@ function LoginNavbar() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu style={{ backgroundColor: "#36d1dc" }}>
-              <Dropdown.Item href="#/action-1">TEAM 1</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">TEAM 2</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">TEAM 3</Dropdown.Item>
+              {mostRecent.map((team) => {
+                return (
+                  <Dropdown.Item key={team.name} href={team.link}>
+                    {team.name}
+                  </Dropdown.Item>
+                );
+              })}
             </Dropdown.Menu>
           </Dropdown>
 
-          <Link
-            to="/LogIn"
+          <Button
+            className="btn--primary"
+            variant="primary"
             style={{
-              textDecoration: "none",
+              marginRight: "0.5rem",
               color: "white",
-              alignItems: "center",
+              textAlign: "center",
               marginTop: "10px",
+              marginBottom: "15px",
             }}
+            onClick={() => setModalShow(true)}
           >
-            <Button
-              className="btn--primary"
-              variant="primary"
-              style={{ marginRight: "0.5rem" }}
-            >
-              CREATE NEW TEAM
-            </Button>
-          </Link>
+            CREATE NEW TEAM
+          </Button>
+          <CreateTeamForm show={modalShow} onHide={() => setModalShow(false)} />
+
           <Link
             to="/Profile"
             style={{

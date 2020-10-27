@@ -2,7 +2,6 @@
 // 10/1/2020
 
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import {
   Container,
   Row,
@@ -36,41 +35,31 @@ class LogInForm extends Component {
                     Welcome back !
                   </h1>
                 </Card.Title>
-                <Card.Text>
-                  <InputGroup style={{ marginBottom: "1rem" }}>
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>
-                        <i class="far fa-user"></i>
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      id="Username"
-                      placeholder="Username or email"
-                    />
-                  </InputGroup>
+                <InputGroup style={{ marginBottom: "1rem" }}>
+                  <InputGroup.Prepend>
+                    <InputGroup.Text>
+                      <i className="far fa-user"></i>
+                    </InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <FormControl id="Username" placeholder="Username or email" />
+                </InputGroup>
 
-                  <InputGroup style={{ marginBottom: "1rem" }}>
-                    <InputGroup.Prepend>
-                      <InputGroup.Text>
-                        <i class="fas fa-lock"></i>
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      type="password"
-                      id="Password"
-                      placeholder="Password"
-                    />
-                  </InputGroup>
-                </Card.Text>
+                <InputGroup style={{ marginBottom: "1rem" }}>
+                  <InputGroup.Prepend>
+                    <InputGroup.Text>
+                      <i className="fas fa-lock"></i>
+                    </InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <FormControl
+                    type="password"
+                    id="Password"
+                    placeholder="Password"
+                  />
+                </InputGroup>
                 <div className="text-center">
-                  <Link
-                    to="/Home"
-                    style={{ textDecoration: "none", color: "white" }}
-                  >
-                    <Button className="btn--primary" variant="primary">
-                      LOG IN
-                    </Button>
-                  </Link>
+                  <Button to="/Home" className="btn--primary" variant="primary">
+                    LOG IN
+                  </Button>
                 </div>
               </Card.Body>
             </Card>
