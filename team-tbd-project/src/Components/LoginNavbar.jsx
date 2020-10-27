@@ -70,10 +70,10 @@ function LoginNavbar() {
       >
         <Nav className="mr-auto"></Nav>
         <Nav>
-          <Nav.Link to="/" style={navStyle}>
+          <Nav.Link href="/" style={navStyle}>
             HOME
           </Nav.Link>
-          <Nav.Link to="/Schedule" style={navStyle}>
+          <Nav.Link href="/Schedule" style={navStyle}>
             MY SCHEDULE
           </Nav.Link>
 

@@ -14,7 +14,7 @@ import Profile from "./Pages/Profile";
 import Teams from "./Pages/Teams";
 
 function App() {
-  var user = { isLogged: false }; //testing purposes
+  var user = { isLogged: true }; //testing purposes
 
   return (
     <>

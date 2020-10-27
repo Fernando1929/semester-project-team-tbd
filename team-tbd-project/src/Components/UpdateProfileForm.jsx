@@ -44,7 +44,7 @@ function UpdateProfileForm(props) {
         <InputGroup style={{ marginBottom: "1rem" }}>
           <InputGroup.Prepend>
             <InputGroup.Text>
-              <i class="fas fa-user"></i>
+              <i className="fas fa-user"></i>
             </InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl id="Name" placeholder="Name" />
@@ -54,7 +54,7 @@ function UpdateProfileForm(props) {
         <InputGroup style={{ marginBottom: "1rem" }}>
           <InputGroup.Prepend>
             <InputGroup.Text>
-              <i class="far fa-envelope"></i>
+              <i className="far fa-envelope"></i>
             </InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl id="Email" placeholder="Email" />
@@ -64,7 +64,7 @@ function UpdateProfileForm(props) {
         <InputGroup style={{ marginBottom: "1rem" }}>
           <InputGroup.Prepend>
             <InputGroup.Text>
-              <i class="fas fa-phone-alt"></i>
+              <i className="fas fa-phone-alt"></i>
             </InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl id="Phone Number" placeholder="Phone Number" />
@@ -74,7 +74,7 @@ function UpdateProfileForm(props) {
         <InputGroup style={{ marginBottom: "1rem" }}>
           <InputGroup.Prepend>
             <InputGroup.Text>
-              <i class="fas fa-map-marker-alt"></i>
+              <i className="fas fa-map-marker-alt"></i>
             </InputGroup.Text>
           </InputGroup.Prepend>
           <FormControl id="Location" placeholder="Location" />

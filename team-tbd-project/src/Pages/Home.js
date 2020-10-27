@@ -4,7 +4,7 @@ import "./Home.css";
 import HomeLogged from "../Components/HomeComponents/HomeLogged";
 import HomeUnLogged from "../Components/HomeComponents/HomeUnLogged";
 function Home() {
-  var user = { isLoggedIn: false };
+  var user = { isLoggedIn: true };
   return <div>{user.isLoggedIn ? <HomeLogged /> : <HomeUnLogged />}</div>;
 }
 

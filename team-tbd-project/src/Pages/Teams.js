@@ -31,7 +31,7 @@ function Teams() {
             <CardDeck style={{ marginLeft: "4rem" }}>
               {userTeams.map((team) => {
                 return (
-                  <center>
+                  <center key={team.name}>
                     <Card
                       style={{
                         marginTop: "1rem",
