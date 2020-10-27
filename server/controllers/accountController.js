@@ -26,9 +26,9 @@ const signup = async (req,res) => {
 const accountExists = async (req) => {
     try {
         const username = req;
-        console.log(username);
+        // console.log(username);
         const account = await db.query("SELECT * FROM account WHERE username = $1", [username]);
-        console.log(account.rowCount);
+        // console.log(account.rowCount);
         if(account.rows.length !== 0) {
             return true;
         } else {
