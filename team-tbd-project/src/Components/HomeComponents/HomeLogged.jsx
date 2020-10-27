@@ -1,14 +1,12 @@
 import React from "react";
-import "../../App.css"
+import "../../App.css";
 import backgroundH from "../../Images/SyncLinkLogged.gif";
 import RecentTeams from "../RecentTeams";
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
 
-  /* TO DO CHANGE THE LINK PATH WHEN THE PROFILE SECTION IS COMPLETED LINE 90*/
-  /* ADD THE CORRECT LINK PATH WHEN CREATED AT MY SCHEDULE BUTTON LINE 147*/
-  /* MODIFY THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS LINE 212*/
-
+/* TO DO CHANGE THE LINK PATH WHEN THE PROFILE SECTION IS COMPLETED LINE 90*/
+/* ADD THE CORRECT LINK PATH WHEN CREATED AT MY SCHEDULE BUTTON LINE 147*/
+/* MODIFY THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS LINE 212*/
 
 function HomeLogged() {
   return (
@@ -36,7 +34,6 @@ function HomeLogged() {
             >
               <h1 style={{ fontSize: "7vw" }}>SYNCLINK</h1>
               <h3 style={{ fontSize: "2vw" }}>MEET AT THE PERFECT MOMENT</h3>
-              
             </Col>
           </Row>
         </Container>
@@ -47,20 +44,19 @@ function HomeLogged() {
           <Row className="CreateAccount d-flex justify-content-center align-items-center">
             <Col style={{ margin: "3rem" }} xs={3}>
               <i
-                class="fas fa-puzzle-piece"
+                className="fas fa-puzzle-piece"
                 style={{ color: "white", fontSize: "20vw" }}
               />
             </Col>
             <Col
               className="d-flex justify-content-center"
-              style={{ marginTop: "2rem", marginBottom: "2rem" }}
+              style={{
+                marginTop: "2rem",
+                marginBottom: "2rem",
+              }}
               xs={4}
             >
-              <text
-                style={{
-                  textAlign: "center",
-                }}
-              >
+              <div style={{ textAlign: "center" }}>
                 <div
                   style={{
                     fontSize: "5.8vw",
@@ -85,84 +81,71 @@ function HomeLogged() {
                   Take the first step towards organizing your team
                 </div>
                 <div style={{ marginTop: "0.5rem", fontSize: "2vw" }}>
-                  {/* TO DO CHANGE THE LINK PATH WHEN THE PROFILE SECTION IS COMPLETED */}
-                  <Link
-                    // to="/LogIn"
+                  <Button
+                    className="btn--secondary"
+                    variant="primary"
+                    href="/Profile"
                     style={{
-                      textDecoration: "none",
-                      color: "white",
+                      margin: "0.5rem",
+                      fontSize: "2vw",
                     }}
                   >
-                    <Button
-                      className="btn--secondary"
-                      variant="primary"
-                      style={{
-                        margin: "0.5rem",
-                        fontSize: "2vw",
-                      }}
-                    >
-                      MY PROFILE
-                    </Button>
-                  </Link>
+                    MY PROFILE
+                  </Button>
                 </div>
-              </text>
+              </div>
             </Col>
           </Row>
           <Row
             className="AddSchedule d-flex justify-content-center align-items-center"
             style={{ backgroundColor: "white" }}
           >
-            <Col style={{ marginTop: "2rem", marginBottom: "2rem" }} xs={4}>
-              <text
+            <Col
+              style={{
+                textAlign: "right",
+                marginTop: "2rem",
+                marginBottom: "2rem",
+              }}
+              xs={4}
+            >
+              <div
                 style={{
-                  textAlign: "right",
+                  fontSize: "5.8vw",
+                  fontWeight: "600",
+                  color: "#578DE4",
                 }}
               >
-                <div
+                EDIT
+              </div>
+              <div
+                style={{
+                  fontSize: "5.8vw",
+                }}
+              >
+                SCHEDULE
+              </div>
+              <div
+                style={{
+                  fontSize: "2vw",
+                }}
+              >
+                Add the hours you are unavailable
+              </div>
+              <div>
+                {/* ADD THE CORECT LINK PATH WHEN CREATED AT  MY SCHEDULE BUTTON */}
+
+                <Button
+                  className="btn--primary"
+                  variant="primary"
+                  href="/Schedule"
                   style={{
-                    fontSize: "5.8vw",
-                    fontWeight: "600",
-                    color: "#578DE4",
-                  }}
-                >
-                  EDIT
-                </div>
-                <div
-                  style={{
-                    fontSize: "5.8vw",
-                  }}
-                >
-                  SCHEDULE
-                </div>
-                <div
-                  style={{
+                    margin: "0.5rem",
                     fontSize: "2vw",
                   }}
                 >
-                  Add the hours you are unavailable
-                </div>
-                <div>
-                  {/* ADD THE CORECT LINK PATH WHEN CREATED AT  MY SCHEDULE BUTTON */}
-                  <Link
-                    // to="/LogIn"
-                    style={{
-                      textDecoration: "none",
-                      color: "white",
-                    }}
-                  >
-                    <Button
-                      className="btn--primary"
-                      variant="primary"
-                      style={{
-                        margin: "0.5rem",
-                        fontSize: "2vw",
-                      }}
-                    >
-                      MY SCHEDULE
-                    </Button>
-                  </Link>
-                </div>
-              </text>
+                  MY SCHEDULE
+                </Button>
+              </div>
             </Col>
             <Col
               className="d-flex justify-content-center"
@@ -178,57 +161,51 @@ function HomeLogged() {
             </Col>
           </Row>
           <Row className="ManageTeams d-flex justify-content-center align-items-center">
-            <Col style={{ marginTop: "2rem", marginBottom: "2rem" }} xs={5}>
-              <text
+            <Col
+              style={{
+                marginTop: "2rem",
+                marginBottom: "2rem",
+                textAlign: "right",
+              }}
+              xs={5}
+            >
+              <div
                 style={{
-                  textAlign: "right",
+                  fontSize: "5vw",
+                  fontWeight: "600",
+                  color: "white",
                 }}
               >
-                <div
-                  style={{
-                    fontSize: "5vw",
-                    fontWeight: "600",
-                    color: "white",
-                  }}
-                >
-                  MANAGE
+                MANAGE
+              </div>
+              <div
+                style={{
+                  fontSize: "5vw",
+                }}
+              >
+                TEAMS
+              </div>
+              <div
+                style={{
+                  fontSize: "2vw",
+                }}
+              >
+                Create or edit a team and share it with your group or join a
+                team that was shared to you
+                <div>
+                  <Button
+                    className="btn--secondary"
+                    variant="primary"
+                    href="/Teams"
+                    style={{
+                      margin: "0.5rem",
+                      fontSize: "2vw",
+                    }}
+                  >
+                    MY TEAMS
+                  </Button>
                 </div>
-                <div
-                  style={{
-                    fontSize: "5vw",
-                  }}
-                >
-                  TEAMS
-                </div>
-                <div
-                  style={{
-                    fontSize: "2vw",
-                  }}
-                >
-                  Create or edit a team and share it with your group or join a team that was shared to you
-                  <div>
-                    {/* MODIFY THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS 212*/}
-                    <Link
-                      // to="/LogIn"
-                      style={{
-                        textDecoration: "none",
-                        color: "white",
-                      }}
-                    >
-                      <Button
-                        className="btn--secondary"
-                        variant="primary"
-                        style={{
-                          margin: "0.5rem",
-                          fontSize: "2vw",
-                        }}
-                      >
-                        MY TEAMS
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </text>
+              </div>
             </Col>
             <Col
               className="d-flex justify-content-center"
@@ -236,7 +213,7 @@ function HomeLogged() {
               xs={3}
             >
               <i
-                class="fas fa-user-plus"
+                className="fas fa-user-plus"
                 style={{ color: "white", fontSize: "20vw" }}
               />
             </Col>
@@ -257,36 +234,38 @@ function HomeLogged() {
                 alt="Tablet"
               />
             </Col>
-            <Col style={{ marginTop: "2rem", marginBottom: "2rem" }} xs={4}>
-              <text
+            <Col
+              style={{
+                textAlign: "left",
+                marginTop: "2rem",
+                marginBottom: "2rem",
+              }}
+              xs={4}
+            >
+              <div
                 style={{
-                  textAlign: "left",
+                  fontSize: "5.8vw",
+                  fontWeight: "600",
+                  color: "#578DE4",
                 }}
               >
-                <div
-                  style={{
-                    fontSize: "5.8vw",
-                    fontWeight: "600",
-                    color: "#578DE4",
-                  }}
-                >
-                  HOLD
-                </div>
-                <div
-                  style={{
-                    fontSize: "5.8vw",
-                  }}
-                >
-                  A MEETING
-                </div>
-                <div
-                  style={{
-                    fontSize: "2vw",
-                  }}
-                >
-                  Get together as a team because this project is going to be less bumpy
-                </div>
-              </text>
+                HOLD
+              </div>
+              <div
+                style={{
+                  fontSize: "5.8vw",
+                }}
+              >
+                A MEETING
+              </div>
+              <div
+                style={{
+                  fontSize: "2vw",
+                }}
+              >
+                Get together as a team because this project is going to be less
+                bumpy
+              </div>
             </Col>
           </Row>
         </Container>

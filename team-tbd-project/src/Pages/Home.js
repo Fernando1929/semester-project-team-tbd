@@ -5,12 +5,7 @@ import HomeLogged from "../Components/HomeComponents/HomeLogged";
 import HomeUnLogged from "../Components/HomeComponents/HomeUnLogged";
 function Home() {
   var user = { isLoggedIn: true };
-  return (
-    <div>
-      {!user.isLoggedIn ? <HomeUnLogged /> : ""}
-      {user.isLoggedIn ? <HomeLogged /> : ""}
-    </div>
-  );
+  return <div>{user.isLoggedIn ? <HomeLogged /> : <HomeUnLogged />}</div>;
 }
 
 export default Home;

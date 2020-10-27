@@ -29,52 +29,56 @@ function SignUpForm() {
                   Sign Up
                 </h1>
               </Card.Title>
-              <Card.Text>
-                <InputGroup style={{ marginBottom: "1rem" }}>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>
-                      <i class="far fa-user"></i>
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl id="Username" placeholder="Username" />
-                </InputGroup>
-                <InputGroup style={{ marginBottom: "1rem" }}>
-                  <FormControl type="firstName" placeholder="Enter your first name" />
-                  <FormControl type="lastName" placeholder="Enter your last name" />
-                </InputGroup>
-                <InputGroup style={{ marginBottom: "1rem" }}>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>
-                      <i class="far fa-envelope"></i>
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl type="email" id="Email" placeholder="Email" />
-                </InputGroup>
-                <InputGroup style={{ marginBottom: "1rem" }}>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>
-                      <i class="fas fa-lock"></i>
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    type="password"
-                    id="Password"
-                    placeholder="Password"
-                  />
-                </InputGroup>
-                <InputGroup style={{ marginBottom: "1rem" }}>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>
-                      <i class="fas fa-lock"></i>
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    type="password"
-                    id="Re-enterPassword"
-                    placeholder="Re-enter Password"
-                  />
-                </InputGroup>
-              </Card.Text>
+              <InputGroup style={{ marginBottom: "1rem" }}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <i className="far fa-user"></i>
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl id="Username" placeholder="Username" />
+              </InputGroup>
+              <InputGroup style={{ marginBottom: "1rem" }}>
+                <FormControl
+                  type="firstName"
+                  placeholder="Enter your first name"
+                />
+                <FormControl
+                  type="lastName"
+                  placeholder="Enter your last name"
+                />
+              </InputGroup>
+              <InputGroup style={{ marginBottom: "1rem" }}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <i className="far fa-envelope"></i>
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl type="email" id="Email" placeholder="Email" />
+              </InputGroup>
+              <InputGroup style={{ marginBottom: "1rem" }}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <i className="fas fa-lock"></i>
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  type="password"
+                  id="Password"
+                  placeholder="Password"
+                />
+              </InputGroup>
+              <InputGroup style={{ marginBottom: "1rem" }}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <i className="fas fa-lock"></i>
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  type="password"
+                  id="Re-enterPassword"
+                  placeholder="Re-enter Password"
+                />
+              </InputGroup>
               <div className="text-center">
                 <Button className="btn--primary" variant="primary">
                   CREATE ACCOUNT
