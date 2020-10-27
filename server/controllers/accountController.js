@@ -1,14 +1,18 @@
 const db = require("../db/index");
+const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+const  authTokens =  {};
 
 const signup = async (req,res) => {
     try {
         const { username, password, email } = req.body.user;
         const duplicated = (await accountExists(username)).valueOf();
+        const hashedPassword = await getHashedPassword(password);
 
         if(!duplicated) {
             const newAccount = await db.query(
                 "INSERT INTO account (username, password, email) VALUES ($1, $2, $3) RETURNING *",
-                [username, password, email]
+                [username, hashedPassword, email]
             );
     
             res.status(201).json(newAccount.rows[0]);
@@ -16,7 +20,6 @@ const signup = async (req,res) => {
         else {
             res.status(404).json("Username already exists");
         }
-
     } catch (err) {
         console.log(err);
     }
@@ -40,7 +43,46 @@ const accountExists = async (req) => {
     }
 }
 
-const login = async (req,res) => {}
+const login = async (req,res) => {
+    try{
+        const { username, email, password} = req.body.user;
+        const queryreturn = await db.query("SELECT * FROM account where username = $1 OR email = $2",[username, email]);
+        const user_exists = queryreturn.rows[0];
+        const user = (user) =>{ 
+            return ((user['username'] === username || user['email'] === email) && bcrypt.compare(password,user['password']))
+        };
+
+        if(user(user_exists)){
+            authToken = generateAuthToken();
+            // Store authentication token
+            authTokens[authToken] = user;
+
+            // Setting the auth token in cookies
+            //res.cookie('AuthToken', authToken);
+            //res.redirect("3000/");
+            res.status(200).json({
+                    token:authToken,
+                    user_id:user_exists['account_id'],
+                    username:user_exists['username']
+                });
+        }
+        else{
+            res.status(404).json("Wrong password.");
+        }
+    }
+    catch (err){
+       console.log(err);
+    }
+}
+//Hashes the password
+const getHashedPassword = (password) => {
+    const hash = bcrypt.hash(password, 10);
+    return hash;
+}
+
+const generateAuthToken = () => {
+    return crypto.randomBytes(30).toString('hex');
+}
 
 const getAccountById = async (req,res) => {
     try {
@@ -77,7 +119,7 @@ const updateAccount = async (req,res) => {
 
 const deleteAccount = async (req,res) => {
     try {
-        const result = await db.query("DELETE FROM account WHERE account_id = $1", [req.params.id])
+        const result = await db.query("DELETE FROM account WHERE account_id = $1", [req.params.id]);
         res.status(204).json({
             status: "success",
         });
@@ -91,5 +133,5 @@ module.exports = {
     login,
     getAccountById,
     updateAccount,
-    deleteAccount
+    deleteAccount,
 }

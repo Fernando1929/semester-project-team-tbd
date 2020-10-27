@@ -1,4 +1,3 @@
-//import React, { Component, useState } from "react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {signupHandler} from "../Apis/SignUp";
@@ -12,7 +11,7 @@ import {
   FormControl,
 } from "react-bootstrap";
 
-import "../App.css";
+import "../App/App.css";
 
 function SignUpForm() {
 
@@ -26,15 +25,21 @@ const submit = (e) => {
   e.preventDefault();
   if(validateForm()){
     console.log("validated")
+    let errors = []
     const user = {
       username: username,
       email: email,
       password: password,
     };
-
     //Here send things to the handler
     signupHandler(user).then(res => {
-      console.log(res);
+      if(res.status === 201){
+        //change to the other form to fill the profile info
+        console.log(res);
+      }else{
+        errors.push(res.data);
+        setErrors(errors);
+      }
     });
   }
 };
@@ -87,7 +92,7 @@ const validateForm = () =>{
                 <InputGroup style={{ marginBottom: "1rem" }}>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
-                      <i class="far fa-user"></i>
+                      <i className="far fa-user"></i>
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl id="Username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)}/>
@@ -95,7 +100,7 @@ const validateForm = () =>{
                 <InputGroup style={{ marginBottom: "1rem" }}>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
-                      <i class="far fa-envelope"></i>
+                      <i className="far fa-envelope"></i>
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl type="email" id="Email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
@@ -103,7 +108,7 @@ const validateForm = () =>{
                 <InputGroup style={{ marginBottom: "1rem" }}>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
-                      <i class="fas fa-lock"></i>
+                      <i className="fas fa-lock"></i>
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl
@@ -117,7 +122,7 @@ const validateForm = () =>{
                 <InputGroup style={{ marginBottom: "1rem" }}>
                   <InputGroup.Prepend>
                     <InputGroup.Text>
-                      <i class="fas fa-lock"></i>
+                      <i className="fas fa-lock"></i>
                     </InputGroup.Text>
                   </InputGroup.Prepend>
                   <FormControl
@@ -130,7 +135,7 @@ const validateForm = () =>{
                 </InputGroup>
               </Card.Text>
                 <div className="error_message">{
-                error_message.map(error =>(<h5>{error}</h5>))}
+                error_message.map(error =>(<h5 key={error_message.indexOf(error)}>{error}</h5>))}
                 </div>
               <div className="text-center">
                 <Link to="/ProfileInfo">

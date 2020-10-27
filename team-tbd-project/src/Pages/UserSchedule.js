@@ -1,7 +1,6 @@
 import React from "react";
-import "../../src/App.css";
+import "../App/App.css";
 import UserScheduler from "../../src/Components/UserScheduler";
-// import "./SignUp.css";
 
 function UserSchedule() {
   return (

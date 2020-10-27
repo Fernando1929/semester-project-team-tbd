@@ -1,7 +1,6 @@
 // By Yeran L Concepcion
 // 10/1/2020
-
-import React, { useState } from "react";
+import React, { Component, useState  } from "react";
 import {
   Container,
   Row,
@@ -12,11 +11,11 @@ import {
   FormControl,
 } from "react-bootstrap";
 
-import "../App.css";
-import { loginHandler } from "../Apis/Login"
+import "../App/App.css";
+import { loginHandler } from "../Apis/Login";
+import Auth from '../utils/Auth';
 
 function LogInForm() {
-  //emailIcon = (<i className="fab fa-user"></i>); why is this here?? Have no clue
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -25,27 +24,26 @@ function LogInForm() {
 
   const submit = e => {
     e.preventDefault();
-    if(validateForm()){//validate the form and fix it 
+    if(validateForm()){
+      let errors = [];
       const user = {
         username: username,
         email: email,
         password: password
       }
-      //have to finish the implementation on the other side for the returned response
-      // loginHandler(user).then( response =>{
-      //   if(response.status === '200'){
-      //     //here you authenticate the response you recieve the responde and the access token 
-      //     //Authenticate();
-      //     //This.props.succes();
-      //   }else{//here you manage the error messages
-      //     let errors  = {
-      //       invalid: response.data["msg"]
-      //     };
-      //     setErrors(errors);
-      //   }
-      // });
+      loginHandler(user).then( res =>{
+        if(res.status === 200){//Just for now 
+          Auth.authenticateUser(res.data.token);
+          Auth.setUserid(res.data.user_id);
+          Auth.setUsername(res.data.username);
+          window.location.assign("/");
+          console.log("User logged in", res.data);
+        }else{
+          errors.push(res.data);
+          setErrors(errors);
+        }
+      });
     }
-
   };
 
   const validateForm = () => {
@@ -89,7 +87,7 @@ function LogInForm() {
                   style={{ marginBottom: "1rem" }}>
                     <InputGroup.Prepend>
                       <InputGroup.Text>
-                        <i class="far fa-user"></i>
+                        <i className="far fa-user"></i>
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
@@ -99,11 +97,10 @@ function LogInForm() {
                       onChange={(e) => setUsername(e.target.value)}
                     />
                   </InputGroup>
-
                   <InputGroup style={{ marginBottom: "1rem" }}>
                     <InputGroup.Prepend>
                       <InputGroup.Text>
-                        <i class="fas fa-lock"></i>
+                         <i className="fas fa-lock"></i>
                       </InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl
@@ -117,13 +114,19 @@ function LogInForm() {
                 </Card.Text>
                 <div className="error_message">
                   {error_message.map(error => (
-                    <h5>{error}</h5>))
+                    <h5 key={error_message.indexOf(error)}>{error}</h5>))
                     }
                 </div>
-                <div className="text-center">
-                  <Button className="btn--primary" variant="primary" onClick={submit}>
+                {/* <div className="text-center"> */}
+                  {/* <Button className="btn--primary" variant="primary" onClick={submit}>
                     LOG IN
-                  </Button>
+                  </Button> */}
+                {/* By Yeran L Concepcion 10/17/2020
+                For test porpuses when ever you click log in button it sent you to the logged user page */}
+                <div className="text-center">
+                    <Button className="btn--primary" variant="primary" onClick={(e) => submit(e)}>
+                      LOG IN
+                    </Button>
                 </div>
               </Card.Body>
             </Card>

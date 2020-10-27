@@ -3,9 +3,11 @@ CREATE DATABASE synclink;
 CREATE TABLE account (
     account_id serial primary key, 
     username varchar(30), 
-    password varchar(30),
-    email varchar(30)),
-    account_validation boolean;
+    password varchar(200),
+    email varchar(50),
+    account_validation boolean,
+    UNIQUE(email)
+    );
 
 CREATE TABLE users (
     user_id serial primary key, 
@@ -22,8 +24,8 @@ CREATE TABLE user_schedule (
     event_title varchar(50), 
     start_date_time TIMESTAMP with time zone, 
     end_date_time TIMESTAMP with time zone, 
-    r_rule varchar(40), 
-    ex_dates varchar(40),
+    r_rule varchar(120), 
+    ex_dates varchar(120),
     user_id integer references users(user_id));
 
 CREATE TABLE team_leader (
@@ -47,8 +49,9 @@ CREATE TABLE team_membership (
 
 CREATE TABLE team_schedule (
     team_schedule_id serial primary key, 
-    event_name varchar(50), 
-    start_time time, 
-    end_time time, 
-    days varchar(20), 
+    event_title varchar(50), 
+    start_date_time TIMESTAMP with time zone, 
+    end_date_time TIMESTAMP with time zone, 
+    r_rule varchar(120), 
+    ex_dates varchar(120),
     team_id integer references team(team_id));
