@@ -49,8 +49,9 @@ CREATE TABLE team_membership (
 
 CREATE TABLE team_schedule (
     team_schedule_id serial primary key, 
-    event_name varchar(50), 
-    start_time time, 
-    end_time time, 
-    days varchar(20), 
+    event_title varchar(50), 
+    start_date_time TIMESTAMP with time zone, 
+    end_date_time TIMESTAMP with time zone, 
+    r_rule varchar(120), 
+    ex_dates varchar(120),
     team_id integer references team(team_id));
