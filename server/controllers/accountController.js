@@ -46,8 +46,9 @@ const accountExists = async (req) => {
 const login = async (req,res) => {
     try{
         const { username, email, password} = req.body.user;
-        const queryreturn = await db.query("SELECT * FROM account where username = $1 OR email = $2",[username, email]);
+        const queryreturn = await db.query("SELECT * FROM account NATURAL INNER JOIN users WHERE username = $1 OR email = $2",[username, email]);
         const user_exists = queryreturn.rows[0];
+        console.log(user_exists);
         const user = (user) =>{ 
             return ((user['username'] === username || user['email'] === email) && bcrypt.compare(password,user['password']))
         };
@@ -58,8 +59,6 @@ const login = async (req,res) => {
             authTokens[authToken] = user;
 
             // Setting the auth token in cookies
-            //res.cookie('AuthToken', authToken);
-            //res.redirect("3000/");
             res.status(200).json({
                     token:authToken,
                     user_id:user_exists['account_id'],

@@ -1,6 +1,6 @@
 // By Yeran L Concepcion
 // 10/1/2020
-import React, { Component, useState  } from "react";
+import React, { useState  } from "react";
 import {
   Container,
   Row,
