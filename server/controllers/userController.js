@@ -2,10 +2,10 @@ const db = require("../db/index");
 
 const addUser = async (req,res) => {
     try {
-        const { user_firstname, user_lastname, user_phone, user_location, account_id } = req.body;
+        const { user_firstname, user_lastname, user_phone, user_location, pref_start_work_hour, pref_end_work_hour, account_id } = req.body.user;
         const newUser = await db.query(
-            "INSERT INTO users (user_firstname, user_lastname, user_phone, user_location, account_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-            [user_firstname, user_lastname, user_phone, user_location, account_id]
+            "INSERT INTO users (user_firstname, user_lastname, user_phone, user_location, pref_start_work_hour, pref_end_work_hour, account_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+            [user_firstname, user_lastname, user_phone, user_location, pref_start_work_hour, pref_end_work_hour, account_id]
         );
         res.status(201).json(newUser.rows[0]);
     } catch (err) {
@@ -46,10 +46,10 @@ const getUserById = async (req,res) => {
 
 const updateUser = async (req,res) => {
     try {
-        const { user_firstname, user_lastname, user_phone, user_location } = req.body;
+        const { user_firstname, user_lastname, user_phone, pref_start_work_hour, pref_end_work_hour, user_location } = req.body;
         const result = await db.query(
-            "UPDATE users SET user_firstname = $1, user_lastname = $2, user_phone = $3, user_location = $4 WHERE user_id = $5 RETURNING *",
-            [user_firstname, user_lastname, user_phone, user_location, req.params.id]
+            "UPDATE users SET user_firstname = $1, user_lastname = $2, user_phone = $3, user_location = $4, pref_start_work_hour = $5, pref_end_work_hour = $6 WHERE user_id = $7 RETURNING *",
+            [user_firstname, user_lastname, user_phone, user_location, pref_start_work_hour, pref_end_work_hour, req.params.id]
             ); 
 
         res.status(200).json({

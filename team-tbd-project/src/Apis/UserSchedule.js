@@ -2,7 +2,6 @@ import axios from 'axios';
 import Auth from "../utils/Auth";
 
 export const scheduleAddHandler = appointment =>{ 
-    console.log(appointment);
     return axios
         .post(`http://localhost:3001/api/users/${Auth.getUserid()}/schedule`,{appointment})
         .then( response => {
