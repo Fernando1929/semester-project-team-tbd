@@ -2,7 +2,7 @@ const db = require("../db/index");
 
 const addUser = async (req,res) => {
     try {
-        const { user_firstname, user_lastname, user_phone, user_location, pref_start_work_hour, pref_end_work_hour, account_id } = req.body;
+        const { user_firstname, user_lastname, user_phone, user_location, pref_start_work_hour, pref_end_work_hour, account_id } = req.body.user;
         const newUser = await db.query(
             "INSERT INTO users (user_firstname, user_lastname, user_phone, user_location, pref_start_work_hour, pref_end_work_hour, account_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
             [user_firstname, user_lastname, user_phone, user_location, pref_start_work_hour, pref_end_work_hour, account_id]

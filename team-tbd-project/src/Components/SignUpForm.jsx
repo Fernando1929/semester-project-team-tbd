@@ -12,6 +12,7 @@ import {
 } from "react-bootstrap";
 
 import "../App/App.css";
+import Auth from '../utils/Auth';
 
 function SignUpForm() {
 
@@ -35,11 +36,14 @@ const submit = (e) => {
     signupHandler(user).then(res => {
       if(res.status === 201){
         //change to the other form to fill the profile info
+        Auth.setUserid(res.data.account_id);
         console.log(res);
+        window.location.assign("/ProfileInfo");
       }else{
         errors.push(res.data);
         setErrors(errors);
       }
+      // account_id = res.data.account_id;
     });
   }
 };
@@ -138,11 +142,9 @@ const validateForm = () =>{
                 error_message.map(error =>(<h5 key={error_message.indexOf(error)}>{error}</h5>))}
                 </div>
               <div className="text-center">
-                <Link to="/ProfileInfo">
                   <Button onClick={(e) => submit(e)} type="submit" className="btn--primary" variant="primary">
                   CREATE ACCOUNT
                   </Button>
-                </Link>
               </div>
             </Card.Body>
           </Card>
