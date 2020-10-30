@@ -2,7 +2,6 @@ import React from "react";
 import "../../App/App.css";
 import backgroundH from "../../Images/newHomeBk.gif";
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
 
 function HomeUnLogged() {
   return (
@@ -31,38 +30,23 @@ function HomeUnLogged() {
               <h1 style={{ fontSize: "7vw" }}>SYNCLINK</h1>
               <h3 style={{ fontSize: "2vw" }}>MEET AT THE PERFECT MOMENT</h3>
               <div>
-                <Link
-                  to="/SignUp"
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                  }}
+                <Button
+                  href="/SignUp"
+                  className="btn--primary"
+                  variant="primary"
+                  style={{ fontSize: "2vw", marginBottom: "1rem" }}
                 >
-                  <Button
-                    className="btn--primary"
-                    variant="primary"
-                    style={{ fontSize: "2vw", marginBottom: "1rem" }}
-                  >
-                    GET STARTED
-                  </Button>
-                </Link>
+                  GET STARTED
+                </Button>
               </div>
               <div>
-                <Link
-                  to="/LogIn"
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                    fontSize: "2vw",
-                  }}
+                <Button
+                  href="/LogIn"
+                  className="btn--secondary"
+                  style={{ fontSize: "2vw" }}
                 >
-                  <Button
-                    className="btn--secondary"
-                    style={{ fontSize: "2vw" }}
-                  >
-                    LOG IN
-                  </Button>
-                </Link>
+                  LOG IN
+                </Button>
               </div>
             </Col>
           </Row>
@@ -74,7 +58,7 @@ function HomeUnLogged() {
           <Row className="CreateAccount d-flex justify-content-center align-items-center">
             <Col style={{ margin: "3rem" }} xs={3}>
               <i
-                class="fas fa-puzzle-piece"
+                className="fas fa-puzzle-piece"
                 style={{ color: "white", fontSize: "20vw" }}
               />
             </Col>
@@ -83,7 +67,7 @@ function HomeUnLogged() {
               style={{ marginTop: "2rem", marginBottom: "2rem" }}
               xs={4}
             >
-              <text
+              <div
                 style={{
                   textAlign: "center",
                 }}
@@ -112,45 +96,32 @@ function HomeUnLogged() {
                   Take the first step towards organizing your team
                 </div>
                 <div style={{ marginTop: "0.5rem", fontSize: "2vw" }}>
-                  <Link
-                    to="/LogIn"
+                  <Button
+                    href="/LogIn"
+                    className="btn--secondary"
+                    variant="primary"
                     style={{
-                      textDecoration: "none",
-                      color: "white",
+                      margin: "0.5rem",
+                      fontSize: "2vw",
                     }}
                   >
-                    <Button
-                      className="btn--secondary"
-                      variant="primary"
-                      style={{
-                        margin: "0.5rem",
-                        fontSize: "2vw",
-                      }}
-                    >
-                      LOG IN
-                    </Button>
-                  </Link>
-                  <Link
-                    to="/SignUp"
+                    LOG IN
+                  </Button>
+
+                  <Button
+                    href="/SignUp"
+                    variant="light"
                     style={{
-                      textDecoration: "none",
-                      color: "white",
+                      outline: "none",
+                      border: "none",
+                      margin: "0.5rem",
+                      fontSize: "2vw",
                     }}
                   >
-                    <Button
-                      variant="light"
-                      style={{
-                        outline: "none",
-                        border: "none",
-                        margin: "0.5rem",
-                        fontSize: "2vw",
-                      }}
-                    >
-                      SIGN UP
-                    </Button>
-                  </Link>
+                    SIGN UP
+                  </Button>
                 </div>
-              </text>
+              </div>
             </Col>
           </Row>
           <Row
@@ -158,7 +129,7 @@ function HomeUnLogged() {
             style={{ backgroundColor: "white" }}
           >
             <Col style={{ marginTop: "2rem", marginBottom: "2rem" }} xs={4}>
-              <text
+              <div
                 style={{
                   textAlign: "right",
                 }}
@@ -186,7 +157,7 @@ function HomeUnLogged() {
                 >
                   Add the hours you are unavailable
                 </div>
-              </text>
+              </div>
             </Col>
             <Col
               className="d-flex justify-content-center"
@@ -202,8 +173,8 @@ function HomeUnLogged() {
             </Col>
           </Row>
           <Row className="ManageTeams d-flex justify-content-center align-items-center">
-            <Col style={{ marginTop: "2rem", marginBottom: "2rem"}} xs={4}>
-              <text
+            <Col style={{ marginTop: "2rem", marginBottom: "2rem" }} xs={4}>
+              <div
                 style={{
                   textAlign: "right",
                 }}
@@ -229,9 +200,10 @@ function HomeUnLogged() {
                     fontSize: "2vw",
                   }}
                 >
-                  Create a team and share it with your group or join a team that was shared to you
+                  Create a team and share it with your group or join a team that
+                  was shared to you
                 </div>
-              </text>
+              </div>
             </Col>
             <Col
               className="d-flex justify-content-center"
@@ -239,7 +211,7 @@ function HomeUnLogged() {
               xs={3}
             >
               <i
-                class="fas fa-user-plus"
+                className="fas fa-user-plus"
                 style={{ color: "white", fontSize: "20vw" }}
               />
             </Col>
@@ -261,11 +233,7 @@ function HomeUnLogged() {
               />
             </Col>
             <Col style={{ marginTop: "2rem", marginBottom: "2rem" }} xs={4}>
-              <text
-                style={{
-                  textAlign: "left",
-                }}
-              >
+              <div style={{ textAlign: "left" }}>
                 <div
                   style={{
                     fontSize: "5.8vw",
@@ -287,9 +255,10 @@ function HomeUnLogged() {
                     fontSize: "2vw",
                   }}
                 >
-                  Get together as a team because this project is going to be less bumpy
+                  Get together as a team because this project is going to be
+                  less bumpy
                 </div>
-              </text>
+              </div>
             </Col>
           </Row>
         </Container>

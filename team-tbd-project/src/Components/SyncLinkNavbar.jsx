@@ -1,6 +1,5 @@
 import React from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import mainLogo from "../Images/synLogoNM.png";
 import "../App/App.css";
 import Auth from "../utils/Auth";
@@ -11,7 +10,13 @@ function SyncLinkNavbar() {
   };
 
   return (
-    <Navbar sticky="top" collapseOnSelect expand="lg" bg="light" variant="light">
+    <Navbar
+      sticky="top"
+      collapseOnSelect
+      expand="lg"
+      bg="light"
+      variant="light"
+    >
       <Navbar.Brand href="/">
         <h2
           className="phoneDisplayNoText"
@@ -58,25 +63,17 @@ function SyncLinkNavbar() {
       >
         <Nav className="mr-auto"></Nav>
         <Nav>
-          <Nav.Link>
-            <Link to="/" style={navStyle}>
-              HOME
-            </Link>
+          <Nav.Link href="/" style={navStyle}>
+            HOME
           </Nav.Link>
-          <Nav.Link>
-            <Link to="/Services" style={navStyle}>
-              SERVICES
-            </Link>
+          <Nav.Link href="/Services" style={navStyle}>
+            SERVICES
           </Nav.Link>
-          <Nav.Link>
-            <Link to="/AboutUs" style={navStyle}>
-              ABOUT US
-            </Link>
+          <Nav.Link href="/AboutUs" style={navStyle}>
+            ABOUT US
           </Nav.Link>
-          <Nav.Link>
-            <Link to="/ContactUs" style={navStyle}>
-              CONTACT US
-            </Link>
+          <Nav.Link href="/ContactUs" style={navStyle}>
+            CONTACT US
           </Nav.Link>
           {Auth.isUserAuthenticated() ?
           <Link to="/" onClick={() => window.location.assign("/")}>
