@@ -13,8 +13,8 @@ CREATE TABLE users (
     user_id serial primary key, 
     user_firstname varchar(20), 
     user_lastname varchar(20), 
-    user_phone integer,
-    user_location varchar(75),
+    user_phone varchar(11),
+    user_location varchar(200),
     pref_start_work_hour TIME,
     pref_end_work_hour TIME,
     account_id integer references account(account_id));
