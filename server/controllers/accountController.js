@@ -1,7 +1,7 @@
 const db = require("../db/index");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const  authTokens =  {};
+const authTokens =  {};
 
 const signup = async (req,res) => {
     try {
@@ -50,10 +50,11 @@ const login = async (req,res) => {
         const user_exists = queryreturn.rows[0];
         console.log(user_exists);
         const user = (user) =>{ 
-            return ((user['username'] === username || user['email'] === email) && bcrypt.compare(password,user['password']))
+            return ((user['username'] === username || user['email'] === email) && bcrypt.compare(password,user['password']) )//add at the end:&& user["account_validation"]=== true
         };
 
         if(user(user_exists)){
+            console.log(user(user_exists));
             authToken = generateAuthToken();
             // Store authentication token
             authTokens[authToken] = user;
@@ -61,7 +62,7 @@ const login = async (req,res) => {
             // Setting the auth token in cookies
             res.status(200).json({
                     token:authToken,
-                    user_id:user_exists['account_id'],
+                    user_id:user_exists['user_id'],
                     username:user_exists['username']
                 });
         }

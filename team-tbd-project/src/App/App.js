@@ -11,6 +11,7 @@ import ProfileInfo from "../Pages/SignUp/ProfileInfo";
 import AboutUs from "../Pages/AboutUs";
 import ContactUs from "../Pages/ContactUs";
 import LogIn from "../Pages/LogIn";
+import LoginValidate from "../Pages/LoginValidate";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/ContactUs" component={ContactUs} />
           <Route path="/ProfileInfo" component={ProfileInfo} />
           <Route path="/UserSchedule" component={UserSchedule} />
+          <Route path="/LoginValidate" component={LoginValidate}/>
         </Switch>
       </Router>
     </>

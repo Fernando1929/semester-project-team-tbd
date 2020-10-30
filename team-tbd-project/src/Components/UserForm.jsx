@@ -42,7 +42,8 @@ function UserForm() {
       //Here send things to the handler
       userInfoHandler(user).then(res => {
         console.log(res);
-        window.location.assign("AboutUs");
+        Auth.deauthenticateUser();
+        window.location.assign("/LoginValidate");
       });
     }
   };

@@ -13,7 +13,7 @@ CREATE TABLE users (
     user_id serial primary key, 
     user_firstname varchar(20), 
     user_lastname varchar(20), 
-    user_phone integer,
+    user_phone varchar(11),
     user_location varchar(75),
     pref_start_work_hour TIME,
     pref_end_work_hour TIME,
