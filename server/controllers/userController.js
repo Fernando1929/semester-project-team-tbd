@@ -19,35 +19,39 @@ const addUser = async (req,res) => {
 const emailVerification = async (req) => {
     try {
 
-        let testAccount = await nodemailer.createTestAccount();
-
         let transporter = nodemailer.createTransport({
-            host: "smtp.ethereal.email",
-            port: 587,
-            secure: false, // true for 465, false for other ports
+            host: 'gmail',
             auth: {
-            user: testAccount.user, // generated ethereal user
-            pass: testAccount.pass, // generated ethereal password
-            },
+            user: "", // generated ethereal user
+            pass: "", // generated ethereal password
+            }
         });
         ///Use token with email things
         
         /////////////Test
-        const user_id = req.body;
-        const q = await db.query("SELECT email From account NATURAL INNER JOIN users WHERE user_id = $1",[user_id]);
+        const user_id = req;
+        console.log(user_id);
+        const q = await db.query("SELECT * From account NATURAL INNER JOIN users WHERE user_id = $1",[user_id]);
+        console.log(q);
         const email = q.rows[0]['email'];
         // console.log(username);
         const url = `http://localhost:3000/confirmation/${user_id}`;
 
-        let info = await transporter.sendMail({
-            from: '"SYNCLINK" <synclink@comp.com>', // sender address
+        const mail = {
+            from: "synclink@uprm.com", // sender address
             to: `${email}`, // list of receivers
             subject: "Validate", // Subject line
             text: "Validate your account.", // plain text body
             html: `<b>${url}</b>`, // html body
-          });
+          };
 
-        console.log(info);
+        transporter.sendMail(mail, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
     } catch (err) {
         console.log(err);
     }

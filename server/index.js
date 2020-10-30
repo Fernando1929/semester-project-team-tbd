@@ -31,8 +31,8 @@ const EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf'; // placeholder
 
 app.get('/api/confirmation/:id', async (req,res) => {
     try {
-        const {user: {id}} = jwt.verify(req.params.id, EMAIL_SECRET); // change EMAIL_SECRET for whatever we use
-        await accountController.validateAccount(req.params.id);
+        const user_id = req.params.id;                                ///jwt.verify(req.params.id, EMAIL_SECRET); // change EMAIL_SECRET for whatever we use
+        await accountController.validateAccount(user_id);
     } catch (err) {
         res.send(err);
     }
