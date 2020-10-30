@@ -1,5 +1,6 @@
 const db = require("../db/index");
 const nodemailer = require("nodemailer");
+const SMTPTransport = require("nodemailer/lib/smtp-transport");
 
 const addUser = async (req,res) => {
     try {
@@ -18,21 +19,19 @@ const addUser = async (req,res) => {
 //Send Email Verification
 const emailVerification = async (req) => {
     try {
-
-        let transporter = nodemailer.createTransport({
-            host: 'gmail',
+        let transporter = nodemailer.createTransport(new SMTPTransport({
+            service: 'gmail',
+            host: 'smtp.gmail.com',
             auth: {
-            user: "", // generated ethereal user
+            user: "@gmail.com", // generated ethereal user
             pass: "", // generated ethereal password
             }
-        });
+        }));
         ///Use token with email things
         
         /////////////Test
         const user_id = req;
-        console.log(user_id);
         const q = await db.query("SELECT * From account NATURAL INNER JOIN users WHERE user_id = $1",[user_id]);
-        console.log(q);
         const email = q.rows[0]['email'];
         // console.log(username);
         const url = `http://localhost:3000/confirmation/${user_id}`;
@@ -45,7 +44,7 @@ const emailVerification = async (req) => {
             html: `<b>${url}</b>`, // html body
           };
 
-        transporter.sendMail(mail, function(error, info){
+        await transporter.sendMail(mail, function(error, info){
             if (error) {
               console.log(error);
             } else {
