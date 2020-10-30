@@ -11,8 +11,8 @@ const signup = async (req,res) => {
 
         if(!duplicated) {
             const newAccount = await db.query(
-                "INSERT INTO account (username, password, email) VALUES ($1, $2, $3) RETURNING *",
-                [username, hashedPassword, email]
+                "INSERT INTO account (username, password, email, account_validation) VALUES ($1, $2, $3, $4) RETURNING *",
+                [username, hashedPassword, email, 0]
             );
     
             res.status(201).json(newAccount.rows[0]);
@@ -29,9 +29,7 @@ const signup = async (req,res) => {
 const accountExists = async (req) => {
     try {
         const username = req;
-        // console.log(username);
         const account = await db.query("SELECT * FROM account WHERE username = $1", [username]);
-        // console.log(account.rowCount);
         if(account.rows.length !== 0) {
             return true;
         } else {
@@ -98,12 +96,25 @@ const getAccountById = async (req,res) => {
     }
 }
 
+const validateAccount = async (req,res) => {
+    try {
+        const result = await db.query(
+            "UPDATE account SET account_validation = $1 WHERE account_id = $2 RETURNING *",
+            [1, req.params.id]
+            ); 
+
+        res.status(200).json({status: "success"});
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 const updateAccount = async (req,res) => {
     try {
-        const {username, password, email} = req.body;
+        const {username, password, email, account_validation} = req.body;
         const result = await db.query(
-            "UPDATE account SET username = $1, password = $2, email = $3 WHERE account_id = $4 RETURNING *",
-            [username, password, email, req.params.id]
+            "UPDATE account SET username = $1, password = $2, email = $3, account_validation = $4 WHERE account_id = $5 RETURNING *",
+            [username, password, email, account_validation, req.params.id]
             ); 
 
         res.status(200).json({
@@ -134,4 +145,5 @@ module.exports = {
     getAccountById,
     updateAccount,
     deleteAccount,
+    validateAccount
 }
