@@ -96,11 +96,11 @@ const getAccountById = async (req,res) => {
     }
 }
 
-const validateAccount = async (req) => {
+const validateAccount = async (req,res) => {
     try {
         const result = await db.query(
             "UPDATE account SET account_validation = $1 WHERE account_id = $2 RETURNING *",
-            [1, req]
+            [true, req]
             ); 
 
         res.status(200).json({status: "success"});

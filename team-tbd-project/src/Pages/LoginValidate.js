@@ -1,13 +1,13 @@
 import React from "react";
 import "../App/App.css";
 import LogInForm from "../Components/LogInForm";
+import Validate from "../Components/Validate";
 import "./SignUp/SignUp.css";
 
 function LoginValidate() {
   return (
     <div className="LogIn">
-        <h1>Validate your email</h1>
-        <p>Validate using the link to login from the email you receive from us.</p>
+      <Validate/>
       <LogInForm />
     </div>
   );

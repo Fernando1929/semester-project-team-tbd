@@ -16,15 +16,14 @@ const addUser = async (req,res) => {
     }
 }
 
-//Send Email Verification
-const emailVerification = async (req) => {
+const emailVerification = async(req) =>{///needs a little more work
     try {
         let transporter = nodemailer.createTransport(new SMTPTransport({
             service: 'gmail',
             host: 'smtp.gmail.com',
             auth: {
-            user: "@gmail.com", // generated ethereal user
-            pass: "", // generated ethereal password
+            user: "@gmail.com",
+            pass: "", 
             }
         }));
         ///Use token with email things
@@ -33,8 +32,7 @@ const emailVerification = async (req) => {
         const user_id = req;
         const q = await db.query("SELECT * From account NATURAL INNER JOIN users WHERE user_id = $1",[user_id]);
         const email = q.rows[0]['email'];
-        // console.log(username);
-        const url = `http://localhost:3000/confirmation/${user_id}`;
+        const url = `http://localhost:3001/confirmation/${user_id}`;//using 3001 since the localhoste is on that port
 
         const mail = {
             from: "synclink@uprm.com", // sender address
@@ -43,14 +41,14 @@ const emailVerification = async (req) => {
             text: "Validate your account.", // plain text body
             html: `<b>${url}</b>`, // html body
           };
-
-        await transporter.sendMail(mail, function(error, info){
+        console.log("going to send");
+        transporter.sendMail(mail, function(error, info){
             if (error) {
               console.log(error);
             } else {
               console.log('Email sent: ' + info.response);
             }
-          });
+          });   
     } catch (err) {
         console.log(err);
     }
@@ -122,5 +120,6 @@ module.exports = {
     getAllUsers,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
+    emailVerification
 }

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import {userInfoHandler} from "../Apis/UserInfo";
 import {
   Container,
@@ -42,7 +41,6 @@ function UserForm() {
       //Here send things to the handler
       userInfoHandler(user).then(res => {
         console.log(res);
-        Auth.deauthenticateUser();
         window.location.assign("/LoginValidate");
       });
     }

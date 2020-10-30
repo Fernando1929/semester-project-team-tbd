@@ -13,6 +13,8 @@ const morgan = require("morgan");
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const userController = require('./controllers/userController');
+const { response } = require('express');
 
 const app = express();
 
@@ -32,9 +34,21 @@ const EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf'; // placeholder
 app.get('/api/confirmation/:id', async (req,res) => {
     try {
         const user_id = req.params.id;                                ///jwt.verify(req.params.id, EMAIL_SECRET); // change EMAIL_SECRET for whatever we use
-        await accountController.validateAccount(user_id);
+        await accountController.validateAccount(user_id,res);
     } catch (err) {
         res.send(err);
+    }
+});
+
+app.post('/api/validation/resend/:id', async (req,res) => {
+    try {
+        const user_id = req.params.id;                                ///jwt.verify(req.params.id, EMAIL_SECRET); // change EMAIL_SECRET for whatever we use
+        await userController.emailVerification(user_id);
+        res.status(200).json({
+            status:"succes"
+        });
+    } catch (err) {
+        console.log(err);
     }
 });
 

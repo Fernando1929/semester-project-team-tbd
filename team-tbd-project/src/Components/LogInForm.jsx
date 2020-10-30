@@ -117,12 +117,6 @@ function LogInForm() {
                     <h5 key={error_message.indexOf(error)}>{error}</h5>))
                     }
                 </div>
-                {/* <div className="text-center"> */}
-                  {/* <Button className="btn--primary" variant="primary" onClick={submit}>
-                    LOG IN
-                  </Button> */}
-                {/* By Yeran L Concepcion 10/17/2020
-                For test porpuses when ever you click log in button it sent you to the logged user page */}
                 <div className="text-center">
                     <Button className="btn--primary" variant="primary" onClick={(e) => submit(e)}>
                       LOG IN
