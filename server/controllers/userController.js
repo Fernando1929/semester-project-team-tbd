@@ -16,23 +16,22 @@ const addUser = async (req,res) => {
     }
 }
 
-const emailVerification = async(req) =>{///needs a little more work
+const emailVerification = async(req) =>{//needs tweaks
     try {
         let transporter = nodemailer.createTransport(new SMTPTransport({
             service: 'gmail',
             host: 'smtp.gmail.com',
             auth: {
-            user: "@gmail.com",
-            pass: "", 
+            user: "Schutzies.synclink@gmail.com",
+            pass: "Synclink_appuser", 
             }
         }));
-        ///Use token with email things
-        
-        /////////////Test
+        //Implement with token
+        //Test
         const user_id = req;
         const q = await db.query("SELECT * From account NATURAL INNER JOIN users WHERE user_id = $1",[user_id]);
         const email = q.rows[0]['email'];
-        const url = `http://localhost:3001/confirmation/${user_id}`;//using 3001 since the localhoste is on that port
+        const url = `http://localhost:3001/api/confirmation/${user_id}`;//localhost is on port 3001
 
         const mail = {
             from: "synclink@uprm.com", // sender address

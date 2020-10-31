@@ -48,7 +48,7 @@ const login = async (req,res) => {
         const user_exists = queryreturn.rows[0];
         console.log(user_exists);
         const user = (user) =>{ 
-            return ((user['username'] === username || user['email'] === email) && bcrypt.compare(password,user['password']) )//add at the end:&& user["account_validation"]=== true
+            return ((user['username'] === username || user['email'] === email) && bcrypt.compare(password,user['password']) && user["account_validation"]=== true )
         };
 
         if(user(user_exists)){

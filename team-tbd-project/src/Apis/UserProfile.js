@@ -1,8 +1,9 @@
 import axios from "axios";
+import Auth from "../utils/Auth";
 
 export const profileGetHandler = () => {
     return axios
-        .get('http://localhost:3001/api/users/1') // change to /users/:id
+        .get(`http://localhost:3001/api/users/${Auth.getUserid()}`) // change to /users/:id 
         .then( response => {
             return response.data
         })
@@ -11,9 +12,9 @@ export const profileGetHandler = () => {
         })
 }
 
-export const profileUpdateHandler = profile => {
+export const profileUpdateHandler = (profile) => {
     return axios
-        .put(`http://localhost:3001/api/users/1`, {profile}) // change to /users/:id
+        .put(`http://localhost:3001/api/users/${Auth.getUserid()}`, {profile}) // change to /users/:id
         .then( response => {
             return response
         })

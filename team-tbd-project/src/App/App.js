@@ -12,6 +12,7 @@ import AboutUs from "../Pages/AboutUs";
 import ContactUs from "../Pages/ContactUs";
 import LogIn from "../Pages/LogIn";
 import LoginValidate from "../Pages/LoginValidate";
+import Profile from "../Pages/Profile"
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/ProfileInfo" component={ProfileInfo} />
           <Route path="/UserSchedule" component={UserSchedule} />
           <Route path="/LoginValidate" component={LoginValidate}/>
+          <Route path="/Profile" component={Profile}/>
         </Switch>
       </Router>
     </>

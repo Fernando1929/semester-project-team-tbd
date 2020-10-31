@@ -3,6 +3,7 @@ import { Navbar, Nav, Button } from "react-bootstrap";
 import mainLogo from "../Images/synLogoNM.png";
 import "../App/App.css";
 import Auth from "../utils/Auth";
+import { Link } from "react-router-dom";
 
 function SyncLinkNavbar() {
   const navStyle = {
