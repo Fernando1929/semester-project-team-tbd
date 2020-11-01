@@ -1,5 +1,5 @@
 const db = require("../db/index");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const authTokens =  {};
 
@@ -46,18 +46,17 @@ const login = async (req,res) => {
         const { username, email, password} = req.body.user;
         const queryreturn = await db.query("SELECT * FROM account NATURAL INNER JOIN users WHERE username = $1 OR email = $2",[username, email]);
         const user_exists = queryreturn.rows[0];
-        console.log(user_exists);
-        const user = (user) =>{ 
-            return ((user['username'] === username || user['email'] === email) && bcrypt.compare(password,user['password']) && user["account_validation"]=== true )
+        const user = (user_e) =>{ 
+            return ((user_e['username'] === username || user_e['email'] === email) && user_e["account_validation"] === true && (bcrypt.compareSync(password, user_e['password'])));
         };
-
+        
         if(user(user_exists)){
-            console.log(user(user_exists));
             authToken = generateAuthToken();
             // Store authentication token
             authTokens[authToken] = user;
 
             // Setting the auth token in cookies
+            console.log(user_exists);
             res.status(200).json({
                     token:authToken,
                     user_id:user_exists['user_id'],
@@ -74,7 +73,7 @@ const login = async (req,res) => {
 }
 //Hashes the password
 const getHashedPassword = (password) => {
-    const hash = bcrypt.hash(password, 10);
+    const hash = bcrypt.hashSync(password, 10);
     return hash;
 }
 
@@ -100,7 +99,7 @@ const validateAccount = async (req,res) => {
     try {
         const result = await db.query(
             "UPDATE account SET account_validation = $1 WHERE account_id = $2 RETURNING *",
-            [true, req]
+            [1, req]
             ); 
 
         res.status(200).json({status: "success"});

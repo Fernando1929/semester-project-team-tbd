@@ -3,14 +3,11 @@ const userRoutes = require('./routes/userRoutes');
 const userScheduleRoutes = require('./routes/userScheduleRoutes');
 const teamScheduleRoutes = require('./routes/teamScheduleRoutes');
 const teamRoutes = require('./routes/teamRoutes');
-const accountController = require('./controllers/accountController');
-
+const serviceRoutes =  require('./routes/serviceRoutes');
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-const userController = require('./controllers/userController');
-const { response } = require('express');
 
 const app = express();
 
@@ -24,29 +21,7 @@ app.use('/api', userRoutes);
 app.use('/api', userScheduleRoutes);
 app.use('/api', teamScheduleRoutes);
 app.use('/api', teamRoutes);
-
-const EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf'; // placeholder
-
-app.get('/api/confirmation/:id', async (req,res) => {
-    try {
-        const user_id = req.params.id;                                
-        await accountController.validateAccount(user_id,res);
-    } catch (err) {
-        res.send(err);
-    }
-});
-
-app.post('/api/validation/resend/:id', async (req,res) => {
-    try {
-        const user_id = req.params.id;                                
-        await userController.emailVerification(user_id);
-        res.status(200).json({
-            status:"succes"
-        });
-    } catch (err) {
-        console.log(err);
-    }
-});
+app.use('/api', serviceRoutes);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
