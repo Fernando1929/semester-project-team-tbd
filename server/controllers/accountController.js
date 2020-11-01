@@ -110,10 +110,29 @@ const validateAccount = async (req,res) => {
 
 const updateAccount = async (req,res) => {
     try {
-        const {username, password, email, account_validation} = req.body;
+        const {username, password, email} = req.body.account;
         const result = await db.query(
-            "UPDATE account SET username = $1, password = $2, email = $3, account_validation = $4 WHERE account_id = $5 RETURNING *",
-            [username, password, email, account_validation, req.params.id]
+            "UPDATE account SET username = $1, password = $2, email = $3 WHERE account_id = $4 RETURNING *",
+            [username, password, email, req.params.id]
+            ); 
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                account: result.rows[0]
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const updateEmail = async (req,res) => {
+    try {
+        const {email} = req.body.account;
+        const result = await db.query(
+            "UPDATE account SET email = $1 WHERE account_id = $2 RETURNING *",
+            [email, req.params.id]
             ); 
 
         res.status(200).json({
@@ -143,6 +162,7 @@ module.exports = {
     login,
     getAccountById,
     updateAccount,
+    updateEmail,
     deleteAccount,
     validateAccount
 }
