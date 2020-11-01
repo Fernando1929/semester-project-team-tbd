@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import {signupHandler} from "../Apis/SignUp";
 import {
   Container,
@@ -26,24 +25,23 @@ const submit = (e) => {
   e.preventDefault();
   if(validateForm()){
     console.log("validated")
-    let errors = []
+    let errors = [];
     const user = {
       username: username,
       email: email,
       password: password,
     };
+    
     //Here send things to the handler
     signupHandler(user).then(res => {
       if(res.status === 201){
-        //change to the other form to fill the profile info
-        Auth.setUserid(res.data.account_id);
-        console.log(res);
-        window.location.assign("/ProfileInfo");
+        Auth.setUserid(res.data.account_id);// account_id = res.data.account_id;
+        window.location.assign("/ProfileInfo"); //change to the other form to fill the profile info
       }else{
         errors.push(res.data);
         setErrors(errors);
       }
-      // account_id = res.data.account_id;
+
     });
   }
 };
@@ -138,7 +136,7 @@ const validateForm = () =>{
                   />
                 </InputGroup>
               </Card.Text>
-                <div className="error_message">{
+                <div className="notice">{
                 error_message.map(error =>(<h5 key={error_message.indexOf(error)}>{error}</h5>))}
                 </div>
               <div className="text-center">

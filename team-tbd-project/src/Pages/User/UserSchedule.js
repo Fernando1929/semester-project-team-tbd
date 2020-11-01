@@ -1,6 +1,6 @@
 import React from "react";
-import "../App/App.css";
-import UserScheduler from "../../src/Components/UserScheduler";
+import "../../App/App.css";
+import UserScheduler from "../../Components/UserScheduler";
 
 function UserSchedule() {
   return (

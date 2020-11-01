@@ -77,7 +77,7 @@ function SyncLinkNavbar() {
             CONTACT US
           </Nav.Link>
           {Auth.isUserAuthenticated() ?
-          <Link to="/" onClick={() => window.location.assign("/")}>
+          <Link to="/" style={{ textDecoration: "none", color: "white" }} onClick={() => window.location.assign("/")}>
             <Button className="btn--primary" variant="primary" onClick={() => Auth.deauthenticateUser()}>
               LOG OUT
             </Button>

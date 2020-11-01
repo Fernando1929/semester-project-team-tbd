@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Row,
@@ -7,23 +7,25 @@ import {
   Button
 } from "react-bootstrap";
 import { validateResend } from "../Apis/Validate";
-import "../App/App.css";
 
+import "../App/App.css";
+import "../Pages/SignUp/SignUp.css";
 
 function Validate() {
+  const [msg, setmsg] = useState([]);
 
   const resend = e => {
     e.preventDefault();
+    let msgs = [];
       validateResend().then( res =>{
-        console.log(res);
-        // if(res.status === 200){
-        //   //lol
-        // }else{
-        //   console.log(res)
-        // }
+        if(res.status === 200 || res.status === 304){
+          msgs.push(res.data.msg);
+          setmsg(msgs);
+        }else{
+          console.log(res);
+        }
       });
   };
-
 
     return (
       <Container>
@@ -45,6 +47,9 @@ function Validate() {
                 <Card.Text>
                 <h5>Validate using the link to login from the email you receive from us.</h5>
                 </Card.Text>
+                <div className="notice">{
+                msg.map(msg =>(<h5 key={msg.indexOf(msg)}>{msg}</h5>))}
+                </div>
                 <div className="text-center">
                     <Button className="btn--primary" variant="primary" onClick={(e) => resend(e)}>
                       Resend email

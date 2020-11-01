@@ -20,7 +20,7 @@ import {
   ViewSwitcher,
   AppointmentForm,
   AppointmentTooltip,
-  ConfirmationDialog,
+//  ConfirmationDialog,
   TodayButton,
 } from '@devexpress/dx-react-scheduler-material-ui';
 

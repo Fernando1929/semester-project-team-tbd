@@ -38,10 +38,10 @@ function UserForm() {
         account_id: account_id
       };
   
-      //Here send things to the handler
-      userInfoHandler(user).then(res => {
-        console.log(res);
-        window.location.assign("/LoginValidate");
+      userInfoHandler(user).then(res => {      //Here send things to the handler
+        if(res.status === 201){
+          window.location.assign("/LoginValidate");//test to make sure the redirect happens
+        }
       });
     }
   };

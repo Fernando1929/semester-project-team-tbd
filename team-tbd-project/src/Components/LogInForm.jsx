@@ -32,7 +32,7 @@ function LogInForm() {
         password: password
       }
       loginHandler(user).then( res =>{
-        if(res.status === 200){//Just for now 
+        if(res.status === 200){//Just for now
           Auth.authenticateUser(res.data.token);
           Auth.setUserid(res.data.user_id);
           Auth.setUsername(res.data.username);
@@ -112,7 +112,7 @@ function LogInForm() {
                     />
                   </InputGroup>
                 </Card.Text>
-                <div className="error_message">
+                <div className="notice">
                   {error_message.map(error => (
                     <h5 key={error_message.indexOf(error)}>{error}</h5>))
                     }

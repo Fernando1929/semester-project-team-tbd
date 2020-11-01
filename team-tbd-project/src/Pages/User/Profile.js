@@ -1,9 +1,9 @@
 import React from "react";
-import "../App/App.css";
+import "../../App/App.css";
 import { Container, Row, Col, Card, Button, Nav } from "react-bootstrap";
-import mainLogo from "../Images/HomeBackground.jpg";
+import mainLogo from "../../Images/HomeBackground.jpg";
 import Image from "react-bootstrap/Image";
-import UpdateProfileForm from "../Components/UpdateProfileForm";
+import UpdateProfileForm from "../../Components/UpdateProfileForm";
 
 //User info here please!
 const PersonInfo = {
