@@ -27,8 +27,8 @@ const submit = (e) => {
     console.log("validated")
     let errors = [];
     const user = {
-      username: username,
-      email: email,
+      username: username.toLowerCase(),
+      email: email.toLowerCase(),
       password: password,
     };
     
