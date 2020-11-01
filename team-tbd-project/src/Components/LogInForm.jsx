@@ -14,7 +14,6 @@ import {
 import "../App/App.css";
 import { loginHandler } from "../Apis/Login";
 import Auth from '../utils/Auth';
-import { contains } from "jquery";
 
 function LogInForm() {
 
