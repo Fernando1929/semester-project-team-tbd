@@ -43,11 +43,11 @@ const accountExists = async (req) => {
 
 const login = async (req,res) => {
     try{
-        const { username, email, password} = req.body.user;
-        const queryreturn = await db.query("SELECT * FROM account NATURAL INNER JOIN users WHERE username = $1 OR email = $2",[username, email]);
+        const { username, password} = req.body.user;
+        const queryreturn = await db.query("SELECT * FROM account NATURAL INNER JOIN users WHERE username = $1 OR email = $2",[username, username]);
         const user_exists = queryreturn.rows[0];
         const user = (user_e) =>{ 
-            return ((user_e['username'] === username || user_e['email'] === email) && user_e["account_validation"] === true && (bcrypt.compareSync(password, user_e['password'])));
+            return ((user_e['username'] === username || user_e['email'] === username) && user_e["account_validation"] === true && (bcrypt.compareSync(password, user_e['password'])));
         };
         
         if(user(user_exists)){
@@ -56,7 +56,6 @@ const login = async (req,res) => {
             authTokens[authToken] = user;
 
             // Setting the auth token in cookies
-            console.log(user_exists);
             res.status(200).json({
                     token:authToken,
                     user_id:user_exists['user_id'],

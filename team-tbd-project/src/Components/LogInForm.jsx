@@ -14,21 +14,20 @@ import {
 import "../App/App.css";
 import { loginHandler } from "../Apis/Login";
 import Auth from '../utils/Auth';
+import { contains } from "jquery";
 
 function LogInForm() {
 
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error_message, setErrors] = useState([]);
 
-  const submit = e => {
+  const submit = (e) => {
     e.preventDefault();
     if(validateForm()){
       let errors = [];
       const user = {
-        username: username,
-        email: email,
+        username: username.toLowerCase(),
         password: password
       }
       loginHandler(user).then( res =>{
@@ -49,10 +48,6 @@ function LogInForm() {
   const validateForm = () => {
     let errors = [];
     let isValid =  true;
-    if(username.indexOf("@") > 0 && username.charAt(username.length-4) === '.'){
-      setEmail(username);
-      setUsername(""); 
-    }
     if(!(username.length > 0)){
       isValid = false;
       errors.push("*Please enter your username.");
