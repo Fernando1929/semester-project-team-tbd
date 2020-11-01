@@ -15,6 +15,7 @@ CREATE TABLE users (
     user_lastname varchar(20), 
     user_phone varchar(11),
     user_location varchar(200),
+    user_bio varchar(250),
     pref_start_work_hour TIME,
     pref_end_work_hour TIME,
     account_id integer references account(account_id));
