@@ -1,7 +1,8 @@
 import React from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import mainLogo from "../Images/synLogoNM.png";
-import "../App.css";
+import "../App/App.css";
+import { Link } from "react-router-dom";
 
 function SyncLinkNavbar() {
   const navStyle = {
@@ -74,12 +75,16 @@ function SyncLinkNavbar() {
           <Nav.Link href="/ContactUs" style={navStyle}>
             CONTACT US
           </Nav.Link>
-          <Button href="/LogIn" className="btn--primary" variant="primary">
-            LOG IN
-          </Button>
-          <Button href="/SignUp" className="btn--primary" variant="primary">
-            SIGN UP
-          </Button>
+          <Link to="/LogIn" style={{ textDecoration: "none", color: "white" }}>
+            <Button className="btn--primary" variant="primary">
+              LOG IN
+            </Button>
+          </Link>
+          <Link to="/SignUp" style={{ textDecoration: "none", color: "white" }}>
+            <Button className="btn--primary" variant="primary">
+              SIGN UP
+            </Button>
+          </Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Card, Button, Nav, CardDeck } from "react-bootstrap";
-import "../App.css";
+import "../../App/App.css";
 
 function Teams() {
   //Poner los todos teams del usuario.

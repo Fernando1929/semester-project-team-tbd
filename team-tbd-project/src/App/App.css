@@ -80,3 +80,8 @@ html {
     display: flex;
   }
 }
+
+.notice{
+  color: red;
+  font-size: smaller;
+}

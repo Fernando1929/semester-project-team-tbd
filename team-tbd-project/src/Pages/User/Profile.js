@@ -1,18 +1,10 @@
 import React from "react";
-import "../App.css";
+import "../../App/App.css";
 import { Container, Row, Col, Card, Button, Nav } from "react-bootstrap";
-import mainLogo from "../Images/HomeBackground.jpg";
+import mainLogo from "../../Images/HomeBackground.jpg";
 import Image from "react-bootstrap/Image";
-import UpdateProfileForm from "../Components/UpdateProfileForm";
-
-//User info here please!
-const PersonInfo = {
-  name: "Orlando F. Marrero Soto",
-  email: "orlando.marrero6@upr.edu",
-  phone: "787-413-1722",
-  location: "Las Piedras, PR",
-  bio: "Quiero partir INSO",
-};
+import UpdateProfileForm from "../../Components/UpdateProfileForm";
+import { profileGetHandler } from "../../Apis/UserProfile";
 
 const sectionText = {
   color: "#5b86e5",
@@ -26,6 +18,14 @@ const textStyle = {
 
 function Profile() {
   const [modalShow, setModalShow] = React.useState(false);
+  const [user, setUser] = React.useState({});
+
+  React.useEffect(() => {
+    profileGetHandler().then(res => {
+      setUser(res.data.user);
+    })
+  }, []);
+
   return (
     <Container>
       <Card style={{ marginTop: "5rem", marginBottom: "5rem" }}>
@@ -56,26 +56,26 @@ function Profile() {
                 className="justify-content-center"
                 style={{ marginTop: "4rem" }}
               >
-                <h1>{PersonInfo.name}</h1>
+                <h1>{user.user_firstname + " " + user.user_lastname}</h1>
 
                 <Row className="justify-content-right">
                   <h5 style={sectionText}>Email:</h5>
-                  <h4 style={textStyle}>{PersonInfo.email}</h4>
+                  <h4 style={textStyle}>{user.email}</h4>
                 </Row>
 
                 <Row className="justify-content-right">
                   <h5 style={sectionText}>Phone Number:</h5>
-                  <h4 style={textStyle}>{PersonInfo.phone}</h4>
+                  <h4 style={textStyle}>{user.user_phone}</h4>
                 </Row>
 
                 <Row className="justify-content-right">
                   <h5 style={sectionText}>Location:</h5>
-                  <h4 style={textStyle}>{PersonInfo.location}</h4>
+                  <h4 style={textStyle}>{user.user_location}</h4>
                 </Row>
 
                 <Row className="justify-content-right">
                   <h5 style={sectionText}>Bio:</h5>
-                  <h4 style={textStyle}>{PersonInfo.bio}</h4>
+                  <h4 style={textStyle}>{user.user_bio}</h4>
                 </Row>
               </Col>
             </Row>
