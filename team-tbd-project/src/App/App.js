@@ -14,12 +14,14 @@ import LogIn from "../Pages/Login/LogIn";
 import LoginValidate from "../Pages/Login/LoginValidate";
 import Profile from "../Pages/User/Profile";
 import Teams from "../Pages/Teams/Teams";
+import Auth from "../utils/Auth";
+import LoginNavbar from "../Components/LoginNavbar";
 
 function App() {
   return (
     <>
       <Router>
-        <SyncLinkNavbar />
+        {Auth.isUserAuthenticated()? <LoginNavbar/>:<SyncLinkNavbar />}
         <Switch>
           <Route path="/" exact component={Home}/>
           <Route path="/Services" component={Services} />
