@@ -265,9 +265,7 @@ function getUserFreeHoursTree(U, US, amountH) {
   freeHoursTree = new BinarySearchTree();
   data = null;
 
-  console.log(new Date(U.availableStartHour));
   if (US.length == 0) {
-    console.log("Entre");
     freeHoursTree.insert({
       event_name: "Free",
       start_time: U.availableStartHour,
@@ -276,7 +274,9 @@ function getUserFreeHoursTree(U, US, amountH) {
       hours: Math.abs(U.availableStartHour - U.availableEndHour) / 36e5, //amount of free hours.
     });
   } else {
+    console.log("Entre ELSE");
     var hours = Math.abs(U.availableStartHour - US[0].start_time) / 36e5;
+    console.log(hours);
     if (hours >= amountH) {
       data = {
         event_name: "Free",
@@ -388,4 +388,26 @@ userSchedule = [
   },
 ];
 
-console.log(getUserFreeHoursTree(user, userSchedule, 1));
+function getHoursOrMinutes(data, inMinutes) {
+  var startTime = data[0];
+  var endTime = data[1];
+
+  var s = startTime.split(":");
+  var e = endTime.split(":");
+
+  var end = parseInt(e[0]) * 60 + parseInt(e[1]);
+  var start = parseInt(s[0]) * 60 + parseInt(s[1]);
+
+  var resultMinutes = end - start; //time in minutes
+
+  var resultHours =
+    parseInt(resultMinutes / 60) +
+    " hours " +
+    (resultMinutes % 60) +
+    " minutes";
+
+  return inMinutes ? resultMinutes : resultHours;
+}
+
+// console.log(getUserFreeHoursTree(user, userSchedule, 1));
+console.log(getHoursOrMinutes(["11:20", "13:43"], true));
