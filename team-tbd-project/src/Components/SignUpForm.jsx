@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { signupHandler } from "../Apis/SignUp";
 import {
   Container,
   Row,
@@ -9,9 +10,70 @@ import {
   FormControl,
 } from "react-bootstrap";
 
-import "../App.css";
+import "../App/App.css";
+import Auth from "../utils/Auth";
 
 function SignUpForm() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password_rep, setPassword_rep] = useState("");
+  const [error_message, setErrors] = useState([]);
+
+  const submit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      console.log("validated");
+      let errors = [];
+      const user = {
+        username: username.toLowerCase(),
+        email: email.toLowerCase(),
+        password: password,
+      };
+
+      //Here send things to the handler
+      signupHandler(user).then((res) => {
+        if (res.status === 201) {
+          Auth.setUserid(res.data.account_id); // account_id = res.data.account_id;
+          window.location.assign("/ProfileInfo"); //change to the other form to fill the profile info
+        } else {
+          errors.push(res.data);
+          setErrors(errors);
+        }
+      });
+    }
+  };
+
+  const validateForm = () => {
+    let errors = [];
+    let isValid = true;
+    if (!(username.length > 0)) {
+      isValid = false;
+      errors.push("*Please enter your username.");
+    }
+    if (!(email.length > 0)) {
+      isValid = false;
+      errors.push("*Please enter your email.");
+    }
+    if (
+      (!(email.indexOf("@") > 0) || !email.charAt(email.length - 4) === ".") &&
+      email.length > 0
+    ) {
+      isValid = false;
+      errors.push("*Please enter a proper email address.");
+    }
+    if (!(password.length > 0)) {
+      isValid = false;
+      errors.push("*Please enter your password ");
+    }
+    if (!(password === password_rep) && password.length > 0) {
+      isValid = false;
+      errors.push("*Passwords doesn't match.");
+    }
+    setErrors(errors);
+    return isValid;
+  };
+  ////////////////////////////////////////////////
   return (
     <Container>
       <Row className="justify-content-center">
@@ -29,54 +91,75 @@ function SignUpForm() {
                   Sign Up
                 </h1>
               </Card.Title>
-              <Card.Text>
-                <InputGroup style={{ marginBottom: "1rem" }}>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>
-                      <i class="far fa-user"></i>
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl id="Username" placeholder="Username" />
-                </InputGroup>
-                <InputGroup style={{ marginBottom: "1rem" }}>
-                  <FormControl type="firstName" placeholder="Enter your first name" />
-                  <FormControl type="lastName" placeholder="Enter your last name" />
-                </InputGroup>
-                <InputGroup style={{ marginBottom: "1rem" }}>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>
-                      <i class="far fa-envelope"></i>
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl type="email" id="Email" placeholder="Email" />
-                </InputGroup>
-                <InputGroup style={{ marginBottom: "1rem" }}>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>
-                      <i class="fas fa-lock"></i>
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    type="password"
-                    id="Password"
-                    placeholder="Password"
-                  />
-                </InputGroup>
-                <InputGroup style={{ marginBottom: "1rem" }}>
-                  <InputGroup.Prepend>
-                    <InputGroup.Text>
-                      <i class="fas fa-lock"></i>
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    type="password"
-                    id="Re-enterPassword"
-                    placeholder="Re-enter Password"
-                  />
-                </InputGroup>
-              </Card.Text>
+
+              <InputGroup style={{ marginBottom: "1rem" }}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <i className="far fa-user"></i>
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  id="Username"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </InputGroup>
+              <InputGroup style={{ marginBottom: "1rem" }}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <i className="far fa-envelope"></i>
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  type="email"
+                  id="Email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </InputGroup>
+              <InputGroup style={{ marginBottom: "1rem" }}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <i className="fas fa-lock"></i>
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  type="password"
+                  id="Password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </InputGroup>
+              <InputGroup style={{ marginBottom: "1rem" }}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <i className="fas fa-lock"></i>
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  type="password"
+                  id="Re-enterPassword"
+                  placeholder="Re-enter Password"
+                  value={password_rep}
+                  onChange={(e) => setPassword_rep(e.target.value)}
+                />
+              </InputGroup>
+
+              <div className="notice">
+                {error_message.map((error) => (
+                  <h5 key={error_message.indexOf(error)}>{error}</h5>
+                ))}
+              </div>
               <div className="text-center">
-                <Button className="btn--primary" variant="primary">
+                <Button
+                  onClick={(e) => submit(e)}
+                  type="submit"
+                  className="btn--primary"
+                  variant="primary"
+                >
                   CREATE ACCOUNT
                 </Button>
               </div>
