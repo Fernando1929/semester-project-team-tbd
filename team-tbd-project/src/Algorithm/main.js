@@ -1,3 +1,5 @@
+import alasql from "alasql";
+import rrule from "rrule";
 // Node class
 class Node {
   //data structure example
@@ -320,94 +322,217 @@ function getUserFreeHoursTree(U, US, amountH) {
   return freeHoursTree;
 }
 
-user = {
+var user = {
   availableStartHour: "8:00",
   availableEndHour: "18:00",
   availableDays: "LMWJV",
 };
-userSchedule = [
+
+var userSchedule1 = [
   {
-    event_name: "Stim",
-    start_time: "8:25",
-    end_time: "10:37",
-    event_days: "M",
+    user_schedule_id: 1,
+    event_title: "Work",
+    start_date_time: "2020-11-04T11:30:30.057Z",
+    end_date_time: "2020-11-04T20:30:30.057Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=DAILY;COUNT=27",
+    ex_dates: null,
+    user_id: 1,
   },
   {
-    event_name: "Daltfresh",
-    start_time: "11:49",
-    end_time: "13:03",
-    event_days: "M",
+    user_schedule_id: 2,
+    event_title: "Event",
+    start_date_time: "2020-11-04T20:30:18.820Z",
+    end_date_time: "2020-11-04T21:00:18.820Z",
+    r_rule: null,
+    ex_dates: null,
+    user_id: 1,
   },
   {
-    event_name: "Ventosanzap",
-    start_time: "16:15",
-    end_time: "16:55",
-    event_days: "M",
-  },
-  {
-    event_name: "Zoolab",
-    start_time: "12:47",
-    end_time: "16:12",
-    event_days: "J",
-  },
-  {
-    event_name: "Ventosanzap",
-    start_time: "11:49",
-    end_time: "15:18",
-    event_days: "M",
-  },
-  {
-    event_name: "Home Ing",
-    start_time: "16:01",
-    end_time: "15:34",
-    event_days: "M",
-  },
-  {
-    event_name: "Konklab",
-    start_time: "11:20",
-    end_time: "13:43",
-    event_days: "W",
-  },
-  {
-    event_name: "Bamity",
-    start_time: "12:50",
-    end_time: "15:45",
-    event_days: "V",
-  },
-  {
-    event_name: "Flexidy",
-    start_time: "9:00",
-    end_time: "13:15",
-    event_days: "LWV",
-  },
-  {
-    event_name: "Bamity",
-    start_time: "11:27",
-    end_time: "11:59",
-    event_days: "M",
+    user_schedule_id: 3,
+    event_title: "Event 2",
+    start_date_time: "2020-11-05T22:00:00.000Z",
+    end_date_time: "2020-11-05T22:30:00.000Z",
+    r_rule: "RRULE:INTERVAL=2;FREQ=DAILY;COUNT=10",
+    ex_dates: null,
+    user_id: 1,
   },
 ];
 
-function getHoursOrMinutes(data, inMinutes) {
-  var startTime = data[0];
-  var endTime = data[1];
+var userSchedule2 = [
+  {
+    user_schedule_id: 4,
+    event_title: "Work",
+    start_date_time: "2020-11-02T14:00:33.542Z",
+    end_date_time: "2020-11-02T22:00:33.542Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=DAILY;COUNT=27",
+    ex_dates: null,
+    user_id: 2,
+  },
+  {
+    user_schedule_id: 5,
+    event_title: "Class",
+    start_date_time: "2020-11-02T22:30:33.542Z",
+    end_date_time: "2020-11-02T23:30:33.542Z",
+    r_rule: "RRULE:INTERVAL=3;FREQ=DAILY;COUNT=27",
+    ex_dates: null,
+    user_id: 2,
+  },
+];
 
-  var s = startTime.split(":");
-  var e = endTime.split(":");
+function convertToOneTimeAppointments(data) {
+  var result = [];
+  var alreadyOneTime = alasql("SELECT * FROM ? WHERE r_rule IS NOT NULL", [
+    data,
+  ]);
 
-  var end = parseInt(e[0]) * 60 + parseInt(e[1]);
-  var start = parseInt(s[0]) * 60 + parseInt(s[1]);
+  alreadyOneTime.forEach((event) => {
+    var tempStr = "";
+    var weekDay = null;
+    var freq = null;
+    var count = null;
+    var interval = null;
+    var until = null;
 
-  var resultMinutes = end - start; //time in minutes
+    var duration = diffHoursAndMinutes(
+      event.start_date_time,
+      event.end_date_time
+    );
+    var byHour = duration[0];
+    var byMinute = duration[1];
 
-  var resultHours =
-    parseInt(resultMinutes / 60) +
-    " hours " +
-    (resultMinutes % 60) +
-    " minutes";
+    if (event.r_rule.indexOf("BYDAY=") > 0) {
+      tempStr = event.r_rule.substring(event.r_rule.indexOf("BYDAY=") + 6);
+      weekDay =
+        tempStr.indexOf(";") > 0
+          ? tempStr.substring(0, tempStr.indexOf(";"))
+          : tempStr;
+      if (weekDay.split(",")) {
+        weekDay = weekDay.split(",");
+        var tempArr = [];
 
-  return inMinutes ? resultMinutes : resultHours;
+        weekDay.forEach((day) => {
+          switch (day) {
+            case "MO":
+              tempArr.push(1);
+              break;
+            case "TU":
+              tempArr.push(2);
+              break;
+            case "WE":
+              tempArr.push(3);
+              break;
+            case "TH":
+              tempArr.push(4);
+              break;
+            case "FR":
+              tempArr.push(5);
+              break;
+            case "SA":
+              tempArr.push(6);
+              break;
+            case "SU":
+              tempArr.push(7);
+              break;
+          }
+        });
+      }
+
+      tempStr = "";
+    }
+
+    if (event.r_rule.indexOf("FREQ=") > 0) {
+      tempStr = event.r_rule.substring(event.r_rule.indexOf("FREQ=") + 5);
+      freq =
+        tempStr.indexOf(";") > 0
+          ? tempStr.substring(0, tempStr.indexOf(";"))
+          : tempStr;
+
+      switch (freq) {
+        case "YEARLY":
+          freq = rrule.RRule.YEARLY;
+          break;
+        case "MONTHLY":
+          freq = rrule.RRule.MONTHLY;
+          break;
+        case "WEEKLY":
+          freq = rrule.RRule.WEEKLY;
+          break;
+        case "DAILY":
+          freq = rrule.RRule.DAILY;
+          break;
+        case "HOURLY":
+          freq = rrule.RRule.HOURLY;
+          break;
+        case "MINUTELY":
+          freq = rrule.RRule.MINUTELY;
+          break;
+        case "SECONDLY":
+          freq = rrule.RRule.SECONDLY;
+          break;
+        default:
+          freq = null;
+      }
+      tempStr = "";
+    }
+
+    if (event.r_rule.indexOf("COUNT=") > 0) {
+      tempStr = event.r_rule.substring(event.r_rule.indexOf("COUNT=") + 6);
+      count =
+        tempStr.indexOf(";") > 0
+          ? tempStr.substring(0, tempStr.indexOf(";"))
+          : tempStr;
+      tempStr = "";
+    }
+
+    if (event.r_rule.indexOf("INTERVAL=") > 0) {
+      tempStr = event.r_rule.substring(event.r_rule.indexOf("INTERVAL=") + 9);
+      interval =
+        tempStr.indexOf(";") > 0
+          ? tempStr.substring(0, tempStr.indexOf(";"))
+          : tempStr;
+      interval = parseInt(interval);
+      tempStr = "";
+    }
+
+    if (event.r_rule.indexOf("UNTIL=") > 0) {
+      tempStr = event.r_rule.substring(event.r_rule.indexOf("UNTIL=") + 6);
+      until =
+        tempStr.indexOf(";") > 0
+          ? tempStr.substring(0, tempStr.indexOf(";"))
+          : tempStr;
+      tempStr = "";
+    }
+
+    const rule = new rrule.RRule({
+      freq: freq,
+      interval: interval,
+      count: count,
+      byweekday: weekDay,
+      dtstart: new Date(event.start_date_time),
+      until: until,
+      byhour: byHour,
+      byminute: byMinute,
+    });
+    result.push(rule);
+  });
+
+  return result;
 }
 
+console.log(convertToOneTimeAppointments(userSchedule2)[0].all());
+
+function diffHoursAndMinutes(dt2, dt1) {
+  dt1 = new Date(dt1);
+  dt2 = new Date(dt2);
+  var diffHours = (dt2.getTime() - dt1.getTime()) / 1000;
+  diffHours /= 60 * 60;
+  var diffMinutes = (dt2.getTime() - dt1.getTime()) / 1000;
+  diffMinutes /= 60;
+  diffMinutes -= diffHours * 60;
+  return [Math.abs(Math.round(diffHours)), Math.abs(Math.round(diffMinutes))];
+}
+
+//var d = new Date();
+//var n = d.getHours() + ":" + d.getMinutes();
+
 // console.log(getUserFreeHoursTree(user, userSchedule, 1));
-console.log(getHoursOrMinutes(["11:20", "13:43"], true));
