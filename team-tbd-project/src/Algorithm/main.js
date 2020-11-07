@@ -381,11 +381,14 @@ var userSchedule2 = [
 
 function convertToOneTimeAppointments(data) {
   var result = [];
-  var alreadyOneTime = alasql("SELECT * FROM ? WHERE r_rule IS NOT NULL", [
-    data,
-  ]);
+  var resultInfo = [];
+  var recurringAppointment = alasql(
+    "SELECT * FROM ? WHERE r_rule IS NOT NULL",
+    [data]
+  );
+  var finalResult = alasql("SELECT * FROM ? WHERE r_rule IS NULL", [data]);
 
-  alreadyOneTime.forEach((event) => {
+  recurringAppointment.forEach((event) => {
     var tempStr = "";
     var weekDay = null;
     var freq = null;
@@ -514,12 +517,41 @@ function convertToOneTimeAppointments(data) {
       byminute: byMinute,
     });
     result.push(rule);
+    resultInfo.push({
+      eventTitle: event.event_title,
+      userScheduleId: event.user_schedule_id,
+      userId: event.user_id,
+    });
   });
 
-  return result;
+  for (let i = 0; i < result.length; i++) {
+    var ruleElem = result[i];
+    var ruleInfo = resultInfo[i];
+
+    for (let index = 0; index < ruleElem.all().length; index++) {
+      var endDate = new Date(ruleElem.all()[index]);
+      endDate.setTime(
+        endDate.getTime() +
+          ruleElem.origOptions.byhour * 60 * 60 * 1000 +
+          ruleElem.origOptions.byminute * 60000
+      );
+      finalResult.push({
+        user_schedule_id: ruleInfo.userScheduleId,
+        event_title: ruleInfo.eventTitle,
+        start_date_time: new Date(ruleElem.all()[index]).toJSON(),
+        end_date_time: endDate.toJSON(),
+        r_rule: null,
+        ex_dates: null,
+        user_id: ruleInfo.userId,
+      });
+    }
+  }
+
+  return finalResult;
 }
 
-console.log(convertToOneTimeAppointments(userSchedule2)[0].all());
+console.log(userSchedule1);
+console.log(convertToOneTimeAppointments(userSchedule1).length);
 
 function diffHoursAndMinutes(dt2, dt1) {
   dt1 = new Date(dt1);
