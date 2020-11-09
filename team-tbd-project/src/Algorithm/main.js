@@ -322,70 +322,18 @@ function getUserFreeHoursTree(U, US, amountH) {
   return freeHoursTree;
 }
 
-var user = {
-  availableStartHour: "8:00",
-  availableEndHour: "18:00",
-  availableDays: "LMWJV",
-};
-
-var userSchedule1 = [
-  {
-    user_schedule_id: 1,
-    event_title: "Work",
-    start_date_time: "2020-11-04T11:30:30.057Z",
-    end_date_time: "2020-11-04T20:30:30.057Z",
-    r_rule: "RRULE:INTERVAL=1;FREQ=DAILY;COUNT=27",
-    ex_dates: null,
-    user_id: 1,
-  },
-  {
-    user_schedule_id: 2,
-    event_title: "Event",
-    start_date_time: "2020-11-04T20:30:18.820Z",
-    end_date_time: "2020-11-04T21:00:18.820Z",
-    r_rule: null,
-    ex_dates: null,
-    user_id: 1,
-  },
-  {
-    user_schedule_id: 3,
-    event_title: "Event 2",
-    start_date_time: "2020-11-05T22:00:00.000Z",
-    end_date_time: "2020-11-05T22:30:00.000Z",
-    r_rule: "RRULE:INTERVAL=2;FREQ=DAILY;COUNT=10",
-    ex_dates: null,
-    user_id: 1,
-  },
-];
-
-var userSchedule2 = [
-  {
-    user_schedule_id: 4,
-    event_title: "Work",
-    start_date_time: "2020-11-02T14:00:33.542Z",
-    end_date_time: "2020-11-02T22:00:33.542Z",
-    r_rule: "RRULE:INTERVAL=1;FREQ=DAILY;COUNT=27",
-    ex_dates: null,
-    user_id: 2,
-  },
-  {
-    user_schedule_id: 5,
-    event_title: "Class",
-    start_date_time: "2020-11-02T22:30:33.542Z",
-    end_date_time: "2020-11-02T23:30:33.542Z",
-    r_rule: "RRULE:INTERVAL=3;FREQ=DAILY;COUNT=27",
-    ex_dates: null,
-    user_id: 2,
-  },
-];
-
+/**
+ * This function takes a schedule that has events of type "Recurring appointments" to convert it and returns a schedule with all objects of type "One-time appointments".
+ * @param {JSONschedule} data Schedule to be analyzed/converted
+ * @return {JSONschedule} A schedule with all objects of type "One-time appointments"
+ */
 function convertToOneTimeAppointments(data) {
-  var result = [];
-  var resultInfo = [];
+  //Filter all events that have r_rule. In other words, the recurring appointments that must be transformed to one-time appointments.
   var recurringAppointment = alasql(
     "SELECT * FROM ? WHERE r_rule IS NOT NULL",
     [data]
   );
+  //Filter all events that do not have r_rule. In other words, one-time appointments that don't need any changes.
   var finalResult = alasql("SELECT * FROM ? WHERE r_rule IS NULL", [data]);
 
   recurringAppointment.forEach((event) => {
@@ -400,8 +348,6 @@ function convertToOneTimeAppointments(data) {
       event.start_date_time,
       event.end_date_time
     );
-    var byHour = duration[0];
-    var byMinute = duration[1];
 
     if (event.r_rule.indexOf("BYDAY=") > 0) {
       tempStr = event.r_rule.substring(event.r_rule.indexOf("BYDAY=") + 6);
@@ -503,9 +449,12 @@ function convertToOneTimeAppointments(data) {
         tempStr.indexOf(";") > 0
           ? tempStr.substring(0, tempStr.indexOf(";"))
           : tempStr;
+      until = rrule.rrulestr("DTSTART:" + until);
+      until = until.origOptions.dtstart;
       tempStr = "";
     }
 
+    //In order to be able to calculate all the dates of a recurring appointment, an RRule object is created based on the r_rule property of that appointment.
     const rule = new rrule.RRule({
       freq: freq,
       interval: interval,
@@ -513,46 +462,50 @@ function convertToOneTimeAppointments(data) {
       byweekday: weekDay,
       dtstart: new Date(event.start_date_time),
       until: until,
-      byhour: byHour,
-      byminute: byMinute,
     });
-    result.push(rule);
-    resultInfo.push({
+
+    //rule.all() will return all dates.
+    var ruleElements = rule.all();
+    var ruleInfo = {
       eventTitle: event.event_title,
       userScheduleId: event.user_schedule_id,
       userId: event.user_id,
-    });
-  });
+    };
 
-  for (let i = 0; i < result.length; i++) {
-    var ruleElem = result[i];
-    var ruleInfo = resultInfo[i];
-
-    for (let index = 0; index < ruleElem.all().length; index++) {
-      var endDate = new Date(ruleElem.all()[index]);
+    //Creates an array of appointment type objects, equal to the one given by the API, with all the one-time appointment recurrences of the given appointment.
+    for (let index = 0; index < ruleElements.length; index++) {
+      //Calculates the end time of the appointment
+      var endDate = new Date(ruleElements[index]);
       endDate.setTime(
-        endDate.getTime() +
-          ruleElem.origOptions.byhour * 60 * 60 * 1000 +
-          ruleElem.origOptions.byminute * 60000
+        endDate.getTime() + duration[0] * 60 * 60 * 1000 + duration[1] * 60000
       );
+
       finalResult.push({
         user_schedule_id: ruleInfo.userScheduleId,
         event_title: ruleInfo.eventTitle,
-        start_date_time: new Date(ruleElem.all()[index]).toJSON(),
+        start_date_time: new Date(ruleElements[index]).toJSON(),
         end_date_time: endDate.toJSON(),
         r_rule: null,
         ex_dates: null,
         user_id: ruleInfo.userId,
       });
     }
-  }
+  });
 
   return finalResult;
 }
 
-console.log(userSchedule1);
-console.log(convertToOneTimeAppointments(userSchedule1).length);
-
+/**
+ * Calculate the time difference between two dates
+ * @param {Date} dt2 Oldest date
+ * @param {Date} dt1 Most recent date
+ * @return {Array} Returns an array of integers,
+ * the first element [0] is the number of hours between the two dates,
+ * the second [1] is the number of minutes between the two dates.
+ *
+ * Example: dt1 = "2020-11-13T20: 00: 00.000Z", dt2 = '2020-11-13T21: 30: 00.000Z',
+ * the result will be [1, 30]. In other words, there is a difference of 1 hour and 30 minutes between both dates.
+ */
 function diffHoursAndMinutes(dt2, dt1) {
   dt1 = new Date(dt1);
   dt2 = new Date(dt2);
@@ -560,11 +513,81 @@ function diffHoursAndMinutes(dt2, dt1) {
   diffHours /= 60 * 60;
   var diffMinutes = (dt2.getTime() - dt1.getTime()) / 1000;
   diffMinutes /= 60;
-  diffMinutes -= diffHours * 60;
-  return [Math.abs(Math.round(diffHours)), Math.abs(Math.round(diffMinutes))];
+  if (Math.abs(parseInt(diffHours) * 60) <= Math.abs(diffMinutes)) {
+    diffMinutes = Math.abs(parseInt(diffHours) * 60) - Math.abs(diffMinutes);
+  }
+  return [Math.abs(parseInt(diffHours)), Math.abs(Math.round(diffMinutes))];
 }
 
-//var d = new Date();
-//var n = d.getHours() + ":" + d.getMinutes();
+//Testing purposes
 
+var user = {
+  availableStartHour: "8:00",
+  availableEndHour: "18:00",
+  availableDays: "LMWJV",
+};
+
+var userSchedule1 = [
+  {
+    user_schedule_id: 1,
+    event_title: "Work",
+    start_date_time: "2020-11-04T11:30:30.057Z",
+    end_date_time: "2020-11-04T20:30:30.057Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=DAILY;COUNT=27",
+    ex_dates: null,
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 2,
+    event_title: "Event",
+    start_date_time: "2020-11-04T20:30:18.820Z",
+    end_date_time: "2020-11-04T21:00:18.820Z",
+    r_rule: null,
+    ex_dates: null,
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 3,
+    event_title: "Event 2",
+    start_date_time: "2020-11-05T22:00:00.000Z",
+    end_date_time: "2020-11-05T22:30:00.000Z",
+    r_rule: "RRULE:INTERVAL=2;FREQ=DAILY;COUNT=10",
+    ex_dates: null,
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 7,
+    event_title: "Family",
+    start_date_time: "2020-11-10T21:00:00.000Z",
+    end_date_time: "2020-11-10T21:30:00.000Z",
+    r_rule: "RRULE:INTERVAL=3;FREQ=DAILY;UNTIL=20201114T213000Z",
+    ex_dates: null,
+    user_id: 1,
+  },
+];
+
+var userSchedule2 = [
+  {
+    user_schedule_id: 4,
+    event_title: "Work",
+    start_date_time: "2020-11-02T14:00:33.542Z",
+    end_date_time: "2020-11-02T22:00:33.542Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=DAILY;COUNT=27",
+    ex_dates: null,
+    user_id: 2,
+  },
+  {
+    user_schedule_id: 5,
+    event_title: "Class",
+    start_date_time: "2020-11-02T22:30:33.542Z",
+    end_date_time: "2020-11-02T23:30:33.542Z",
+    r_rule: "RRULE:INTERVAL=3;FREQ=DAILY;COUNT=27",
+    ex_dates: null,
+    user_id: 2,
+  },
+];
+
+console.log(convertToOneTimeAppointments(userSchedule1));
+var dateTest = new Date("2020-11-10T21:00:00.000Z"); //<-Test a given date
+console.log(dateTest.toLocaleString());
 // console.log(getUserFreeHoursTree(user, userSchedule, 1));
