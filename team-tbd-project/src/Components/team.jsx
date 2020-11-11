@@ -1,14 +1,35 @@
-import React from "react";
 import "../App/App.css";
 import backgroundH from "../Images/SyncLinkLogged.gif";
 import RecentTeams from "./RecentTeams";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  InputGroup,
+  FormControl,
+} from "react-bootstrap";
+
 import { Link } from "react-router-dom";
 /* TO DO CHANGE THE LINK PATH WHEN THE PROFILE SECTION IS COMPLETED LINE 90*/
 /* ADD THE CORRECT LINK PATH WHEN CREATED AT MY SCHEDULE BUTTON LINE 147*/
 /* MODIFY THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS LINE 212*/
 
 function team() {
+  const [member, setMember] = useState("");
+  const memberList= [{ name: "Maria", email: "LaDuraka@gmail.com" },
+  { name: "Luis", email: "ElPapichulo@hotmail.com" },
+  { name: "Fernando", email: "Meeps@yahoo.com" },
+];
+
+  const addMember= (e)=>{
+    e.preventDefault();
+    console.log("Add a member");
+  };
+  
+
   return (
     <div>
       <div className="SyncLinkWelcome">
@@ -224,18 +245,48 @@ function team() {
             className="HoldMeeting d-flex justify-content-center align-items-center"
             style={{ backgroundColor: "white" }}
           >
+            <div
+                style={{
+                  fontSize: "5.8vw",
+                  fontWeight: "600",
+                  color: "#578DE4",
+                }}
+              >
+                Team Members
+              </div>
+            </Row>
+          <Row
+            className="HoldMeeting d-flex justify-content-center align-items-center"
+            style={{ backgroundColor: "white" }}
+          >
             {/**Fernando work here */}
+
             <Col
-              className="d-flex justify-content-center"
-              style={{ margin: "3rem" }}
+              style={{
+                textAlign: "left",
+                marginTop: "2rem",
+                marginBottom: "2rem",
+              }}
               xs={4}
-            >
-              {" "}
-              <img
-                className="d-block w-100"
-                src={require("../Images/TabletSyncLink.gif")}
-                alt="Tablet"
-              />
+            > 
+
+              <div
+                style={{
+                  fontSize: "2vw",
+                }}
+              >
+              Name
+              </div>
+              <div
+                style={{
+                  fontSize: "2vw",
+                }}
+              >
+              
+                {memberList.map((member) => (
+                  <h5 key={memberList.indexOf(member)}>{member.name}</h5>
+                ))}
+              </div>
             </Col>
             <Col
               style={{
@@ -245,31 +296,52 @@ function team() {
               }}
               xs={4}
             > 
+
               <div
                 style={{
-                  fontSize: "5.8vw",
-                  fontWeight: "600",
-                  color: "#578DE4",
+                  fontSize: "2vw",
                 }}
               >
-                HOLD
-              </div>
-              <div
-                style={{
-                  fontSize: "5.8vw",
-                }}
-              >
-                A MEETING
+                Email
               </div>
               <div
                 style={{
                   fontSize: "2vw",
                 }}
               >
-                Get together as a team because this project is going to be less
-                bumpy
+              
+                {memberList.map((member) => (
+                  <h5 key={memberList.indexOf(member)}>{member.email}</h5>
+                ))}
               </div>
             </Col>
+          </Row>
+          <Row>
+          <InputGroup style={{ marginBottom: "1rem" }}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <i className="fas fa-lock"></i>
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  type="email"
+                  id="email"
+                  placeholder="email"
+                  value={member}
+                  onChange={(e) => setMember(e.target.value)}
+                />
+              </InputGroup>
+
+
+              <div className="text-center">
+                <Button
+                  className="btn--primary"
+                  variant="primary"
+                  onClick={(e) => addMember(e)}
+                >
+                  LOG IN
+                </Button>
+              </div>
           </Row>
         </Container>
       </div>
