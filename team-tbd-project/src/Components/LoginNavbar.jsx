@@ -3,9 +3,9 @@ import { Navbar, Nav, Button, Image, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import mainLogo from "../Images/synLogoNM.png";
 import profilePic from "../Images/HomeBackground.jpg";
-import "../App.css";
+import "../App/App.css";
 import CreateTeamForm from "../Components/CreateTeamForm";
-
+import Auth from "../utils/Auth";
 function LoginNavbar() {
   const [modalShow, setModalShow] = React.useState(false);
 
@@ -73,10 +73,9 @@ function LoginNavbar() {
           <Nav.Link href="/" style={navStyle}>
             HOME
           </Nav.Link>
-          <Nav.Link href="/Schedule" style={navStyle}>
+          <Nav.Link href="/UserSchedule" style={navStyle}>
             MY SCHEDULE
           </Nav.Link>
-
           <Dropdown style={navStyle}>
             <Dropdown.Toggle
               className="btn--primary"
@@ -112,7 +111,17 @@ function LoginNavbar() {
             CREATE NEW TEAM
           </Button>
           <CreateTeamForm show={modalShow} onHide={() => setModalShow(false)} />
-
+          <Link to="/" style={{ textDecoration: "none", color: "white",alignItems: "center", }} onClick={() => window.location.assign("/")}>
+            <Button className="btn--primary" variant="primary" style={{
+              marginRight: "0.5rem",
+              color: "white",
+              textAlign: "center",
+              marginTop: "10px",
+              marginBottom: "15px",
+            }}onClick={() => Auth.deauthenticateUser()}>
+              LOG OUT
+            </Button>
+          </Link>
           <Link
             to="/Profile"
             style={{

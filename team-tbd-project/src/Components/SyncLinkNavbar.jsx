@@ -2,7 +2,6 @@ import React from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import mainLogo from "../Images/synLogoNM.png";
 import "../App/App.css";
-import Auth from "../utils/Auth";
 import { Link } from "react-router-dom";
 
 function SyncLinkNavbar() {
@@ -76,13 +75,6 @@ function SyncLinkNavbar() {
           <Nav.Link href="/ContactUs" style={navStyle}>
             CONTACT US
           </Nav.Link>
-          {Auth.isUserAuthenticated() ?
-          <Link to="/" style={{ textDecoration: "none", color: "white" }} onClick={() => window.location.assign("/")}>
-            <Button className="btn--primary" variant="primary" onClick={() => Auth.deauthenticateUser()}>
-              LOG OUT
-            </Button>
-          </Link>
-          :<>
           <Link to="/LogIn" style={{ textDecoration: "none", color: "white" }}>
             <Button className="btn--primary" variant="primary">
               LOG IN
@@ -93,8 +85,6 @@ function SyncLinkNavbar() {
               SIGN UP
             </Button>
           </Link>
-          </>
-          }
         </Nav>
       </Navbar.Collapse>
     </Navbar>
