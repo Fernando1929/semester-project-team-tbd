@@ -4,10 +4,13 @@ import rrule from "rrule";
 class Node {
   //data structure example
   // {
-  //  event_name: 'Website Re-Design Plan', <- Name of the event
-  //  start_time: new Date(2018, 5, 25, 9, 35), <- Starting date/hour of the event
-  //  end_time: new Date(2018, 5, 25, 11, 30), <- Ending date/hour of the event
-  //  event_days: "LWV", <- Days of the event
+  //  user_schedule_id: 1,
+  //  event_title: "Work",
+  //  start_date_time: "2020-11-04T11:30:30.057Z",
+  //  end_date_time: "2020-11-04T20:30:30.057Z",
+  //  r_rule: "RRULE:INTERVAL=1;FREQ=DAILY;COUNT=27",
+  //  ex_dates: null,
+  //  user_id: 1,
   // }
 
   constructor(data) {
@@ -21,46 +24,45 @@ class Node {
 class BinarySearchTree {
   constructor() {
     // root of a binary search tree
-    this.rootL = { day: "L", root: null }; //Monday schedule
-    this.rootM = { day: "M", root: null }; //Tuesday schedule
-    this.rootW = { day: "W", root: null }; //Wednesday schedule
-    this.rootJ = { day: "J", root: null }; //Thursday schedule
-    this.rootV = { day: "V", root: null }; //Friday schedule
-    this.rootS = { day: "S", root: null }; //Saturday schedule
-    this.rootD = { day: "D", root: null }; //Sunday schedule
-
-    this.roots = [
-      this.rootL,
-      this.rootM,
-      this.rootW,
-      this.rootJ,
-      this.rootV,
-      this.rootS,
-      this.rootD,
-    ];
+    this.root = null;
   }
 
-  // function to be implemented
+  countLeftNodes(node) {
+    if (node !== null && node !== undefined)
+      return this.inorderArray(node.left, []).length;
+    return 0;
+  }
+
+  countRightNodes(node) {
+    if (node !== null && node !== undefined)
+      return this.inorderArray(node.right, []).length;
+    return 0;
+  }
+
   // insert(data)
-  // helper method which creates a new node to
-  // be inserted and calls insertNode
+  // helper method which creates a new node to be inserted and calls insertNode
+  // if the tree has 5 or more nodes on one side than the other, rearrange the nodes.
   insert(data) {
+    // if (
+    //   Math.abs(
+    //     this.countLeftNodes(this.root) - this.countRightNodes(this.root)
+    //   ) >= 5
+    // ) {
+    //   this.root = this.rearrangeTree(
+    //     this.inorderArray(this.getRootNode(), []),
+    //     new BinarySearchTree()
+    //   ).getRootNode();
+    // }
     // Creating a node and initailising
     // with data
     var newNode = new Node(data);
 
     // root is null then node will
     // be added to the tree and made root.
-    if (data != null) {
-      this.roots.forEach((rootDay) => {
-        if (newNode.data.event_days.toUpperCase().indexOf(rootDay.day) > -1) {
-          if (rootDay.root === null) rootDay.root = newNode;
-          // find the correct position in the
-          // tree and add the node
-          else this.insertNode(rootDay.root, newNode);
-        }
-      });
-    }
+    if (this.root === null) this.root = newNode;
+    // find the correct position in the
+    // tree and add the node
+    else this.insertNode(this.root, newNode);
   }
 
   // Method to insert a node in a tree
@@ -69,9 +71,9 @@ class BinarySearchTree {
   insertNode(node, newNode) {
     // if the data is less than the node
     // data move left of the tree
-    if (newNode.data.start_time < node.data.start_time) {
+    if (newNode.data.start_date_time < node.data.start_date_time) {
       // if left is null insert node here
-      if (node.left === null) node.left = newNode;
+      if (node.left === null || node.left === undefined) node.left = newNode;
       // if left is not null recur until
       // null is found
       else this.insertNode(node.left, newNode);
@@ -81,7 +83,7 @@ class BinarySearchTree {
     // data move right of the tree
     else {
       // if right is null insert node here
-      if (node.right === null) node.right = newNode;
+      if (node.right === null || node.right === undefined) node.right = newNode;
       // if right is not null recur until
       // null is found
       else this.insertNode(node.right, newNode);
@@ -90,37 +92,32 @@ class BinarySearchTree {
 
   // remove(data)
   // helper method that calls the
-  // removeNode with a given hour and a given day (L,M,W,J,V,S,D).
-  remove(hour, day) {
-    this.roots.forEach((rootDay) => {
-      if (rootDay.day == day.toUpperCase()) {
-        // root is re-initialized with
-        // root of a modified tree.
-        rootDay = this.removeNode(rootDay, hour);
-        break;
-      }
-    });
+  // removeNode with a given data
+  remove(data) {
+    // root is re-initialized with 2
+    // root of a modified tree.
+    this.root = this.removeNode(this.root, data);
   }
 
   // Method to remove node with a
-  // given hour
+  // given data
   // it recur over the tree to find the
   // data and removes it
-  removeNode(node, hour) {
+  removeNode(node, startDate) {
     // if the root is null then tree is
     // empty
-    if (node === null) return null;
+    if (node === null || node === undefined) return null;
     // if data to be delete is less than
     // roots data then move to left subtree
-    else if (hour < node.data.start_time) {
-      node.left = this.removeNode(node.left, hour);
+    else if (startDate < node.data.start_date_time) {
+      node.left = this.removeNode(node.left, startDate);
       return node;
     }
 
     // if data to be delete is greater than
     // roots data then move to right subtree
-    else if (hour > node.data.start_time) {
-      node.right = this.removeNode(node.right, hour);
+    else if (startDate > node.data.start_date_time) {
+      node.right = this.removeNode(node.right, startDate);
       return node;
     }
 
@@ -134,16 +131,16 @@ class BinarySearchTree {
       }
 
       // deleting node with one children
-      if (node.left === null) {
+      if (node.left === null || node.left === undefined) {
         node = node.right;
         return node;
-      } else if (node.right === null) {
+      } else if (node.right === null || node.right === undefined) {
         node = node.left;
         return node;
       }
 
       // Deleting node with two children
-      // minumum node of the right subtree
+      // minumum node of the rigt subtree
       // is stored in aux
       var aux = this.findMinNode(node.right);
       node.data = aux.data;
@@ -160,30 +157,52 @@ class BinarySearchTree {
   findMinNode(node) {
     // if left of a node is null
     // then it must be minimum node
-    if (node.left === null) return node;
+    if (node.left === null || node.left === undefined) return node;
     else return this.findMinNode(node.left);
+  }
+
+  // Helper function
+  // findMaxNode()
+  // finds the maximum node in tree
+  // searching starts from given node
+  findMaxNode(node) {
+    // if left of a node is null
+    // then it must be minimum node
+    if (node.right === null || node.right === undefined) return node;
+    else return this.findMaxNode(node.right);
   }
 
   // getRootNode()
   // returns root of the tree
   getRootNode() {
-    return this.roots;
+    return this.root;
   }
 
   // inorder(node)
   // Performs inorder traversal of a tree
+
   inorder(node) {
-    if (node !== null) {
+    if (node !== undefined && node !== null) {
       this.inorder(node.left);
       console.log(node.data);
       this.inorder(node.right);
     }
   }
 
+  inorderArray(node, arr) {
+    if (node !== undefined && node !== null) {
+      this.inorderArray(node.left, arr);
+      arr.push(node.data);
+      this.inorderArray(node.right, arr);
+    }
+
+    return arr;
+  }
+
   // preorder(node)
   // Performs preorder traversal of a tree
   preorder(node) {
-    if (node !== null) {
+    if (node !== undefined && node !== null) {
       console.log(node.data);
       this.preorder(node.left);
       this.preorder(node.right);
@@ -193,29 +212,48 @@ class BinarySearchTree {
   // postorder(node)
   // Performs postorder traversal of a tree
   postorder(node) {
-    if (node !== null) {
+    if (node !== undefined && node !== null) {
       this.postorder(node.left);
       this.postorder(node.right);
       console.log(node.data);
     }
   }
 
-  // search(node, startDate, endDate)
-  // search for a node with given data/startDate, endDate
-  search(node, startDate, endDate) {
+  // search(node, data)
+  // search for a node with given data
+  search(node, data) {
     // if trees is empty return null
-    if (node === null) return null;
+    if (node === null || node === undefined) return null;
     // if data is less than node's data
     // move left
-    else if (startDate < node.data.start_time && endDate < node.data.end_time)
-      return this.search(node.left, startDate, endDate);
+    else if (data.start_date_time < node.data.start_date_time)
+      return this.search(node.left, data);
     // if data is less than node's data
     // move left
-    else if (startDate > node.data.start_time && endDate > node.data.end_time)
-      return this.search(node.right, startDate, endDate);
+    else if (
+      data.start_date_time > node.data.start_date_time ||
+      data.end_date_time !== node.data.end_date_time
+    )
+      return this.search(node.right, data);
     // if data is equal to the node data
     // return node
     else return node;
+  }
+
+  rearrangeTree(arr, bst) {
+    if (arr.length <= 0) {
+      return;
+    }
+    var rightSide = [];
+    var leftSide = [];
+
+    bst.insert(arr[Math.round((arr.length - 1) / 2)]);
+    rightSide = arr.slice(Math.round((arr.length - 1) / 2) + 1, arr.length);
+    leftSide = arr.slice(0, Math.round((arr.length - 1) / 2));
+
+    this.rearrangeTree(rightSide, bst);
+    this.rearrangeTree(leftSide, bst);
+    return bst;
   }
 }
 
@@ -263,26 +301,35 @@ function getUserFreeHours(U, US, amountH) {
   }
 }
 
-function getUserFreeHoursTree(U, US, amountH) {
+// {
+//   user_schedule_id: ruleInfo.userScheduleId,
+//   event_title: ruleInfo.eventTitle,
+//   start_date_time: new Date(ruleElements[index]).toJSON(),
+//   end_date_time: endDate.toJSON(),
+//   r_rule: null,
+//   ex_dates: null,
+//   user_id: ruleInfo.userId,
+// }
+function getUserFreeHoursTree(user, startingDay, finishDay, amountHours) {
   freeHoursTree = new BinarySearchTree();
   data = null;
 
-  if (US.length == 0) {
+  if (user.schedule.length == 0) {
     freeHoursTree.insert({
-      event_name: "Free",
-      start_time: U.availableStartHour,
-      end_time: U.availableEndHour,
-      event_days: U.availableDays,
-      hours: Math.abs(U.availableStartHour - U.availableEndHour) / 36e5, //amount of free hours.
+      user_schedule_id: 1,
+      event_title: "Free",
+      start_date_time: startingDay,
+      end_date_time: finishDay,
+      r_rule: null,
+      ex_dates: null,
+      user_id: user.id,
     });
   } else {
-    console.log("Entre ELSE");
-    var hours = Math.abs(U.availableStartHour - US[0].start_time) / 36e5;
-    console.log(hours);
-    if (hours >= amountH) {
+    var hours = Math.abs(user.availableStartHour - US[0].start_time) / 36e5;
+    if (hours >= amountHours) {
       data = {
         event_name: "Free",
-        start_time: U.availableStartHour,
+        start_time: user.availableStartHour,
         end_time: US[0].start_time,
         event_days: US[0].event_days,
         hours: hours, //calculate the amount of free hours.
@@ -293,7 +340,7 @@ function getUserFreeHoursTree(U, US, amountH) {
 
     for (let i = 0; i < US.length - 2; i++) {
       hours = Math.abs(US[i].end_time - US[i + 1].start_time) / 36e5;
-      if (hours >= amountH) {
+      if (hours >= amountHours) {
         data = {
           event_name: "Free",
           start_time: US[i].end_time,
@@ -306,12 +353,12 @@ function getUserFreeHoursTree(U, US, amountH) {
       }
     }
 
-    hours = Math.abs(US[US.length - 1].end_time - U.availableEndHour) / 36e5;
-    if (hours >= amountH) {
+    hours = Math.abs(US[US.length - 1].end_time - user.availableEndHour) / 36e5;
+    if (hours >= amountHours) {
       data = {
         event_name: "Free",
         start_time: US[US.length - 1].end_time,
-        end_time: U.availableEndHour,
+        end_time: user.availableEndHour,
         event_days: US[US.length - 1].event_days,
         hours: hours, //calculate the amount of free hours.
       };
@@ -325,16 +372,38 @@ function getUserFreeHoursTree(U, US, amountH) {
 /**
  * This function takes a schedule that has events of type "Recurring appointments" to convert it and returns a schedule with all objects of type "One-time appointments".
  * @param {JSONschedule} data Schedule to be analyzed/converted
+ * @param {JSONDate} startingDay First possible date for the meeting.
+ * @param {JSONDate} finishDay Last possible date for the meeting.
  * @return {JSONschedule} A schedule with all objects of type "One-time appointments"
+ *
+ * Example: User wants a meeting between November 15, 2020 and November 20, 2020.
+ * startingDay is going to be "2020-11-15T04: 00: 00.057Z" and finishDay is going to be "2020-11-20T04: 00: 00.057Z".
+ * In other words, the function will return all the dates between November 15 and November 20.
  */
-function convertToOneTimeAppointments(data) {
+function convertToOneTimeAppointments(data, startingDay, finishDay) {
+  alasql.fn.betweenDates = function (start, end) {
+    return (
+      start >= startingDay &&
+      start <= finishDay &&
+      end <= finishDay &&
+      end >= startingDay
+    );
+  };
   //Filter all events that have r_rule. In other words, the recurring appointments that must be transformed to one-time appointments.
   var recurringAppointment = alasql(
     "SELECT * FROM ? WHERE r_rule IS NOT NULL",
     [data]
   );
   //Filter all events that do not have r_rule. In other words, one-time appointments that don't need any changes.
-  var finalResult = alasql("SELECT * FROM ? WHERE r_rule IS NULL", [data]);
+  var tempResult = alasql(
+    "SELECT * FROM ? WHERE r_rule IS NULL AND betweenDates(start_date_time, end_date_time)",
+    [data]
+  );
+  var finalResult = new BinarySearchTree();
+
+  tempResult.forEach((event) => {
+    finalResult.insert(event);
+  });
 
   recurringAppointment.forEach((event) => {
     var tempStr = "";
@@ -480,19 +549,28 @@ function convertToOneTimeAppointments(data) {
         endDate.getTime() + duration[0] * 60 * 60 * 1000 + duration[1] * 60000
       );
 
-      finalResult.push({
-        user_schedule_id: ruleInfo.userScheduleId,
-        event_title: ruleInfo.eventTitle,
-        start_date_time: new Date(ruleElements[index]).toJSON(),
-        end_date_time: endDate.toJSON(),
-        r_rule: null,
-        ex_dates: null,
-        user_id: ruleInfo.userId,
-      });
+      if (
+        ruleElements[index].toJSON() >= startingDay &&
+        ruleElements[index].toJSON() <= finishDay &&
+        endDate.toJSON() <= finishDay &&
+        endDate.toJSON() >= startingDay
+      )
+        finalResult.insert({
+          user_schedule_id: ruleInfo.userScheduleId,
+          event_title: ruleInfo.eventTitle,
+          start_date_time: new Date(ruleElements[index]).toJSON(),
+          end_date_time: endDate.toJSON(),
+          r_rule: null,
+          ex_dates: null,
+          user_id: ruleInfo.userId,
+        });
     }
   });
 
-  return finalResult;
+  return finalResult.rearrangeTree(
+    finalResult.inorderArray(finalResult.getRootNode(), []),
+    new BinarySearchTree()
+  );
 }
 
 /**
@@ -503,7 +581,7 @@ function convertToOneTimeAppointments(data) {
  * the first element [0] is the number of hours between the two dates,
  * the second [1] is the number of minutes between the two dates.
  *
- * Example: dt1 = "2020-11-13T20: 00: 00.000Z", dt2 = '2020-11-13T21: 30: 00.000Z',
+ * Example: dt1 = "2020-11-13T20:00:00.000Z", dt2 = '2020-11-13T21:30:00.000Z',
  * the result will be [1, 30]. In other words, there is a difference of 1 hour and 30 minutes between both dates.
  */
 function diffHoursAndMinutes(dt2, dt1) {
@@ -587,7 +665,13 @@ var userSchedule2 = [
   },
 ];
 
-console.log(convertToOneTimeAppointments(userSchedule1));
-var dateTest = new Date("2020-11-10T21:00:00.000Z"); //<-Test a given date
+var userSc = convertToOneTimeAppointments(
+  userSchedule1,
+  "2020-11-09T12:00:00.057Z",
+  "2020-11-10T20:30:30.057Z"
+);
+// console.log(userSc.findMaxNode(userSc.getRootNode()));
+
+var dateTest = new Date("2020-11-15T04:00:00.057Z");
 console.log(dateTest.toLocaleString());
 // console.log(getUserFreeHoursTree(user, userSchedule, 1));
