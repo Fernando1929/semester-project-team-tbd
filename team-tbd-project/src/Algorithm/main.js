@@ -310,9 +310,15 @@ function getUserFreeHours(U, US, amountH) {
 //   ex_dates: null,
 //   user_id: ruleInfo.userId,
 // }
-function getUserFreeHoursTree(user, startingDay, finishDay, amountHours) {
-  freeHoursTree = new BinarySearchTree();
-  data = null;
+function getUserFreeHoursTree(
+  user,
+  startingDay,
+  finishDay,
+  amountHours,
+  amountMinutes
+) {
+  var freeHoursTree = new BinarySearchTree();
+  var data = null;
 
   if (user.schedule.length == 0) {
     freeHoursTree.insert({
@@ -325,45 +331,65 @@ function getUserFreeHoursTree(user, startingDay, finishDay, amountHours) {
       user_id: user.id,
     });
   } else {
-    var hours = Math.abs(user.availableStartHour - US[0].start_time) / 36e5;
-    if (hours >= amountHours) {
+    var countId = 1;
+    var hours = diffHoursAndMinutes(
+      startingDay,
+      user.schedule[0].start_date_time
+    );
+
+    if (hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60) {
       data = {
-        event_name: "Free",
-        start_time: user.availableStartHour,
-        end_time: US[0].start_time,
-        event_days: US[0].event_days,
-        hours: hours, //calculate the amount of free hours.
+        user_schedule_id: countId,
+        event_title: "Free",
+        start_date_time: startingDay,
+        end_date_time: user.schedule[0].start_date_time,
+        r_rule: null,
+        ex_dates: null,
+        user_id: user.id,
       };
+      countId++;
+      freeHoursTree.insert(data);
     }
-    freeHoursTree.insert(data);
     data = null;
 
-    for (let i = 0; i < US.length - 2; i++) {
-      hours = Math.abs(US[i].end_time - US[i + 1].start_time) / 36e5;
-      if (hours >= amountHours) {
+    for (let i = 0; i < user.schedule.length - 1; i++) {
+      hours = diffHoursAndMinutes(
+        user.schedule[i].end_date_time,
+        user.schedule[i + 1].start_date_time
+      );
+
+      if (hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60) {
         data = {
-          event_name: "Free",
-          start_time: US[i].end_time,
-          end_time: US[i + 1].start_time,
-          event_days: US[i].event_days,
-          hours: hours, //calculate the amount of free hours.
+          user_schedule_id: countId,
+          event_title: "Free",
+          start_date_time: user.schedule[i].end_date_time,
+          end_date_time: user.schedule[i + 1].start_date_time,
+          r_rule: null,
+          ex_dates: null,
+          user_id: user.id,
         };
-        console.log(data);
+        countId++;
         freeHoursTree.insert(data);
       }
     }
 
-    hours = Math.abs(US[US.length - 1].end_time - user.availableEndHour) / 36e5;
-    if (hours >= amountHours) {
+    hours = diffHoursAndMinutes(
+      user.schedule[user.schedule.length - 1].end_date_time,
+      finishDay
+    );
+
+    if (hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60) {
       data = {
-        event_name: "Free",
-        start_time: US[US.length - 1].end_time,
-        end_time: user.availableEndHour,
-        event_days: US[US.length - 1].event_days,
-        hours: hours, //calculate the amount of free hours.
+        user_schedule_id: countId,
+        event_title: "Free",
+        start_date_time: user.schedule[user.schedule.length - 1].end_date_time,
+        end_date_time: finishDay,
+        r_rule: null,
+        ex_dates: null,
+        user_id: user.id,
       };
+      freeHoursTree.insert(data);
     }
-    freeHoursTree.insert(data);
   }
 
   return freeHoursTree;
@@ -377,7 +403,7 @@ function getUserFreeHoursTree(user, startingDay, finishDay, amountHours) {
  * @return {JSONschedule} A schedule with all objects of type "One-time appointments"
  *
  * Example: User wants a meeting between November 15, 2020 and November 20, 2020.
- * startingDay is going to be "2020-11-15T04: 00: 00.057Z" and finishDay is going to be "2020-11-20T04: 00: 00.057Z".
+ * startingDay is going to be "2020-11-15T04:00:00.057Z" and finishDay is going to be "2020-11-20T04:00:00.057Z".
  * In other words, the function will return all the dates between November 15 and November 20.
  */
 function convertToOneTimeAppointments(data, startingDay, finishDay) {
@@ -399,10 +425,10 @@ function convertToOneTimeAppointments(data, startingDay, finishDay) {
     "SELECT * FROM ? WHERE r_rule IS NULL AND betweenDates(start_date_time, end_date_time)",
     [data]
   );
-  var finalResult = new BinarySearchTree();
+  var finalResult = [];
 
   tempResult.forEach((event) => {
-    finalResult.insert(event);
+    finalResult.push(event);
   });
 
   recurringAppointment.forEach((event) => {
@@ -555,7 +581,7 @@ function convertToOneTimeAppointments(data, startingDay, finishDay) {
         endDate.toJSON() <= finishDay &&
         endDate.toJSON() >= startingDay
       )
-        finalResult.insert({
+        finalResult.push({
           user_schedule_id: ruleInfo.userScheduleId,
           event_title: ruleInfo.eventTitle,
           start_date_time: new Date(ruleElements[index]).toJSON(),
@@ -567,10 +593,10 @@ function convertToOneTimeAppointments(data, startingDay, finishDay) {
     }
   });
 
-  return finalResult.rearrangeTree(
-    finalResult.inorderArray(finalResult.getRootNode(), []),
-    new BinarySearchTree()
-  );
+  return finalResult.sort(function (a, b) {
+    if (a.start_date_time > b.start_date_time) return 1;
+    else return -1;
+  });
 }
 
 /**
@@ -598,12 +624,6 @@ function diffHoursAndMinutes(dt2, dt1) {
 }
 
 //Testing purposes
-
-var user = {
-  availableStartHour: "8:00",
-  availableEndHour: "18:00",
-  availableDays: "LMWJV",
-};
 
 var userSchedule1 = [
   {
@@ -665,13 +685,51 @@ var userSchedule2 = [
   },
 ];
 
-var userSc = convertToOneTimeAppointments(
-  userSchedule1,
-  "2020-11-09T12:00:00.057Z",
-  "2020-11-10T20:30:30.057Z"
-);
+// var userSc = convertToOneTimeAppointments(
+//   userSchedule1,
+//   "2020-11-09T12:00:00.057Z",
+//   "2020-11-20T20:30:30.057Z"
+// );
+
+// //console.log(userSc);
+
+// var user = {
+//   schedule: userSc,
+//   id: 1,
+// };
+// var userFreeSc = getUserFreeHoursTree(
+//   user,
+//   "2020-11-09T12:00:00.057Z",
+//   "2020-11-20T20:30:30.057Z",
+//   1,
+//   0
+// );
+
+// console.log(userFreeSc.inorderArray(userFreeSc.getRootNode(), []));
+
+// var userSc = convertToOneTimeAppointments(
+//   userSchedule2,
+//   "2020-11-09T12:00:00.057Z",
+//   "2020-11-20T20:00:30.057Z"
+// );
+
+// //console.log(userSc);
+
+// var user = {
+//   schedule: userSc,
+//   id: 2,
+// };
+// var userFreeSc = getUserFreeHoursTree(
+//   user,
+//   "2020-11-09T12:00:00.057Z",
+//   "2020-11-20T20:00:30.057Z",
+//   1,
+//   30
+// );
+
+// console.log(userFreeSc.inorderArray(userFreeSc.getRootNode(), []));
 // console.log(userSc.findMaxNode(userSc.getRootNode()));
 
-var dateTest = new Date("2020-11-15T04:00:00.057Z");
-console.log(dateTest.toLocaleString());
+// var dateTest = new Date("2020-11-15T04:00:00.057Z");
+// console.log(dateTest.toLocaleString());
 // console.log(getUserFreeHoursTree(user, userSchedule, 1));
