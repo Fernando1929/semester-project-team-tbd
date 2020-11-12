@@ -1,5 +1,5 @@
 import React from "react";
-import "../../App/App.css"
+import "../../App/App.css";
 import backgroundH from "../../Images/SyncLinkLogged.gif";
 import RecentTeams from "../RecentTeams";
 import { Button, Col, Container, Row } from "react-bootstrap";
@@ -134,7 +134,10 @@ function HomeLogged() {
               <div>
                 <div>
                   {/* ADD THE CORECT LINK PATH WHEN CREATED AT  MY SCHEDULE BUTTON */}
-                  <Link to="/UserSchedule" style={{textDecoration: "none",color: "white",}}>
+                  <Link
+                    to="/UserSchedule"
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
                     <Button
                       className="btn--primary"
                       variant="primary"
