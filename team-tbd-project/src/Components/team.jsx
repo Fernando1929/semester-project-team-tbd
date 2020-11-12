@@ -1,6 +1,3 @@
-import "../App/App.css";
-import backgroundH from "../Images/SyncLinkLogged.gif";
-import RecentTeams from "./RecentTeams";
 import React, { useState } from "react";
 import {
   Container,
@@ -12,21 +9,27 @@ import {
   FormControl,
 } from "react-bootstrap";
 
+import "../App/App.css";
+import backgroundH from "../Images/SyncLinkLogged.gif";
+import RecentTeams from "./RecentTeams";
 import { Link } from "react-router-dom";
+
 /* TO DO CHANGE THE LINK PATH WHEN THE PROFILE SECTION IS COMPLETED LINE 90*/
 /* ADD THE CORRECT LINK PATH WHEN CREATED AT MY SCHEDULE BUTTON LINE 147*/
 /* MODIFY THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS LINE 212*/
 
-function team() {
-  const [member, setMember] = useState("");
-  const memberList= [{ name: "Maria", email: "LaDuraka@gmail.com" },
-  { name: "Luis", email: "ElPapichulo@hotmail.com" },
-  { name: "Fernando", email: "Meeps@yahoo.com" },
-];
+  
 
-  const addMember= (e)=>{
+function Teamr() {
+  const [em, setEmail] = useState("");
+  const memberList = [
+  { name: "Maria", email: "LaDuraka@gmail.com" },
+  { name: "Luis", email: "ElPapichulo@hotmail.com" },
+  { name: "Fernando", email: "Meeps@yahoo.com" },];
+
+  const addMember = (e) => {
     e.preventDefault();
-    console.log("Add a member");
+    console.log("Add a member",em);
   };
   
 
@@ -259,8 +262,6 @@ function team() {
             className="HoldMeeting d-flex justify-content-center align-items-center"
             style={{ backgroundColor: "white" }}
           >
-            {/**Fernando work here */}
-
             <Col
               style={{
                 textAlign: "left",
@@ -317,6 +318,7 @@ function team() {
             </Col>
           </Row>
           <Row>
+            <Card>
           <InputGroup style={{ marginBottom: "1rem" }}>
                 <InputGroup.Prepend>
                   <InputGroup.Text>
@@ -325,10 +327,10 @@ function team() {
                 </InputGroup.Prepend>
                 <FormControl
                   type="email"
-                  id="email"
-                  placeholder="email"
-                  value={member}
-                  onChange={(e) => setMember(e.target.value)}
+                  id="Email"
+                  placeholder="Email"
+                  value={em}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </InputGroup>
 
@@ -341,7 +343,7 @@ function team() {
                 >
                   LOG IN
                 </Button>
-              </div>
+              </div></Card>
           </Row>
         </Container>
       </div>
@@ -349,4 +351,4 @@ function team() {
   );
 }
 
-export default team;
+export default Teamr;
