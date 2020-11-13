@@ -61,7 +61,7 @@ const mapAppointmentData = appointment => ({
 
 function UserScheduler() {
     const [loading, setLoading] = useState(true);
-    const [currentDate, setCurrentDate] = useState('2018-06-25');
+    const [currentDate, setCurrentDate] = useState(new Date().toLocaleDateString());
     const [currentViewName, setCurrentViewName] = useState('Day');
     const [data, setData] = useState([]);
 
