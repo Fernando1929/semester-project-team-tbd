@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 import placeholder from "../Images/placeholder.png";
 import Image from "react-bootstrap/Image";
-import { profileGetHandler, profileUpdateHandler, profileEmailUpdateHandler } from "../Apis/UserProfile";
+import { profileGetHandler, profileUpdateHandler, profileEmailUpdateHandler, profilePictureUpdateHandler } from "../Apis/UserProfile";
 
 function UpdateProfileForm(props) {
   const [firstname, setFirstname] = React.useState("");
@@ -18,6 +18,7 @@ function UpdateProfileForm(props) {
   const [phone, setPhone] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [bio, setBio] = React.useState("");
+  const [profile_picture, setProfilePicture] = React.useState("");
 
   React.useEffect(() => {
     profileGetHandler().then(res => {
@@ -28,8 +29,45 @@ function UpdateProfileForm(props) {
       setPhone(user.user_phone);
       setLocation(user.user_location);
       setBio(user.user_bio);
+
+      if (user.profile_picture) {
+        setProfilePicture(user.profile_picture);
+      }
+      else {
+        setProfilePicture(placeholder);
+      }
     })
   }, []);
+
+  const hiddenFileInput = React.useRef(null);
+
+  const handleClick = (e) => {
+    hiddenFileInput.current.click();
+  };
+
+  const updatePicture = (e) => {
+    e.preventDefault();
+    const profile_picture = e.target.files[0];
+
+    if (profile_picture !== "") {
+      console.log(profile_picture);
+      const formData = new FormData();
+      formData.append('profile_picture', profile_picture);
+      const config = {
+        headers: {
+            'content-type': 'multipart/form-data'
+        }
+      };
+  
+      profilePictureUpdateHandler(formData, config).then(res => {
+        if(res.status === 200){
+  
+          window.location.assign("/Profile");
+        }
+      });
+    }
+    
+  }
 
   const updateProfile = (e) => {
     e.preventDefault();
@@ -78,16 +116,24 @@ function UpdateProfileForm(props) {
       </Modal.Header>
       <Modal.Body>
         <Row className="justify-content-center">
-          <Image src={placeholder} width="300" height="300" roundedCircle />
+          <Image src={"http://localhost:3001/" + profile_picture} width="300" height="300" roundedCircle />
         </Row>
         <Row className="justify-content-center">
           <Button
             className="btn--primary"
             variant="primary"
             style={{ marginTop: "0.5rem" }}
+            onClick={(e)=>handleClick(e)}
           >
             UPLOAD PICTURE
           </Button>
+          <input
+            type="file"
+            name="profile_picture"
+            ref={hiddenFileInput}
+            onChange={(e)=>updatePicture(e)}
+            style={{display: 'none'}}
+          />
         </Row>
 
         {/* First Name input */}
