@@ -3,11 +3,28 @@ import { Navbar, Nav, Button, Image, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import mainLogo from "../Images/synLogoNM.png";
 import profilePic from "../Images/HomeBackground.jpg";
+import placeholder from "../Images/placeholder.png";
 import "../App/App.css";
 import CreateTeamForm from "../Components/CreateTeamForm";
 import Auth from "../utils/Auth";
+import { profileGetHandler } from "../Apis/UserProfile";
+
 function LoginNavbar() {
   const [modalShow, setModalShow] = React.useState(false);
+  const [profile_picture, setProfilePicture] = React.useState("");
+
+  React.useEffect(() => {
+    profileGetHandler().then(res => {
+      const user = res.data.user;
+
+      if (user.profile_picture) {
+        setProfilePicture(user.profile_picture);
+      }
+      else {
+        setProfilePicture(placeholder);
+      }
+    })
+  }, []);
 
   const navStyle = {
     textDecoration: "none",
@@ -132,7 +149,7 @@ function LoginNavbar() {
           >
             <Image
               className="d-inline-block"
-              src={profilePic}
+              src={"http://localhost:3001/" + profile_picture}
               width="60"
               height="60"
               roundedCircle
