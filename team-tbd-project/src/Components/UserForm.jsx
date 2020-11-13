@@ -24,6 +24,36 @@ function UserForm() {
 
   const account_id = parseInt(Auth.getUserid());
 
+  const build_location = (street_address, city, country) => {
+    const address_length = street_address.trim().length;
+    const city_length = city.trim().length;
+    const country_length = country.trim().length;
+
+    if (address_length && city_length && country_length) {
+      return street_address + ", " + city + ", " + country;
+    }
+    else if (city_length && country_length) {
+      return city + ", " + country;
+    }
+    else if (address_length && city_length) {
+      return street_address + ", " + city;
+    }
+    else if (address_length && country_length) {
+      return street_address + ", " + country;
+    }
+    else if (address_length) {
+      return street_address;
+    }
+    else if (city_length) {
+      return city;
+    }
+    else if (country_length) {
+      return country;
+    }
+
+    return "";
+  }
+
   const submit = (e) => {
     e.preventDefault();
     if(validateForm()){
@@ -32,7 +62,7 @@ function UserForm() {
         user_firstname: firstname,
         user_lastname: lastname,
         user_phone: phone,
-        user_location: street_address + ", " + city + ", " + country,
+        user_location: build_location(street_address, city, country),
         pref_start_work_hour: null,
         pref_end_end_hour: null,
         account_id: account_id
