@@ -1,5 +1,8 @@
 import alasql from "alasql";
 import rrule from "rrule";
+
+//Created by Yaritza M. García Chaparro for INSO4101 class project
+
 // Node class
 class Node {
   //data structure example
@@ -43,16 +46,6 @@ class BinarySearchTree {
   // helper method which creates a new node to be inserted and calls insertNode
   // if the tree has 5 or more nodes on one side than the other, rearrange the nodes.
   insert(data) {
-    // if (
-    //   Math.abs(
-    //     this.countLeftNodes(this.root) - this.countRightNodes(this.root)
-    //   ) >= 5
-    // ) {
-    //   this.root = this.rearrangeTree(
-    //     this.inorderArray(this.getRootNode(), []),
-    //     new BinarySearchTree()
-    //   ).getRootNode();
-    // }
     // Creating a node and initailising
     // with data
     var newNode = new Node(data);
@@ -257,59 +250,295 @@ class BinarySearchTree {
   }
 }
 
-function getUserFreeHours(U, US, amountH) {
-  freeHoursArr = [];
-  if (US.length == 0) {
-    freeHoursArr.push({
-      title: "Free",
-      startDate: U.availableStartHour,
-      endDate: U.availableEndHour,
-      hours: Math.abs(U.availableStartHour - U.availableEndHour) / 36e5, //amount of free hours.
-    });
-  } else {
-    var hours = Math.abs(U.availableStartHour - US[0].startDate) / 36e5;
-    if (hours >= amountH) {
-      freeHoursArr.push({
-        title: "Free",
-        startDate: U.availableStartHour,
-        endDate: US[0].startDate,
-        hours: hours, //calculate the amount of free hours.
-      });
-    }
+function getMeetingHours(
+  teamMembers,
+  teamLeader,
+  startingDay,
+  finishDay,
+  amountHours,
+  amountMinutes
+) {
+  var teamMembersPro = [];
+  teamMembers.forEach((member) => {
+    var memberSc = convertToOneTimeAppointments(
+      member.schedule,
+      startingDay,
+      finishDay
+    );
 
-    for (let i = 0; i < US.length() - 2; i++) {
-      hours = Math.abs(US[i].endDate - US[i + 1].startDate) / 36e5;
-      if (hours >= amountH) {
-        freeHoursArr.push({
-          title: "Free",
-          startDate: US[i].endDate,
-          endDate: US[i + 1].startDate,
-          hours: hours, //calculate the amount of free hours.
-        });
-      }
-    }
+    var tempMember = {
+      id: member.id,
+      schedule: memberSc,
+    };
 
-    hours = Math.abs(US[US.length() - 1].endDate - U.availableEndHour) / 36e5;
-    if (hours >= amountH) {
-      freeHoursArr.push({
-        title: "Free",
-        startDate: US[US.length() - 1].endDate,
-        endDate: U.availableEndHour,
-        hours: hours, //calculate the amount of free hours.
-      });
-    }
-  }
+    var memberFreeSc = getUserFreeHoursTree(
+      tempMember,
+      startingDay,
+      finishDay,
+      amountHours,
+      amountMinutes
+    );
+
+    teamMembersPro.push(memberFreeSc);
+  });
+
+  var leaderSc = convertToOneTimeAppointments(
+    teamLeader.schedule,
+    startingDay,
+    finishDay
+  );
+
+  var tempLeader = {
+    id: teamLeader.id,
+    schedule: leaderSc,
+  };
+
+  var teamLeaderPro = getUserFreeHoursTree(
+    tempLeader,
+    startingDay,
+    finishDay,
+    amountHours,
+    amountMinutes
+  );
+
+  var temp = new BinarySearchTree();
+  var result = new BinarySearchTree();
+  checkPossible(
+    teamLeaderPro.getRootNode(),
+    teamMembersPro,
+    0,
+    result,
+    temp,
+    1,
+    0,
+    "Welcome Meeting 2",
+    1
+  );
+  console.log(result.inorderArray(result.getRootNode(), []));
 }
 
-// {
-//   user_schedule_id: ruleInfo.userScheduleId,
-//   event_title: ruleInfo.eventTitle,
-//   start_date_time: new Date(ruleElements[index]).toJSON(),
-//   end_date_time: endDate.toJSON(),
-//   r_rule: null,
-//   ex_dates: null,
-//   user_id: ruleInfo.userId,
-// }
+function checkPossible(
+  leader,
+  memberArr,
+  memberPosition,
+  tempBST,
+  bstResult,
+  amountHours,
+  amountMinutes,
+  meetingTitle,
+  userId
+) {
+  if (memberPosition == memberArr.length) {
+    return;
+  }
+
+  if (memberPosition == 0) {
+    checkPossibleTimeSlot(
+      leader,
+      memberArr[memberPosition].getRootNode(),
+      tempBST,
+      amountHours,
+      amountMinutes,
+      meetingTitle,
+      userId
+    );
+    memberPosition++;
+  } else {
+    tempBST = bstResult;
+    bstResult = new BinarySearchTree();
+
+    checkPossibleTimeSlot(
+      tempBST.getRootNode(),
+      memberArr[memberPosition].getRootNode(),
+      bstResult,
+      amountHours,
+      amountMinutes,
+      meetingTitle,
+      userId
+    );
+    memberPosition++;
+  }
+
+  checkPossible(
+    leader,
+    memberArr,
+    memberPosition,
+    tempBST,
+    bstResult,
+    amountHours,
+    amountMinutes,
+    meetingTitle,
+    userId
+  );
+}
+
+function checkPossibleTimeSlot(
+  node,
+  node2,
+  bstResult,
+  amountHours,
+  amountMinutes,
+  meetingTitle,
+  userId
+) {
+  if (node === null || node === undefined) {
+    return;
+  }
+
+  checkPossibleTimeSlotHelper(
+    node,
+    node2,
+    bstResult,
+    amountHours,
+    amountMinutes,
+    meetingTitle,
+    userId
+  );
+
+  checkPossibleTimeSlot(
+    node.left,
+    node2,
+    bstResult,
+    amountHours,
+    amountMinutes,
+    meetingTitle,
+    userId
+  );
+  checkPossibleTimeSlot(
+    node.right,
+    node2,
+    bstResult,
+    amountHours,
+    amountMinutes,
+    meetingTitle,
+    userId
+  );
+}
+
+function checkPossibleTimeSlotHelper(
+  node,
+  node2,
+  bstResult,
+  amountHours,
+  amountMinutes,
+  meetingTitle,
+  userId
+) {
+  if (
+    node2 === null ||
+    node2 === undefined ||
+    (node2.data.start_date_time > node.data.start_date_time &&
+      node2.data.end_date_time > node.data.end_date_time)
+  ) {
+    return;
+  }
+
+  checkPossibleTimeSlotHelper(
+    node,
+    node2.left,
+    bstResult,
+    amountHours,
+    amountMinutes,
+    meetingTitle,
+    userId
+  );
+  var tempObjEvent = calculateTimeSlot(
+    node.data.start_date_time,
+    node.data.end_date_time,
+    node2.data.start_date_time,
+    node2.data.end_date_time,
+    amountHours,
+    amountMinutes
+  );
+  if (
+    tempObjEvent.start_date_time !== null &&
+    tempObjEvent.end_date_time !== null
+  ) {
+    bstResult.insert({
+      user_schedule_id: 1,
+      event_title: meetingTitle,
+      start_date_time: tempObjEvent.start_date_time,
+      end_date_time: tempObjEvent.end_date_time,
+      r_rule: null,
+      ex_dates: null,
+      user_id: userId,
+    });
+  }
+
+  checkPossibleTimeSlotHelper(
+    node,
+    node2.right,
+    bstResult,
+    amountHours,
+    amountMinutes,
+    meetingTitle,
+    userId
+  );
+}
+/**
+ * The function calculates startDate and endDate that have two startDate and two endDate, in common.
+ * If the amount of time between the resulting startDate and endDate is less than the given amountHours and amountMinutes, it returns [null, null].
+ * If the given dates do not have hours in common, return [null, null].
+ * @param {Date} startDate1 Start date of the first time period to analize
+ * @param {Date} endDate1 End date of the first time period to analize
+ * @param {Date} startDate2 Start date of the second time period to analize
+ * @param {Date} endDate2 End date of the second time period to analize
+ * @param {Integer} amountHours The minimum number of hours for the meeting.
+ * @param {Integer} amountMinutes The minimum number of minutes for the meeting.
+ * @return {Object} Returns an object with two properties: start_date_time (Start date of free time period in common) and end_date_time (End date of free time period in common)
+ *
+ * Example: startDate1 = "2020-11-09T22:30:00.000Z", endDate1 = "2020-11-10T14:00:33.542Z",
+ *          startDate2 = "2020-11-09T22:00:33.542Z", endDate2 = "2020-11-10T11:30:30.057Z",
+ * The time slot must have a minimum of 1 hour and 30 minutes. => amountHours = 1, amountMinutes = 30
+ * Then the result of the function it's going to be => {start_date_time: "2020-11-09T22:30:00.000Z", end_date_time: "2020-11-10T11:30:30.057Z"}
+  )
+ */
+function calculateTimeSlot(
+  startDate1,
+  endDate1,
+  startDate2,
+  endDate2,
+  amountHours,
+  amountMinutes
+) {
+  var resultStartDate = null;
+  var resultEndDate = null;
+
+  var tempStart = startDate1 <= startDate2 ? startDate2 : startDate1;
+  var tempEnd = endDate1 <= endDate2 ? endDate1 : endDate2;
+  var hours = diffHoursAndMinutes(tempStart, tempEnd);
+
+  if (
+    hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60 &&
+    tempStart >= startDate1 &&
+    tempStart <= endDate1 &&
+    tempEnd >= startDate1 &&
+    tempEnd <= endDate1 &&
+    tempStart >= startDate2 &&
+    tempStart <= endDate2 &&
+    tempEnd >= startDate2 &&
+    tempEnd <= endDate2
+  ) {
+    resultStartDate = tempStart;
+    resultEndDate = tempEnd;
+  }
+
+  return { start_date_time: resultStartDate, end_date_time: resultEndDate };
+}
+
+/**
+ * This function takes the user's information and based on their schedule it calculates all the free hours that the user has.
+ * @param user User object with the id and schedule. It must have those two properties. The schedule has to be an array/JSON.
+ * @param {JSONDate} startingDay First possible date for the meeting.
+ * @param {JSONDate} finishDay Last possible date for the meeting.
+ * @param {Integer} amountHours The minimum number of hours for the meeting.
+ * @param {Integer} amountMinutes The minimum number of minutes for the meeting.
+ * @return {BinarySearchTree} A binary search tree with all the user's free hours.
+ *
+ * Example: User wants a meeting between November 15, 2020 and November 20, 2020 and it should be a 1 hour 30 minute meeting.
+ * startingDay is going to be "2020-11-15T04:00:00.057Z" and finishDay is going to be "2020-11-20T04:00:00.057Z".
+ * amountHours is going to be 1 and amountMinutes is going to be 30.
+ */
 function getUserFreeHoursTree(
   user,
   startingDay,
@@ -685,51 +914,17 @@ var userSchedule2 = [
   },
 ];
 
-// var userSc = convertToOneTimeAppointments(
-//   userSchedule1,
-//   "2020-11-09T12:00:00.057Z",
-//   "2020-11-20T20:30:30.057Z"
-// );
+var team = [
+  { id: 1, schedule: userSchedule1 },
+  { id: 2, schedule: userSchedule2 },
+];
+var leader = { id: 3, schedule: userSchedule1 };
 
-// //console.log(userSc);
-
-// var user = {
-//   schedule: userSc,
-//   id: 1,
-// };
-// var userFreeSc = getUserFreeHoursTree(
-//   user,
-//   "2020-11-09T12:00:00.057Z",
-//   "2020-11-20T20:30:30.057Z",
-//   1,
-//   0
-// );
-
-// console.log(userFreeSc.inorderArray(userFreeSc.getRootNode(), []));
-
-// var userSc = convertToOneTimeAppointments(
-//   userSchedule2,
-//   "2020-11-09T12:00:00.057Z",
-//   "2020-11-20T20:00:30.057Z"
-// );
-
-// //console.log(userSc);
-
-// var user = {
-//   schedule: userSc,
-//   id: 2,
-// };
-// var userFreeSc = getUserFreeHoursTree(
-//   user,
-//   "2020-11-09T12:00:00.057Z",
-//   "2020-11-20T20:00:30.057Z",
-//   1,
-//   30
-// );
-
-// console.log(userFreeSc.inorderArray(userFreeSc.getRootNode(), []));
-// console.log(userSc.findMaxNode(userSc.getRootNode()));
-
-// var dateTest = new Date("2020-11-15T04:00:00.057Z");
-// console.log(dateTest.toLocaleString());
-// console.log(getUserFreeHoursTree(user, userSchedule, 1));
+getMeetingHours(
+  team,
+  leader,
+  "2020-11-09T12:00:00.057Z",
+  "2020-11-20T20:00:30.057Z",
+  1,
+  0
+);
