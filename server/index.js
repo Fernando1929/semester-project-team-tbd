@@ -15,6 +15,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev")); // for logging HTTP requests in console
+app.use('/uploads', express.static('uploads')); // making uploads folder statically accessible
 // -------------------------------------Start of routes--------------- 
 app.use('/api', accountRoutes);
 app.use('/api', userRoutes);

@@ -18,6 +18,7 @@ CREATE TABLE users (
     user_bio varchar(250),
     pref_start_work_hour TIME,
     pref_end_work_hour TIME,
+    profile_picture varchar(300),
     account_id integer references account(account_id));
 
 CREATE TABLE user_schedule (

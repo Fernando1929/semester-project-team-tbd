@@ -65,6 +65,25 @@ const updateUser = async (req,res) => {
     }
 }
 
+const updateProfilePicture = async (req,res) => {
+    try {
+        const profile_picture = req.file.path;
+        const result = await db.query(
+            "UPDATE users SET profile_picture = $1 WHERE user_id = $2 RETURNING *",
+            [profile_picture, req.params.id]
+        ); 
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                user: result.rows[0]
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 const deleteUser = async (req,res) => {
     try {
         const result = await db.query("DELETE FROM user_schedule WHERE user_id = $1", [req.params.id])
@@ -81,5 +100,6 @@ module.exports = {
     getAllUsers,
     getUserById,
     updateUser,
+    updateProfilePicture,
     deleteUser
 }
