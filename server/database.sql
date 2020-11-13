@@ -1,19 +1,21 @@
 CREATE DATABASE synclink;
 
-CREATE TABLE account (
-    account_id serial primary key, 
-    username varchar(30), 
+CREATE TABLE account
+(
+    account_id serial primary key,
+    username varchar(30),
     password varchar(200),
     email varchar(50),
     account_validation boolean,
     UNIQUE(email)
-    );
+);
 
-CREATE TABLE users (
-    user_id serial primary key, 
-    user_firstname varchar(20), 
-    user_lastname varchar(20), 
-    user_phone varchar(11),
+CREATE TABLE users
+(
+    user_id serial primary key,
+    user_firstname varchar(20),
+    user_lastname varchar(20),
+    user_phone varchar(15),
     user_location varchar(200),
     user_bio varchar(250),
     pref_start_work_hour TIME,
