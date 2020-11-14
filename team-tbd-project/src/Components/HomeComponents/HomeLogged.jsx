@@ -27,7 +27,7 @@ function HomeLogged() {
               style={{
                 textAlign: "center",
                 marginTop: "50%",
-                marginBottom: "45%",
+                marginBottom: "50%",
                 marginLeft: "18%",
               }}
               sm

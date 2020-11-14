@@ -9,8 +9,9 @@ import TeamProfile from "../../Pages/Teams/TeamProfile";
 function Home() {
   return (
     <div>
-      <TeamProfile />
-      {/* {Auth.isUserAuthenticated() ? <HomeLogged /> : <HomeUnLogged />} */}
+      {/* To See team profile uncomment and coment the next line */}
+      {/* <TeamProfile /> */}
+      {Auth.isUserAuthenticated() ? <HomeLogged /> : <HomeUnLogged />}
     </div>
   );
 }
