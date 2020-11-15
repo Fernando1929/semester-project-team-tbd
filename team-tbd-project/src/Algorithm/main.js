@@ -256,9 +256,32 @@ function getMeetingHours(
   startingDay,
   finishDay,
   amountHours,
-  amountMinutes
+  amountMinutes,
+  meetingTitle,
+  userId
 ) {
-  var teamMembersPro = [];
+  var leaderSc = convertToOneTimeAppointments(
+    teamLeader.schedule,
+    startingDay,
+    finishDay
+  );
+
+  var tempLeader = {
+    id: teamLeader.id,
+    schedule: leaderSc,
+  };
+
+  var teamLeaderPro = getUserFreeHoursTree(
+    tempLeader,
+    startingDay,
+    finishDay,
+    amountHours,
+    amountMinutes
+  );
+
+  var result = new BinarySearchTree();
+
+  var counter = 0;
   teamMembers.forEach((member) => {
     var memberSc = convertToOneTimeAppointments(
       member.schedule,
@@ -279,97 +302,33 @@ function getMeetingHours(
       amountMinutes
     );
 
-    teamMembersPro.push(memberFreeSc);
+    if (counter == 0) {
+      checkPossibleTimeSlot(
+        teamLeaderPro.getRootNode(),
+        memberFreeSc.getRootNode(),
+        result,
+        amountHours,
+        amountMinutes,
+        meetingTitle,
+        userId
+      );
+      counter++;
+    } else {
+      var tempResult = result.getRootNode();
+      result = new BinarySearchTree();
+      checkPossibleTimeSlot(
+        tempResult,
+        memberFreeSc.getRootNode(),
+        result,
+        amountHours,
+        amountMinutes,
+        meetingTitle,
+        30
+      );
+    }
   });
 
-  var leaderSc = convertToOneTimeAppointments(
-    teamLeader.schedule,
-    startingDay,
-    finishDay
-  );
-
-  var tempLeader = {
-    id: teamLeader.id,
-    schedule: leaderSc,
-  };
-
-  var teamLeaderPro = getUserFreeHoursTree(
-    tempLeader,
-    startingDay,
-    finishDay,
-    amountHours,
-    amountMinutes
-  );
-
-  var temp = new BinarySearchTree();
-  var result = new BinarySearchTree();
-  checkPossible(
-    teamLeaderPro.getRootNode(),
-    teamMembersPro,
-    0,
-    result,
-    temp,
-    1,
-    0,
-    "Welcome Meeting 2",
-    1
-  );
-  console.log(result.inorderArray(result.getRootNode(), []));
-}
-
-function checkPossible(
-  leader,
-  memberArr,
-  memberPosition,
-  tempBST,
-  bstResult,
-  amountHours,
-  amountMinutes,
-  meetingTitle,
-  userId
-) {
-  if (memberPosition == memberArr.length) {
-    return;
-  }
-
-  if (memberPosition == 0) {
-    checkPossibleTimeSlot(
-      leader,
-      memberArr[memberPosition].getRootNode(),
-      tempBST,
-      amountHours,
-      amountMinutes,
-      meetingTitle,
-      userId
-    );
-    memberPosition++;
-  } else {
-    tempBST = bstResult;
-    bstResult = new BinarySearchTree();
-
-    checkPossibleTimeSlot(
-      tempBST.getRootNode(),
-      memberArr[memberPosition].getRootNode(),
-      bstResult,
-      amountHours,
-      amountMinutes,
-      meetingTitle,
-      userId
-    );
-    memberPosition++;
-  }
-
-  checkPossible(
-    leader,
-    memberArr,
-    memberPosition,
-    tempBST,
-    bstResult,
-    amountHours,
-    amountMinutes,
-    meetingTitle,
-    userId
-  );
+  return result.inorderArray(result.getRootNode(), []);
 }
 
 function checkPossibleTimeSlot(
@@ -415,6 +374,17 @@ function checkPossibleTimeSlot(
   );
 }
 
+/**
+ * This function takes o
+ * @param {Node} node Node that contains the data to be compared.
+ * @param {Node} node2 Node where the data of a schedule is stored. This node will be the one to iterate through.
+ * @param {BinarySearchTree} bstResult Binary search tree in which the result will be saved.
+ * @param {Integer} amountHours The minimum number of hours for the meeting.
+ * @param {Integer} amountMinutes The minimum number of minutes for the meeting.
+ * @param {String} meetingTitle Name of the event.
+ * @param {Integer} userId Identification number of the user or team to which the hours will be added.
+ * @return {BinarySearchTree} A binary search tree with all free hours in common between node and node 2.
+ */
 function checkPossibleTimeSlotHelper(
   node,
   node2,
@@ -475,6 +445,7 @@ function checkPossibleTimeSlotHelper(
     userId
   );
 }
+
 /**
  * The function calculates startDate and endDate that have two startDate and two endDate, in common.
  * If the amount of time between the resulting startDate and endDate is less than the given amountHours and amountMinutes, it returns [null, null].
@@ -490,8 +461,7 @@ function checkPossibleTimeSlotHelper(
  * Example: startDate1 = "2020-11-09T22:30:00.000Z", endDate1 = "2020-11-10T14:00:33.542Z",
  *          startDate2 = "2020-11-09T22:00:33.542Z", endDate2 = "2020-11-10T11:30:30.057Z",
  * The time slot must have a minimum of 1 hour and 30 minutes. => amountHours = 1, amountMinutes = 30
- * Then the result of the function it's going to be => {start_date_time: "2020-11-09T22:30:00.000Z", end_date_time: "2020-11-10T11:30:30.057Z"}
-  )
+ * Then the result of the function it's going to be => {start_date_time: "2020-11-09T22:30:00.000Z", end_date_time: "2020-11-10T11:30:30.057Z"})
  */
 function calculateTimeSlot(
   startDate1,
@@ -854,77 +824,410 @@ function diffHoursAndMinutes(dt2, dt1) {
 
 //Testing purposes
 
-var userSchedule1 = [
+var MariaSchedule = [
   {
-    user_schedule_id: 1,
-    event_title: "Work",
-    start_date_time: "2020-11-04T11:30:30.057Z",
-    end_date_time: "2020-11-04T20:30:30.057Z",
-    r_rule: "RRULE:INTERVAL=1;FREQ=DAILY;COUNT=27",
+    user_schedule_id: 26,
+    event_title: "ICOM4009",
+    start_date_time: "2020-11-16T18:30:00.000Z",
+    end_date_time: "2020-11-16T19:20:00.000Z",
+    r_rule:
+      "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20201120T192000Z",
     ex_dates: null,
-    user_id: 1,
+    user_id: 9,
   },
   {
-    user_schedule_id: 2,
-    event_title: "Event",
-    start_date_time: "2020-11-04T20:30:18.820Z",
-    end_date_time: "2020-11-04T21:00:18.820Z",
+    user_schedule_id: 27,
+    event_title: "ADMI4085",
+    start_date_time: "2020-11-16T15:00:00.000Z",
+    end_date_time: "2020-11-16T15:50:00.000Z",
+    r_rule:
+      "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20201120T155000Z",
+    ex_dates: null,
+    user_id: 9,
+  },
+  {
+    user_schedule_id: 25,
+    event_title: "INEL4211",
+    start_date_time: "2020-11-16T19:30:00.000Z",
+    end_date_time: "2020-11-16T22:20:00.000Z",
+    r_rule: null,
+    ex_dates: null,
+    user_id: 9,
+  },
+  {
+    user_schedule_id: 28,
+    event_title: "INME5995 (Moonbuggy)",
+    start_date_time: "2020-11-18T20:30:00.000Z",
+    end_date_time: "2020-11-18T23:20:00.000Z",
+    r_rule: null,
+    ex_dates: null,
+    user_id: 9,
+  },
+  {
+    user_schedule_id: 29,
+    event_title: "INEL4206",
+    start_date_time: "2020-11-17T16:30:00.000Z",
+    end_date_time: "2020-11-17T17:45:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=TU,TH;UNTIL=20201119T174500Z",
+    ex_dates: null,
+    user_id: 9,
+  },
+  {
+    user_schedule_id: 30,
+    event_title: "INEL4207",
+    start_date_time: "2020-11-17T18:00:00.000Z",
+    end_date_time: "2020-11-17T19:15:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=TU,TH;UNTIL=20201119T191500Z",
+    ex_dates: null,
+    user_id: 9,
+  },
+];
+
+var YaritzaSchedule = [
+  {
+    user_schedule_id: 12,
+    event_title: "FISI3172",
+    start_date_time: "2020-11-09T19:30:00.000Z",
+    end_date_time: "2020-11-09T20:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;COUNT=13;BYDAY=MO,TU,WE,TH",
+    ex_dates: null,
+    user_id: 6,
+  },
+  {
+    user_schedule_id: 13,
+    event_title: "INSO4101",
+    start_date_time: "2020-11-10T18:30:00.000Z",
+    end_date_time: "2020-11-10T19:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;COUNT=13;BYDAY=FR,WE,MO",
+    ex_dates: null,
+    user_id: 6,
+  },
+  {
+    user_schedule_id: 14,
+    event_title: "INSO4101",
+    start_date_time: "2020-11-09T18:30:00.000Z",
+    end_date_time: "2020-11-09T19:20:00.000Z",
+    r_rule: null,
+    ex_dates: null,
+    user_id: 6,
+  },
+  {
+    user_schedule_id: 15,
+    event_title: "MATE3063",
+    start_date_time: "2020-11-09T17:30:00.000Z",
+    end_date_time: "2020-11-09T18:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;COUNT=13;BYDAY=MO,WE,FR",
+    ex_dates: null,
+    user_id: 6,
+  },
+  {
+    user_schedule_id: 16,
+    event_title: "FISI3174",
+    start_date_time: "2020-11-10T12:30:00.000Z",
+    end_date_time: "2020-11-10T14:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;COUNT=13;BYDAY=TU",
+    ex_dates: null,
+    user_id: 6,
+  },
+  {
+    user_schedule_id: 17,
+    event_title: "INEL4115",
+    start_date_time: "2020-11-11T12:30:00.000Z",
+    end_date_time: "2020-11-11T14:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;COUNT=13;BYDAY=WE",
+    ex_dates: null,
+    user_id: 6,
+  },
+  {
+    user_schedule_id: 18,
+    event_title: "INEL3105",
+    start_date_time: "2020-11-10T18:00:00.000Z",
+    end_date_time: "2020-11-10T19:15:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;COUNT=13;BYDAY=TU,TH",
+    ex_dates: null,
+    user_id: 6,
+  },
+];
+
+var YeranSchedule = [
+  {
+    user_schedule_id: 1,
+    event_title: "BreakFast",
+    start_date_time: "2020-11-13T11:30:59.263Z",
+    end_date_time: "2020-11-13T12:00:59.263Z",
     r_rule: null,
     ex_dates: null,
     user_id: 1,
   },
   {
-    user_schedule_id: 3,
-    event_title: "Event 2",
-    start_date_time: "2020-11-05T22:00:00.000Z",
-    end_date_time: "2020-11-05T22:30:00.000Z",
-    r_rule: "RRULE:INTERVAL=2;FREQ=DAILY;COUNT=10",
+    user_schedule_id: 2,
+    event_title: "INGE 3011 Graficas",
+    start_date_time: "2020-11-16T11:30:00.000Z",
+    end_date_time: "2020-11-16T13:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=DAILY;COUNT=30",
+    ex_dates:
+      "20201116T113000Z,20201117T113000Z,20201119T113000Z,20201121T113000Z,20201118T113000Z,20201120T113000Z",
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 5,
+    event_title: "INGL3201",
+    start_date_time: "2020-11-16T16:30:00.000Z",
+    end_date_time: "2020-11-16T17:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=2;FREQ=DAILY;COUNT=30",
+    ex_dates: null,
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 6,
+    event_title: "INSO4101",
+    start_date_time: "2020-11-16T18:30:00.000Z",
+    end_date_time: "2020-11-16T19:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=2;FREQ=DAILY;COUNT=3",
+    ex_dates: null,
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 8,
+    event_title: "MATE3063",
+    start_date_time: "2020-11-16T19:30:00.000Z",
+    end_date_time: "2020-11-16T20:20:00.000Z",
+    r_rule: null,
+    ex_dates: null,
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 9,
+    event_title: "MATE3063",
+    start_date_time: "2020-11-18T19:30:00.000Z",
+    end_date_time: "2020-11-18T20:20:00.000Z",
+    r_rule: null,
+    ex_dates: null,
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 10,
+    event_title: "MATE3063",
+    start_date_time: "2020-11-20T19:30:00.000Z",
+    end_date_time: "2020-11-20T20:20:00.000Z",
+    r_rule: null,
     ex_dates: null,
     user_id: 1,
   },
   {
     user_schedule_id: 7,
-    event_title: "Family",
-    start_date_time: "2020-11-10T21:00:00.000Z",
-    end_date_time: "2020-11-10T21:30:00.000Z",
-    r_rule: "RRULE:INTERVAL=3;FREQ=DAILY;UNTIL=20201114T213000Z",
+    event_title: "MATE3063",
+    start_date_time: "2020-11-16T19:30:00.000Z",
+    end_date_time: "2020-11-16T20:00:00.000Z",
+    r_rule: "RRULE:INTERVAL=2;FREQ=DAILY;COUNT=3",
+    ex_dates: "20201116T193000Z,20201118T193000Z,20201120T193000Z",
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 3,
+    event_title: "INGE 3011 Graficas",
+    start_date_time: "2020-11-16T11:30:00.000Z",
+    end_date_time: "2020-11-16T13:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=2;FREQ=DAILY;COUNT=30",
+    ex_dates: "20201120T113000Z",
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 11,
+    event_title: "MUSI3171",
+    start_date_time: "2020-11-17T18:00:00.000Z",
+    end_date_time: "2020-11-17T19:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=2;FREQ=DAILY;COUNT=2",
     ex_dates: null,
     user_id: 1,
   },
 ];
 
-var userSchedule2 = [
+var LuisSchedule = [
   {
-    user_schedule_id: 4,
-    event_title: "Work",
-    start_date_time: "2020-11-02T14:00:33.542Z",
-    end_date_time: "2020-11-02T22:00:33.542Z",
-    r_rule: "RRULE:INTERVAL=1;FREQ=DAILY;COUNT=27",
+    user_schedule_id: 10,
+    event_title: "Electronica",
+    start_date_time: "2020-11-16T14:30:53.794Z",
+    end_date_time: "2020-11-16T15:20:00.000Z",
+    r_rule:
+      "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20201121T040000Z",
+    ex_dates: null,
+    user_id: 6,
+  },
+  {
+    user_schedule_id: 11,
+    event_title: "Frances",
+    start_date_time: "2020-11-16T15:30:53.794Z",
+    end_date_time: "2020-11-16T16:20:00.000Z",
+    r_rule:
+      "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20201123T160000Z",
+    ex_dates: null,
+    user_id: 6,
+  },
+  {
+    user_schedule_id: 12,
+    event_title: "Circuitos 2",
+    start_date_time: "2020-11-16T17:30:53.794Z",
+    end_date_time: "2020-11-16T18:20:00.000Z",
+    r_rule:
+      "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20201123T160000Z",
+    ex_dates: null,
+    user_id: 6,
+  },
+  {
+    user_schedule_id: 13,
+    event_title: "Intro to Soft.",
+    start_date_time: "2020-11-16T18:30:53.794Z",
+    end_date_time: "2020-11-16T19:20:00.000Z",
+    r_rule:
+      "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20201123T160000Z",
+    ex_dates: null,
+    user_id: 6,
+  },
+  {
+    user_schedule_id: 14,
+    event_title: "Estadistica",
+    start_date_time: "2020-11-16T19:30:53.794Z",
+    end_date_time: "2020-11-16T21:20:00.000Z",
+    r_rule:
+      "RRULE:INTERVAL=1;FREQ=WEEKLY;UNTIL=20201123T160000Z;COUNT=13;BYDAY=MO,WE",
+    ex_dates: null,
+    user_id: 6,
+  },
+];
+
+var FernandoSchedule = [
+  {
+    user_schedule_id: 1,
+    event_title: "INEL-3105",
+    start_date_time: "2020-11-09T13:30:00.000Z",
+    end_date_time: "2020-11-09T14:30:00.000Z",
+    r_rule:
+      "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20201210T143000Z",
     ex_dates: null,
     user_id: 2,
+  },
+  {
+    user_schedule_id: 2,
+    event_title: "INSO-4101",
+    start_date_time: "2020-11-09T18:30:00.000Z",
+    end_date_time: "2020-11-09T19:30:00.000Z",
+    r_rule:
+      "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20201210T193000Z",
+    ex_dates: null,
+    user_id: 2,
+  },
+  {
+    user_schedule_id: 3,
+    event_title: "ARTE-3122",
+    start_date_time: "2020-11-10T16:30:00.000Z",
+    end_date_time: "2020-11-10T19:30:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=TU,TH;UNTIL=20201210T170000Z",
+    ex_dates: null,
+    user_id: 2,
+  },
+  {
+    user_schedule_id: 4,
+    event_title: "INEL-4115",
+    start_date_time: "2020-11-12T19:30:00.000Z",
+    end_date_time: "2020-11-12T22:30:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=TH;UNTIL=20201210T200000Z",
+    ex_dates: null,
+    user_id: 2,
+  },
+];
+
+var OrlandoSchedule = [
+  {
+    user_schedule_id: 4,
+    event_title: "QUIM 3131",
+    start_date_time: "2020-11-16T15:30:00.000Z",
+    end_date_time: "2020-11-16T16:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=4;FREQ=WEEKLY;BYDAY=MO,WE,FR",
+    ex_dates: null,
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 2,
+    event_title: "QUIM 3131",
+    start_date_time: "2020-11-16T15:30:00.000Z",
+    end_date_time: "2020-11-16T16:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=2;FREQ=DAILY;COUNT=30",
+    ex_dates:
+      "20201116T153000Z,20201120T153000Z,20201122T153000Z,20201124T153000Z,20201126T153000Z,20201128T153000Z,20201118T153000Z",
+    user_id: 1,
   },
   {
     user_schedule_id: 5,
-    event_title: "Class",
-    start_date_time: "2020-11-02T22:30:33.542Z",
-    end_date_time: "2020-11-02T23:30:33.542Z",
-    r_rule: "RRULE:INTERVAL=3;FREQ=DAILY;COUNT=27",
+    event_title: "INSO ",
+    start_date_time: "2020-11-16T18:30:00.000Z",
+    end_date_time: "2020-11-16T19:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=13",
     ex_dates: null,
-    user_id: 2,
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 3,
+    event_title: "QUIM 3131",
+    start_date_time: "2020-11-16T15:30:00.000Z",
+    end_date_time: "2020-11-16T16:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=4;FREQ=WEEKLY;COUNT=13;BYDAY=MO,WE,FR",
+    ex_dates: "20201118T153000Z,20201116T153000Z,20201120T153000Z",
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 6,
+    event_title: "FISI",
+    start_date_time: "2020-11-16T19:30:00.000Z",
+    end_date_time: "2020-11-16T20:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;COUNT=13;BYDAY=MO,TU,WE,TH",
+    ex_dates: null,
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 7,
+    event_title: "ECON",
+    start_date_time: "2020-11-16T20:30:00.000Z",
+    end_date_time: "2020-11-16T21:45:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;COUNT=13;BYDAY=MO,WE",
+    ex_dates: null,
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 9,
+    event_title: "LAB quim",
+    start_date_time: "2020-11-20T11:30:00.000Z",
+    end_date_time: "2020-11-20T14:30:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;COUNT=13;BYDAY=FR",
+    ex_dates: null,
+    user_id: 1,
+  },
+  {
+    user_schedule_id: 8,
+    event_title: "Lab Fisi",
+    start_date_time: "2020-11-18T12:30:00.000Z",
+    end_date_time: "2020-11-18T14:20:00.000Z",
+    r_rule: "RRULE:INTERVAL=1;FREQ=WEEKLY;COUNT=13;BYDAY=WE",
+    ex_dates: null,
+    user_id: 1,
   },
 ];
 
-var team = [
-  { id: 1, schedule: userSchedule1 },
-  { id: 2, schedule: userSchedule2 },
-];
-var leader = { id: 3, schedule: userSchedule1 };
-
-getMeetingHours(
-  team,
-  leader,
-  "2020-11-09T12:00:00.057Z",
-  "2020-11-20T20:00:30.057Z",
+var team = getMeetingHours(
+  [
+    { id: 2, schedule: OrlandoSchedule },
+    { id: 3, schedule: FernandoSchedule },
+    { id: 4, schedule: LuisSchedule },
+    { id: 5, schedule: YeranSchedule },
+    { id: 6, schedule: YaritzaSchedule },
+  ],
+  { id: 1, schedule: MariaSchedule },
+  "2020-11-16T10:30:00.000Z",
+  "2020-11-20T19:30:00.000Z",
   1,
-  0
+  0,
+  "QUIERO TERMINAR EJTA MRD",
+  "TeamID"
 );
+
+console.log(team);
