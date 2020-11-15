@@ -1,7 +1,9 @@
 import React from "react";
 import "../../App/App.css";
 import backgroundH from "../../Images/TeamBK2.gif";
-// import DatePicker from "react-datepicker";
+import MeetingDatePickerForm from "../../Components/MeetingDatePickerForm";
+import VotesForm from "../../Components/VotesForm";
+
 import {
   Button,
   Col,
@@ -11,20 +13,24 @@ import {
   ListGroup,
   ListGroupItem,
 } from "react-bootstrap";
+// ToDO List:
+// 1. Implement remove button for when a leader wants to reamove a member
+// 2. For members give them an alert when they vote and remove the vote button affter they do so
+// 3. Complete DatePicker
+// 4.Control The characters on the Team name and descripiton of the team
+// 5. Are U Sure to Remove Candidate (POP UP)
+// 6.Find a way to control the lenght of the name so i does not overlap with the bk image
 
-// Install New Dependenciesnpm install react-bootstrap-date-picker
+// Dependencies to install: Install New Dependencies npm install react-bootstrap-date-picker,npm i react-notification-timeline
 
-// ToDO fix the letter size of the team nave pq cuando el nombre es mas largo los botones se ruedan al otro div
 function TeamProfile() {
   const [modalShow, setModalShow] = React.useState(false);
-  //testing var for the scroller
-  const child = { width: `30em`, height: `100%` };
-  const parent = { width: `60em`, height: `100%` };
-
   //Team name
   var teamName = "Team TBD";
 
-  //end of testing var
+  // If is true shows the Leader Team page else show a reagular team member page
+  var isLeader = true;
+
   var counterColors = 0;
   var mostRecentColors = [
     "#66D6F5",
@@ -57,8 +63,7 @@ function TeamProfile() {
 
   return (
     <div>
-      {/* <MeetingDatePicker /> */}
-      <div className="SyncLinkWelcome">
+      <div>
         <Container
           fluid
           className="d-flex align-items-start"
@@ -72,42 +77,80 @@ function TeamProfile() {
           <Row>
             <Col
               style={{
-                // textAlign: "center",
-                marginTop: "10%",
-                marginBottom: "18%",
+                marginTop: "25%",
+                marginBottom: "10%",
                 marginLeft: "5%",
                 marginRight: "50%",
               }}
               sm
             >
-              <h1 style={{ fontSize: "7vw", color: "#005792" }}>{teamName}</h1>
-              <h3 style={{ fontSize: "2vw" }}>
+              <h1 style={{ fontSize: "6vw", color: "#4993FA" }}>{teamName}</h1>
+              <h4
+                style={{
+                  fontSize: "1.5vw",
+                  marginTop: "1rem",
+                  fontWeight: "300",
+                }}
+              >
                 Insert Team Description here, this must have a restriction on
                 the lenght of the characters/ TODO
-              </h3>
+              </h4>
               <div>
-                <Button
-                  href="/SignUp"
-                  className="btn--primary"
-                  variant="primary"
-                  style={{
-                    fontSize: "2vw",
-                    marginBottom: "1rem",
-                    marginTop: "1rem",
-                  }}
-                >
-                  New Meeting
-                </Button>
+                {isLeader ? (
+                  <h1>
+                    <Button
+                      className="btn--secondary"
+                      variant="primary"
+                      style={{
+                        fontSize: "2vw",
+                        marginBottom: "3rem",
+                        marginTop: "5%",
+                        backgroundColor: "#005792",
+                      }}
+                      onClick={() => setModalShow(true)}
+                    >
+                      New Meeting
+                    </Button>
+                  </h1>
+                ) : (
+                  <hi>
+                    <Button
+                      className="btn--secondary"
+                      style={{
+                        fontSize: "2vw",
+                        marginBottom: "1rem",
+                        marginTop: "2rem",
+                        backgroundColor: "#005792",
+                      }}
+                      onClick={() => setModalShow(true)}
+                    >
+                      VOTE NOW
+                    </Button>
+
+                    <h4
+                      style={{
+                        color: "#FF5050",
+                        fontSize: "1vw",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      Your have been requested to select a meeting date.
+                    </h4>
+                  </hi>
+                )}
+
+                {isLeader ? (
+                  <MeetingDatePickerForm
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                  />
+                ) : (
+                  <VotesForm
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                  />
+                )}
               </div>
-              {/* <div>
-                <Button
-                  href="/LogIn"
-                  className="btn--secondary"
-                  style={{ fontSize: "2vw" }}
-                >
-                  LOG IN
-                </Button>
-              </div> */}
             </Col>
           </Row>
         </Container>
@@ -115,14 +158,15 @@ function TeamProfile() {
 
       <div className="LearnMore">
         <Container fluid>
-          <h2 style={{ color: "white" }}>UPCOMING EVENTS</h2>
+          <h2 style={{ color: "white", marginTop: "1rem" }}>UPCOMING EVENTS</h2>
 
           <Row>
             {mostRecent.map((team) => {
               teamStyle = {
                 marginTop: "0.5rem",
-                marginBottom: "3rem",
+                marginBottom: "2rem",
                 height: "50px",
+
                 backgroundColor: mostRecentColors[counterColors],
               };
               counterColors++;
@@ -132,30 +176,26 @@ function TeamProfile() {
                     <Card
                       style={{
                         width: "18rem",
-                        marginTop: "1rem",
-                        marginBottom: "3rem",
+                        marginBottom: "1rem",
                       }}
                     >
-                      <Button
-                        className="btn--secondary"
-                        // change to schedule
-                        href="/SignUp"
-                        variant="primary"
-                        style={teamStyle}
-                      >
-                        {team.name}
-                      </Button>
                       <Card.Body>
                         <Card.Title
-                          style={{ marginTop: "-3rem", marginBottom: "2rem" }}
+                          style={{ fontSize: "30px", fontWeight: "400" }}
                         >
-                          Meeting Title
+                          {" "}
+                          {team.name}
                         </Card.Title>
-                        <Card.Text
-                          style={{ marginTop: "-2rem", marginBottom: "3rem" }}
-                        >
-                          Description
+                        <Card.Subtitle className="mb-2 text-muted">
+                          Meting Title
+                        </Card.Subtitle>
+                        <Card.Text>
+                          Some quick description text to build and make up the
+                          bulk of the card's content.
                         </Card.Text>
+                        <Card.Link href="/UserSchedule">
+                          View on Schedule
+                        </Card.Link>
                       </Card.Body>
                     </Card>
                   </center>
@@ -172,25 +212,31 @@ function TeamProfile() {
           backgroundColor: "white",
         }}
       >
-        <h2 style={{ marginLeft: "20px", color: "#005792" }}>TEAM MEMBERS</h2>
+        <h2
+          style={{ marginLeft: "20px", color: "#005792", paddingTop: "1rem" }}
+        >
+          TEAM MEMBERS
+        </h2>
         <ListGroup
           variant="flush"
           style={{ marginRight: "1rem", marginLeft: "1rem" }}
         >
           {Teammembers.map((member) => {
             return (
-              <ListGroupItem key={member.name}>
+              <ListGroupItem key={member.name} style={{ fontSize: "30px" }}>
                 {member.name}
 
                 <Row>
                   <Button
                     className="btn--secondary ml-auto p-2"
-                    // change to remove from
+                    // change to later when the remove button is implemented
                     // href="/SignUp"
                     variant="primary"
                     style={{
-                      backgroundColor: "#ec0101",
+                      backgroundColor: "white",
+                      color: "#FF5050",
                       marginTop: "-3%",
+                      size: "10px",
                     }}
                   >
                     REMOVE
