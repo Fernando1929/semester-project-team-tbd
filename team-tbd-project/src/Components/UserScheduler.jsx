@@ -1,14 +1,11 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
-// import { Link } from "react-router-dom";
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core/styles';
-// import moment from 'moment';
 import {
   ViewState,
-  EditingState, 
-  IntegratedEditing
+  EditingState,
 } from '@devexpress/dx-react-scheduler';
 import {
   Scheduler,
@@ -20,8 +17,9 @@ import {
   ViewSwitcher,
   AppointmentForm,
   AppointmentTooltip,
-//  ConfirmationDialog,
+  ConfirmationDialog,
   TodayButton,
+  EditRecurrenceMenu
 } from '@devexpress/dx-react-scheduler-material-ui';
 
 import {scheduleAddHandler, scheduleGetHandler, scheduleUpdateHandler, scheduleDeleteHandler} from "../Apis/UserSchedule";
@@ -140,7 +138,6 @@ function UserScheduler() {
             <EditingState
                 onCommitChanges={commitChanges}
             />
-            <IntegratedEditing />
             <DayView
               startDayHour={6}
               endDayHour={23}
@@ -149,7 +146,8 @@ function UserScheduler() {
               startDayHour={6}
               endDayHour={23}
             />
-            {/* <ConfirmationDialog /> */}
+            <EditRecurrenceMenu />
+            <ConfirmationDialog />
             <Appointments />
             <Toolbar
               {...loading ? { rootComponent: ToolbarWithLoading } : null}
