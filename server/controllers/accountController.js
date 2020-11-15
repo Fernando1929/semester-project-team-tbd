@@ -1,6 +1,7 @@
 const db = require("../db/index");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+const jwtGenerator = require("../services/jwtGenerator");
 const authTokens = {};
 
 const signup = async (req, res) => {
@@ -15,7 +16,9 @@ const signup = async (req, res) => {
         [username, hashedPassword, email, 0]
       );
 
-      res.status(201).json(newAccount.rows[0]);
+      //jwt setup
+      const token = jwtGenerator(newAccount.rows[0].account_id);
+      res.status(201).json(token);
     } else {
       res.status(404).json("Username already exists");
     }
@@ -45,33 +48,29 @@ const accountExists = async (req) => {
 const login = async (req, res) => {
   try {
     const { username, password } = req.body.user;
-    const queryreturn = await db.query(
-      "SELECT * FROM account NATURAL INNER JOIN users WHERE username = $1 OR email = $2",
+  
+    // const user = await db.query(
+    //   "SELECT * FROM account NATURAL INNER JOIN users WHERE username = $1 OR email = $2",
+    //   [username, username]
+    // );
+
+    const user = await db.query(
+      "SELECT * FROM account WHERE username = $1 OR email = $2",
       [username, username]
     );
-    const user_exists = queryreturn.rows[0];
-    const user = (user_e) => {
-      return (
-        (user_e["username"] === username || user_e["email"] === username) &&
-        user_e["account_validation"] === true &&
-        bcrypt.compareSync(password, user_e["password"])
-      );
-    };
-
-    if (user(user_exists)) {
-      var authToken = generateAuthToken();
-      // Store authentication token
-      authTokens[authToken] = user;
-
-      // Setting the auth token in cookies
-      res.status(200).json({
-        token: authToken,
-        user_id: user_exists["user_id"],
-        username: user_exists["username"],
-      });
-    } else {
-      res.status(404).json("Wrong password.");
+      console.log(user);
+    if(user.rows.length === 0){
+      return res.status(404).json("User does not exist");
     }
+    const isvalidPassword = await bcrypt.compareSync(password, user.rows[0]["password"]);
+    
+    if(!isvalidPassword){
+      return res.status(401).json("Wrong password.");
+    }
+
+    const token = jwtGenerator(user.rows[0].account_id);
+
+    res.status(200).json({token});
   } catch (err) {
     console.log(err);
   }
