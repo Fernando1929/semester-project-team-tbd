@@ -28,7 +28,7 @@ function Profile() {
       setUser(user);
 
       if (user.profile_picture) {
-        setProfilePicture(user.profile_picture);
+        setProfilePicture("http://localhost:3001/" + user.profile_picture);
       }
       else {
         setProfilePicture(placeholder);
@@ -55,7 +55,7 @@ function Profile() {
               <Col>
                 <center>
                   <Image
-                    src={"http://localhost:3001/" + profile_picture}
+                    src={profile_picture}
                     width="300"
                     height="300"
                     roundedCircle

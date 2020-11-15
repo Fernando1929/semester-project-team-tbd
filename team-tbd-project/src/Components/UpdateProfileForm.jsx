@@ -36,7 +36,7 @@ function UpdateProfileForm(props) {
       setBio(user.user_bio);
 
       if (user.profile_picture) {
-        setProfilePicture(user.profile_picture);
+        setProfilePicture("http://localhost:3001/" + user.profile_picture);
       }
       else {
         setProfilePicture(placeholder);
@@ -120,7 +120,7 @@ function UpdateProfileForm(props) {
       </Modal.Header>
       <Modal.Body>
         <Row className="justify-content-center">
-          <Image src={"http://localhost:3001/" + profile_picture} width="300" height="300" roundedCircle />
+          <Image src={profile_picture} width="300" height="300" roundedCircle />
         </Row>
         <Row className="justify-content-center">
           <Button

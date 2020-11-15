@@ -18,11 +18,12 @@ function LoginNavbar() {
       const user = res.data.user;
 
       if (user.profile_picture) {
-        setProfilePicture(user.profile_picture);
+        setProfilePicture("http://localhost:3001/" + user.profile_picture);
       }
       else {
         setProfilePicture(placeholder);
       }
+
     })
   }, []);
 
@@ -149,7 +150,7 @@ function LoginNavbar() {
           >
             <Image
               className="d-inline-block"
-              src={"http://localhost:3001/" + profile_picture}
+              src={profile_picture}
               width="60"
               height="60"
               roundedCircle
