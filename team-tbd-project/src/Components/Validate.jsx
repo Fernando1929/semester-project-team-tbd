@@ -1,12 +1,33 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { validateResend } from "../Apis/Validate";
+import { validateResend, verifyValidation } from "../Apis/Validate";
 
 import "../App/App.css";
 import "../Pages/SignUp/SignUp.css";
 
 function Validate() {
   const [msg, setmsg] = useState([]);
+  const [card_header, setCardHeader] = useState("Validate Your Email!");
+  const [card_text, setCardText] = useState("Validate using the link to login from the email you receive from us.");
+  const [resendFlag, setResendFlag] = useState(false);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      verifyValidation().then((res) => {
+        const account = res.data.account;
+        if (account.account_validation) {
+          setCardHeader("Email Validated!");
+          setCardText("Your account has been successfully validated!\nYou may now close this window.");
+          setResendFlag(true);
+          clearInterval(interval);
+        }
+      });
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+
+  }, []);
 
   const resend = (e) => {
     e.preventDefault();
@@ -35,7 +56,7 @@ function Validate() {
                     fontFamily: "'Open Sans', sans-serif",
                   }}
                 >
-                  Validate Your Email!
+                {card_header}
                 </h1>
               </Card.Title>
               <h3
@@ -45,8 +66,7 @@ function Validate() {
                   fontFamily: "'Open Sans', sans-serif",
                 }}
               >
-                Validate using the link to login from the email you receive from
-                us.
+                {card_text}
               </h3>
               <div className="notice">
                 {msg.map((msg) => (
@@ -57,6 +77,7 @@ function Validate() {
                 <Button
                   className="btn--primary"
                   variant="primary"
+                  hidden={resendFlag}
                   onClick={(e) => resend(e)}
                 >
                   Resend email
