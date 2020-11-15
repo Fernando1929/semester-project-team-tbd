@@ -109,7 +109,8 @@ const validateAccount = async (req, res) => {
       [1, req]
     );
 
-    res.status(200).json({ status: "success" });
+    res.status(200);
+    res.redirect("http://localhost:3000/LogIn");
   } catch (err) {
     console.log(err);
   }

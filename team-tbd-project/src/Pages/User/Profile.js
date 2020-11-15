@@ -1,7 +1,8 @@
 import React from "react";
 import "../../App/App.css";
 import { Container, Row, Col, Card, Button, Nav } from "react-bootstrap";
-import mainLogo from "../../Images/HomeBackground.jpg";
+// import mainLogo from "../../Images/HomeBackground.jpg";
+import placeholder from "../../Images/placeholder.png";
 import Image from "react-bootstrap/Image";
 import UpdateProfileForm from "../../Components/UpdateProfileForm";
 import { profileGetHandler } from "../../Apis/UserProfile";
@@ -19,10 +20,19 @@ const textStyle = {
 function Profile() {
   const [modalShow, setModalShow] = React.useState(false);
   const [user, setUser] = React.useState({});
+  const [profile_picture, setProfilePicture] = React.useState("");
 
   React.useEffect(() => {
     profileGetHandler().then(res => {
-      setUser(res.data.user);
+      const user = res.data.user;
+      setUser(user);
+
+      if (user.profile_picture) {
+        setProfilePicture("http://localhost:3001/" + user.profile_picture);
+      }
+      else {
+        setProfilePicture(placeholder);
+      }
     })
   }, []);
 
@@ -45,7 +55,7 @@ function Profile() {
               <Col>
                 <center>
                   <Image
-                    src={mainLogo}
+                    src={profile_picture}
                     width="300"
                     height="300"
                     roundedCircle
