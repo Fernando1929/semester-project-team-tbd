@@ -1,7 +1,7 @@
 import alasql from "alasql";
 import rrule from "rrule";
 
-//Created by Yaritza M. García Chaparro for INSO4101 class project
+// Created by Yaritza M. García Chaparro for INSO4101 class project
 
 // Node class
 class Node {
@@ -24,27 +24,30 @@ class Node {
 }
 
 // Binary Search tree class
+// Original Binary Search tree implementation: https://www.geeksforgeeks.org/implementation-binary-search-tree-javascript/
+// Note: Most of the methods/functions have been modified to handle schedule objects.
+// The following methods are original and have been created from scratch: countLeftNodes, countRightNodes, inorderArray, rearrangeTree.
 class BinarySearchTree {
   constructor() {
     // root of a binary search tree
     this.root = null;
   }
 
+  // Counts all nodes that are on the left side of the given node.
   countLeftNodes(node) {
     if (node !== null && node !== undefined)
       return this.inorderArray(node.left, []).length;
     return 0;
   }
 
+  // Counts all nodes that are on the right side of the given node.
   countRightNodes(node) {
     if (node !== null && node !== undefined)
       return this.inorderArray(node.right, []).length;
     return 0;
   }
 
-  // insert(data)
   // helper method which creates a new node to be inserted and calls insertNode
-  // if the tree has 5 or more nodes on one side than the other, rearrange the nodes.
   insert(data) {
     // Creating a node and initailising
     // with data
@@ -59,8 +62,7 @@ class BinarySearchTree {
   }
 
   // Method to insert a node in a tree
-  // it moves over the tree to find the location
-  // to insert a node with a given data
+  // it moves over the tree to find the location to insert a node with a given data
   insertNode(node, newNode) {
     // if the data is less than the node
     // data move left of the tree
@@ -83,19 +85,15 @@ class BinarySearchTree {
     }
   }
 
-  // remove(data)
-  // helper method that calls the
-  // removeNode with a given data
+  // helper method that calls the removeNode with a given data/starting date of an event
   remove(data) {
     // root is re-initialized with 2
     // root of a modified tree.
     this.root = this.removeNode(this.root, data);
   }
 
-  // Method to remove node with a
-  // given data
-  // it recur over the tree to find the
-  // data and removes it
+  // Method to remove node with a given data/starting date of an event
+  // it recur over the tree to find the node and removes it
   removeNode(node, startDate) {
     // if the root is null then tree is
     // empty
@@ -143,8 +141,6 @@ class BinarySearchTree {
     }
   }
 
-  // Helper function
-  // findMinNode()
   // finds the minimum node in tree
   // searching starts from given node
   findMinNode(node) {
@@ -154,8 +150,6 @@ class BinarySearchTree {
     else return this.findMinNode(node.left);
   }
 
-  // Helper function
-  // findMaxNode()
   // finds the maximum node in tree
   // searching starts from given node
   findMaxNode(node) {
@@ -165,15 +159,12 @@ class BinarySearchTree {
     else return this.findMaxNode(node.right);
   }
 
-  // getRootNode()
-  // returns root of the tree
+  // returns root node of the tree
   getRootNode() {
     return this.root;
   }
 
-  // inorder(node)
   // Performs inorder traversal of a tree
-
   inorder(node) {
     if (node !== undefined && node !== null) {
       this.inorder(node.left);
@@ -182,6 +173,7 @@ class BinarySearchTree {
     }
   }
 
+  // Performs inorder traversal of a tree and return an array with all the data of the nodes.
   inorderArray(node, arr) {
     if (node !== undefined && node !== null) {
       this.inorderArray(node.left, arr);
@@ -192,7 +184,6 @@ class BinarySearchTree {
     return arr;
   }
 
-  // preorder(node)
   // Performs preorder traversal of a tree
   preorder(node) {
     if (node !== undefined && node !== null) {
@@ -202,7 +193,6 @@ class BinarySearchTree {
     }
   }
 
-  // postorder(node)
   // Performs postorder traversal of a tree
   postorder(node) {
     if (node !== undefined && node !== null) {
@@ -212,7 +202,6 @@ class BinarySearchTree {
     }
   }
 
-  // search(node, data)
   // search for a node with given data
   search(node, data) {
     // if trees is empty return null
@@ -233,6 +222,7 @@ class BinarySearchTree {
     else return node;
   }
 
+  // It takes all the values of the BST and distributes them equally in the tree.
   rearrangeTree(arr, bst) {
     if (arr.length <= 0) {
       return;
@@ -250,6 +240,21 @@ class BinarySearchTree {
   }
 }
 
+// Main function
+/**
+ * This function receives the information (id and schedule) of all the team members/users that request a new meeting.
+ * It also receives a range of dates in which the meeting must be and the minimum period of time that the meeting has to have.
+ * Then it returns an array with all the appointments objects where the team can have the meeting.
+ * @param {Array} teamMembers An array of objects with the information (id and schedule) of all team members. The format of the object need to be: {id: #, schedule:[{...},{...}]}
+ * @param {Object} teamLeader An object with the information of the team leader. The format of the object need to be: {id: #, schedule:[{...},{...}]}.
+ * @param {JSONDate} startingDay First possible date for the meeting.
+ * @param {JSONDate} finishDay Last possible date for the meeting.
+ * @param {Integer} amountHours The minimum number of hours for the meeting.
+ * @param {Integer} amountMinutes The minimum number of minutes for the meeting.
+ * @param {String} meetingTitle Name of the event.
+ * @param {Integer} userId Identification number of the user or team to which the hours will be added.
+ * @return {Array} An array of appointment objects with all the possible hours for the meeting.
+ */
 function getMeetingHours(
   teamMembers,
   teamLeader,
@@ -323,7 +328,7 @@ function getMeetingHours(
         amountHours,
         amountMinutes,
         meetingTitle,
-        30
+        userId
       );
     }
   });
@@ -331,6 +336,20 @@ function getMeetingHours(
   return result.inorderArray(result.getRootNode(), []);
 }
 
+//Helper functions
+/**
+ * This function takes two nodes and iterates over the first one and then calls the helper function.
+ * The purpose of the function is to compare all the values that are linked to the first node, with all the values of the second node using the helper function.
+ * This returns all the free hours that two users have in common.
+ * @param {Node} node Node that contains the data to be compared.
+ * @param {Node} node2 Node where the data of a schedule is stored.
+ * @param {BinarySearchTree} bstResult Binary search tree in which the result will be saved.
+ * @param {Integer} amountHours The minimum number of hours for the meeting.
+ * @param {Integer} amountMinutes The minimum number of minutes for the meeting.
+ * @param {String} meetingTitle Name of the event.
+ * @param {Integer} userId Identification number of the user or team to which the hours will be added.
+ * @return {BinarySearchTree} A binary search tree with all free hours in common between node and node 2.
+ */
 function checkPossibleTimeSlot(
   node,
   node2,
@@ -375,7 +394,8 @@ function checkPossibleTimeSlot(
 }
 
 /**
- * This function takes o
+ * This function takes two nodes and iterates over the second in order to compare the value of the first node with all the values linked to the second node.
+ * This generates a new BST with all the values of the second node that have times in common with the value of the first node.
  * @param {Node} node Node that contains the data to be compared.
  * @param {Node} node2 Node where the data of a schedule is stored. This node will be the one to iterate through.
  * @param {BinarySearchTree} bstResult Binary search tree in which the result will be saved.
@@ -823,6 +843,7 @@ function diffHoursAndMinutes(dt2, dt1) {
 }
 
 //Testing purposes
+// To run this code use the following command: node Algorithm.js
 
 var MariaSchedule = [
   {
@@ -1226,7 +1247,7 @@ var team = getMeetingHours(
   "2020-11-20T19:30:00.000Z",
   1,
   0,
-  "QUIERO TERMINAR EJTA MRD",
+  "Finally Done",
   "TeamID"
 );
 
