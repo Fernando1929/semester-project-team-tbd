@@ -16,6 +16,7 @@ import Profile from "../Pages/User/Profile";
 import Teams from "../Pages/Teams/Teams";
 import Auth from "../utils/Auth";
 import LoginNavbar from "../Components/LoginNavbar";
+import TeamProfile from "../Pages/Teams/TeamProfile";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/LoginValidate" component={LoginValidate}/>
           <Route path="/Profile" component={Profile}/>
           <Route path="/Teams" component={Teams}/>
+          <Route path="/TeamProfile" component={TeamProfile}/>
         </Switch>
       </Router>
     </>
