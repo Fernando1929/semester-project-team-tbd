@@ -12,6 +12,9 @@ import {
   Card,
   ListGroup,
   ListGroupItem,
+  InputGroup,
+  FormControl,
+  
 } from "react-bootstrap";
 // ToDO List:
 // 1. Implement remove button for when a leader wants to reamove a member
@@ -243,9 +246,36 @@ function TeamProfile() {
                   </Button>
                 </Row>
               </ListGroupItem>
+              
             );
           })}
         </ListGroup>
+        <Row>
+        <InputGroup style={{ marginBottom: "1rem" }}>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <i className="fas fa-lock"></i>
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  type="email"
+                  id="Email"
+                  placeholder="Email"
+                  value={em}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </InputGroup>
+              <div className="text-center">
+                <Button
+                  className="btn--primary"
+                  variant="primary"
+                  onClick={(e) => addMember(e)}
+                >
+                  +
+                </Button>
+              </div>
+          </Row>
+
       </div>
     </div>
   );
