@@ -279,19 +279,20 @@ function TeamProfile() {
                 />
               </InputGroup>
               </Col>
-              
+              <Col>
               <div className="text-center" style={{ display: "flex-end"}}>
                 <Button
                   className="btn--primary"
                   variant="primary"
                   onClick={(e) => addMember(e)}
                   //style={{justifyContent: 'right'}}
+                  style={{ float: 'right' }}
                   
                 >
                   +
                 </Button>
               </div>
-              
+              </Col>
           </Row>
 
       </div>
