@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../App/App.css";
 import backgroundH from "../../Images/TeamBK2.gif";
 import MeetingDatePickerForm from "../../Components/MeetingDatePickerForm";
 import VotesForm from "../../Components/VotesForm";
+
 
 import {
   Button,
@@ -30,6 +31,16 @@ function TeamProfile() {
   const [modalShow, setModalShow] = React.useState(false);
   //Team name
   var teamName = "Team TBD";
+  const [em, setEmail] = useState("");
+  const memberList = [
+  { name: "Maria", email: "LaDuraka@gmail.com" },
+  { name: "Luis", email: "ElPapichulo@hotmail.com" },
+  { name: "Fernando", email: "Meeps@yahoo.com" },];
+
+  const addMember = (e) => {
+    e.preventDefault();
+    console.log("Add a member",em);
+  };
 
   // If is true shows the Leader Team page else show a reagular team member page
   var isLeader = true;
@@ -240,6 +251,7 @@ function TeamProfile() {
                       color: "#FF5050",
                       marginTop: "-3%",
                       size: "10px",
+
                     }}
                   >
                     REMOVE
@@ -251,6 +263,7 @@ function TeamProfile() {
           })}
         </ListGroup>
         <Row>
+        <Col>
         <InputGroup style={{ marginBottom: "1rem" }}>
                 <InputGroup.Prepend>
                   <InputGroup.Text>
@@ -265,15 +278,20 @@ function TeamProfile() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </InputGroup>
-              <div className="text-center">
+              </Col>
+              
+              <div className="text-center" style={{ display: "flex-end"}}>
                 <Button
                   className="btn--primary"
                   variant="primary"
                   onClick={(e) => addMember(e)}
+                  //style={{justifyContent: 'right'}}
+                  
                 >
                   +
                 </Button>
               </div>
+              
           </Row>
 
       </div>
