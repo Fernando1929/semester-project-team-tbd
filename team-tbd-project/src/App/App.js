@@ -36,7 +36,6 @@ function App() {
           <Route path="/Profile" component={Profile} />
           <Route path="/Teams" component={Teams} />
           <Route path="/TeamProfile" component={TeamProfile} />
-          {/* <TeamProfile /> */}
         </Switch>
       </Router>
     </>
