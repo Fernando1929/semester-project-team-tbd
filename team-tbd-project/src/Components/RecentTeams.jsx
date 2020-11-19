@@ -11,9 +11,9 @@ function RecentTeams() {
   const [modalShow, setModalShow] = React.useState(false);
   //Poner los tres teams más recientes del usuario.
   var mostRecent = [
-    { name: "Team1", link: "/Team1" },
-    { name: "Team2", link: "/Team2" },
-    { name: "Team3", link: "/Team3" },
+    { name: "Team1", link: "/TeamProfile" },
+    { name: "Team2", link: "/TeamProfile" },
+    { name: "Team3", link: "/TeamProfile" },
   ];
 
   var counterColors = 0;

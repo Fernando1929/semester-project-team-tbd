@@ -16,20 +16,19 @@ import {
 // ToDO List:
 // 1. Implement remove button for when a leader wants to reamove a member
 // 2. For members give them an alert when they vote and remove the vote button affter they do so
-// 3. Complete DatePicker
+// 3. Complete DatePicker---------------------------------------------------------------------------------DONE
 // 4.Control The characters on the Team name and descripiton of the team
 // 5. Are U Sure to Remove Candidate (POP UP)
 // 6.Find a way to control the lenght of the name so i does not overlap with the bk image
+// 7. pq el navbar no corre luego que lo abres una vez
 
 // Dependencies to install: Install New Dependencies npm install react-bootstrap-date-picker,npm i react-notification-timeline
 
 function TeamProfile() {
   const [modalShow, setModalShow] = React.useState(false);
-  //Team name
-  var teamName = "Team TBD";
 
   // If is true shows the Leader Team page else show a reagular team member page
-  var isLeader = true;
+  var isLeader = false;
 
   var counterColors = 0;
   var mostRecentColors = [
@@ -39,12 +38,16 @@ function TeamProfile() {
     "#005792",
     "#66D6F5",
   ];
+
+  //Team name
+  var teamName = "Team TBD";
+
   var mostRecent = [
-    { name: "12 Nov 2020", link: "/Team1" },
-    { name: "13 Nov 2020", link: "/Team2" },
-    { name: "15 Nov 2020", link: "/Team3" },
-    { name: "18 Nov 3030", link: "/Team4" },
-    { name: "18 Nov 3030", link: "/Team5" },
+    { name: "12 Nov 2020" },
+    { name: "13 Nov 2020" },
+    { name: "15 Nov 2020" },
+    { name: "18 Nov 3030" },
+    { name: "18 Nov 3030" },
   ];
   var Teammembers = [
     { name: "Yeran L Concepción Concepción" },
@@ -62,7 +65,7 @@ function TeamProfile() {
   };
 
   return (
-    <div>
+    <div className="TeamProfile">
       <div>
         <Container
           fluid
