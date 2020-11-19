@@ -19,17 +19,16 @@ import {
 // 1. Implement remove button for when a leader wants to reamove a member
 // 2. For members give them an alert when they vote and remove the vote button affter they do so
 // 3. Complete DatePicker---------------------------------------------------------------------------------DONE
-// 4.Control The characters on the Team name and descripiton of the team
+// 4.Control The characters on the Team name and descripiton of the team------------------------------Done
 // 5. Are U Sure to Remove Candidate (POP UP)
-// 6.Find a way to control the lenght of the name so i does not overlap with the bk image
+// 6.Find a way to control the lenght of the name so i does not overlap with the bk image-------------Done
 // 7. pq el navbar no corre luego que lo abres una vez
 
 // Dependencies to install: Install New Dependencies npm install react-bootstrap-date-picker,npm i react-notification-timeline
 
 function TeamProfile() {
   const [modalShow, setModalShow] = React.useState(false);
-  //Team name
-  var teamName = "Team TBD";
+
   const [em, setEmail] = useState("");
   const memberList = [
     { name: "Maria", email: "LaDuraka@gmail.com" },
@@ -57,7 +56,9 @@ function TeamProfile() {
   ];
 
   //Team name
-  var teamName = "Team TBD";
+  var teamName = "Team TBDLLLLLLLLL";
+  var teamDes =
+    " Insert Team Description here, this must have a restriction that already has been implemented now only renders a certain ammount of words testing testing testing long long long ";
 
   var mostRecent = [
     { name: "12 Nov 2020" },
@@ -97,23 +98,29 @@ function TeamProfile() {
           <Row>
             <Col
               style={{
-                marginTop: "25%",
+                marginTop: "15%",
                 marginBottom: "10%",
                 marginLeft: "5%",
                 marginRight: "50%",
               }}
               sm
             >
-              <h1 style={{ fontSize: "6vw", color: "#4993FA" }}>{teamName}</h1>
+              <h1 style={{ fontSize: "6vw", color: "#4993FA" }}>
+                {teamName.length > 13
+                  ? teamName.substring(0, 13 - 3) + "..."
+                  : teamName}
+              </h1>
+
               <h4
                 style={{
-                  fontSize: "1.5vw",
+                  fontSize: "1.2vw",
                   marginTop: "1rem",
                   fontWeight: "300",
                 }}
               >
-                Insert Team Description here, this must have a restriction on
-                the lenght of the characters/ TODO
+                {teamDes.length > 140
+                  ? teamDes.substring(0, 140 - 3) + "..."
+                  : teamDes}
               </h4>
               <div>
                 {isLeader ? (
