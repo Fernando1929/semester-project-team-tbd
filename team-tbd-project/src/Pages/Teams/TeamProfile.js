@@ -43,7 +43,7 @@ function TeamProfile() {
   };
 
   // If is true shows the Leader Team page else show a reagular team member page
-  var isLeader = false;
+  var isLeader = true;
 
   var counterColors = 0;
   var mostRecentColors = [
