@@ -44,11 +44,12 @@ CREATE TABLE team (
     team_id serial primary key, 
     team_name varchar(25),
     date_created date,
+    team_description varchar(250),
     team_leader_id integer references team_leader(team_leader_id));
 
 CREATE TABLE team_membership (
     team_member_id integer references users(user_id), 
-    team_id integer references team(team_id), 
+    team_id integer references team(team_id),
     primary key (team_member_id, team_id));
 
 CREATE TABLE team_schedule (
@@ -58,4 +59,14 @@ CREATE TABLE team_schedule (
     end_date_time TIMESTAMP with time zone, 
     r_rule varchar(120), 
     ex_dates varchar(120),
+    team_id integer references team(team_id));
+
+CREATE TABLE meeting_options (
+    meeting_option_id serial primary key, 
+    event_title varchar(50), 
+    start_date_time TIMESTAMP with time zone, 
+    end_date_time TIMESTAMP with time zone, 
+    r_rule varchar(120), 
+    ex_dates varchar(120),
+    vote_count integer,
     team_id integer references team(team_id));
