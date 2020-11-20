@@ -28,11 +28,11 @@ app.use("/api", teamScheduleRoutes);
 app.use("/api", teamRoutes);
 app.use("/api", serviceRoutes);
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "team-tbd-project/public/index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "team-tbd-project/public/index.html"));
+// });
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log(`Server has started on port ${port}`);
