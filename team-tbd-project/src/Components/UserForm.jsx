@@ -70,6 +70,7 @@ function UserForm() {
       userInfoHandler(user).then((res) => {
         //Here send things to the handler
         if (res.status === 201) {
+          //Auth.deauthenticateUser();//****Look into later
           window.location.assign("/LoginValidate"); //test to make sure the redirect happens
         }
       });

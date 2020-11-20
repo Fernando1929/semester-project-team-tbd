@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import SyncLinkNavbar from "../Components/SyncLinkNavbar";
@@ -24,18 +24,25 @@ function App() {
       <Router>
         {Auth.isUserAuthenticated() ? <LoginNavbar /> : <SyncLinkNavbar />}
         <Switch>
-          <Route path="/" exact component={Home} />
+          <Route exact path="/" component={Home} />
           <Route path="/Services" component={Services} />
-          <Route path="/SignUp" component={SignUp} />
-          <Route path="/LogIn" component={LogIn} />
+          <Route path="/SignUp" render={() => Auth.isUserAuthenticated() ?
+           <Redirect to="/"/>: <SignUp/> }/>
+          <Route path="/LogIn" render={() => Auth.isUserAuthenticated() ?
+           <Redirect to="/"/>: <LogIn/> }/>
           <Route path="/AboutUs" component={AboutUs} />
           <Route path="/ContactUs" component={ContactUs} />
-          <Route path="/ProfileInfo" component={ProfileInfo} />
-          <Route path="/UserSchedule" component={UserSchedule} />
+          <Route path="/ProfileInfo" render={() => Auth.getUserid() !== null ?
+           <ProfileInfo/> : <Redirect to="SignUp"/> } />
+          <Route path="/UserSchedule" render={() => Auth.isUserAuthenticated() ?
+           <UserSchedule/> : <Redirect to="LogIn"/> }  />
           <Route path="/LoginValidate" component={LoginValidate} />
-          <Route path="/Profile" component={Profile} />
-          <Route path="/Teams" component={Teams} />
-          <Route path="/TeamProfile" component={TeamProfile} />
+          <Route path="/Profile" render={() => Auth.isUserAuthenticated() ?
+           <Profile/> : <Redirect to="LogIn"/> } />
+          <Route path="/Teams" render={() => Auth.isUserAuthenticated() ?
+           <Teams/> : <Redirect to="LogIn"/>}/>
+          <Route path="/TeamProfile" render={() => Auth.isUserAuthenticated() ?
+           <TeamProfile/> : <Redirect to="LogIn"/>} />
         </Switch>
       </Router>
     </>
