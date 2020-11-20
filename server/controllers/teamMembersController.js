@@ -4,7 +4,7 @@ const addTeamMember =  async (req,res) =>{
     try{
         const {user_id} = req.body;
         const newTeamMember =  await db.query(
-            "INSERT INTO team_members (id) VALUES($1) RETURNING *",
+            "INSERT INTO team_members (user_id) VALUES($1) RETURNING *",
             [user_id]
         );
 
@@ -29,9 +29,27 @@ const getAllTeamMembers =  async (req,res) =>{
     }
 }
 
+const getTeamMembersByTeamId =  async (req,res) =>{
+    try{
+        const allTeamMembers = await db.query("SELECT * FROM team NATURAL INNER JOIN team_membership NATURAL INNER JOIN team_members WHERE team_id = $1",
+            [req.params.tid]
+        );
+        res.status(200).json({
+            status: "success",
+            results: allTeamMembers.rows.length,
+            data:{
+                users: allTeamMembers.rows
+            },
+        });
+    }catch(err){
+        console.log(err);
+    }
+}
+
 const getTeamMemberByUserId =  async (req,res) =>{
     try{
-        const teamMember = await db.query("SELECT * FROM team_members WHERE user_id = 1$",[req.params.tid]);
+        const {user_id} = req.body;
+        const teamMember = await db.query("SELECT * FROM team_members WHERE user_id = 1$",[user_id]);
         res.status(200).json({
             status: "success",
             data: {
@@ -74,21 +92,21 @@ const deleteTeamMember =  async (req,res) =>{
     }
 }
 
-const searchTeamMember =  async (req,res) =>{
-    try{
-        const { team}
+// const searchTeamMember =  async (req,res) =>{
+//     try{
+//         const { team}
 
-    }catch(err){
-        console.log(err);
-    }
-}
+//     }catch(err){
+//         console.log(err);
+//     }
+// }
 
 
 module.exports = {
     addTeamMember,
     getAllTeamMembers,
     getTeamMemberByUserId,
+    getTeamMembersByTeamId,
     updateTeamMember,
     deleteTeamMember,
-    searchTeamMember,
 }

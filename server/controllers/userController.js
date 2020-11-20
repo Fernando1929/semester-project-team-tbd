@@ -17,12 +17,32 @@ const addUser = async (req,res) => {
 
 const getAllUsers = async (req,res) => {
     try {
+        if (req.body) {
+            const result = await getUserIdByEmail(req,res);
+            return result;
+        }
         const allUsers = await db.query("SELECT * FROM users");
         res.status(200).json({
             status: "success",
             results: allUsers.rows.length,
             data: {
                 users: allUsers.rows
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const getUserIdByEmail = async (req,res) => {
+    try {
+        // const {email} = req.body;
+        console.log(req.params.email);
+        const user = await db.query("SELECT user_id FROM users NATURAL INNER JOIN account WHERE email = $1", [req.params.email]);
+        res.status(200).json({
+            status: "success",
+            data: {
+                user: user.rows[0]
             },
         });
     } catch (err) {
@@ -99,6 +119,7 @@ module.exports = {
     addUser,
     getAllUsers,
     getUserById,
+    getUserIdByEmail,
     updateUser,
     updateProfilePicture,
     deleteUser

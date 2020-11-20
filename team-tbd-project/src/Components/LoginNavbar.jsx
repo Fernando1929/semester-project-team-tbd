@@ -16,13 +16,18 @@ function LoginNavbar() {
   React.useEffect(() => {
     profileGetHandler().then(res => {
       const user = res.data.user;
-
-      if (user.profile_picture) {
-        setProfilePicture("http://localhost:3001/" + user.profile_picture);
+      if(user !== undefined) {
+        if (user.profile_picture) {
+          setProfilePicture("http://localhost:3001/" + user.profile_picture);
+        }
+        else {
+          setProfilePicture(placeholder);
+        }
       }
       else {
         setProfilePicture(placeholder);
       }
+
 
     })
   }, []);

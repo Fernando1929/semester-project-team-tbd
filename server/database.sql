@@ -48,7 +48,7 @@ CREATE TABLE team (
     team_leader_id integer references team_leader(team_leader_id));
 
 CREATE TABLE team_membership (
-    team_member_id integer references users(user_id), 
+    team_member_id integer references team_members(team_member_id), 
     team_id integer references team(team_id),
     primary key (team_member_id, team_id));
 

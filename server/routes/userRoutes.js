@@ -32,6 +32,7 @@ const storage = multer.diskStorage({
 
 router.post("/users", userController.addUser);
 router.get("/users", userController.getAllUsers);
+router.get("/users/:email", userController.getUserIdByEmail);
 router.get("/users/:id", userController.getUserById);
 router.put("/users/:id", userController.updateUser);
 router.put("/users/:id/picture", upload.single('profile_picture'), userController.updateProfilePicture);

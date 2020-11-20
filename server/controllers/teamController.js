@@ -3,11 +3,11 @@ const moment = require('moment');
 
 const addTeam = async (req,res) => {
     try {
-        const { team_name, team_leader_id } = req.body;
+        const { team_name, team_description, team_leader_id } = req.body.team;
         const date_created = moment(new Date());
         const newTeam = await db.query(
-            "INSERT INTO team (team_name, date_created, team_leader_id) VALUES ($1, $2, $3) RETURNING *",
-            [team_name, date_created, team_leader_id]
+            "INSERT INTO team (team_name, date_created, team_description, team_leader_id) VALUES ($1, $2, $3, $4) RETURNING *",
+            [team_name, date_created, team_description, team_leader_id]
         );
         res.status(201).json(newTeam.rows[0]);
     } catch (err) {
@@ -46,10 +46,10 @@ const getTeamById = async (req,res) => {
 
 const updateTeam = async (req,res) => {
     try {
-        const { team_name, date_created } = req.body;
+        const { team_name, date_created, team_description } = req.body;
         const result = await db.query(
-            "UPDATE team SET team_name = $1, date_created = $2 WHERE team_id = $3 RETURNING *",
-            [team_name, date_created, req.params.tid]
+            "UPDATE team SET team_name = $1, date_created = $2, team_description = $3 WHERE team_id = $4 RETURNING *",
+            [team_name, date_created, team_description, req.params.tid]
             ); 
 
         res.status(200).json({

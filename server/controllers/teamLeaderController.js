@@ -4,11 +4,11 @@ const addTeamLeader =  async (req,res) =>{
     try{
         const {user_id} = req.body;
         const newTeamLeader =  await db.query(
-            "INSERT INTO team_leader(id) VALUES($1) RETURNING *",
+            "INSERT INTO team_leader(user_id) VALUES($1) RETURNING *",
             [user_id]
         );
 
-        res.status(201).json(newTeamMember.rows[0]);
+        res.status(201).json(newTeamLeader.rows[0]);
     }catch(err){
         console.log(err);
     }
@@ -17,12 +17,12 @@ const addTeamLeader =  async (req,res) =>{
 //Posible is more than one leader option is implemataded
 const getAllTeamLeaders =  async (req,res) =>{
     try{
-        const allTeamMembers = await db.query("SELECT * FROM team_leader")
+        const allTeamLeaders = await db.query("SELECT * FROM team_leader")
         res.status(200).json({
             status: "success",
-            results: allTeamMembers.rows.length,
+            results: allTeamLeaders.rows.length,
             data:{
-                users: allTeamMembers.rows
+                team_leader: allTeamLeaders.rows
             },
         });
     }catch(err){
@@ -32,7 +32,8 @@ const getAllTeamLeaders =  async (req,res) =>{
 
 const getTeamLeaderByUserId =  async (req,res) =>{
     try{
-        const teamLeader = await db.query("SELECT * FROM team_leader WHERE user_id = 1$",[req.params.tid]);
+        const { user_id } =  req.body;
+        const teamLeader = await db.query("SELECT * FROM team_leader WHERE user_id = 1$",[user_id]);
         res.status(200).json({
             status: "success",
             data: {
@@ -49,7 +50,7 @@ const updateTeamLeader =  async (req,res) =>{//Verify
     try{
         const { user_id } =  req.body;
         const result = await db.query(
-            "UPDATE team_leader SET user_id = $1 WHERE team_member_id =$2",
+            "UPDATE team_leader SET user_id = $1 WHERE team_leader_id =$2",
             [user_id, req.params.id]
             );
         
@@ -75,9 +76,9 @@ const deleteTeamLeader =  async (req,res) =>{
     }
 }
 //Terminar luego con pareametros por lo que se buscará.
-const searchTeamLearder =  async (req,res) =>{
+const searchTeamLeader =  async (req,res) =>{
     try{
-        const { team}
+        // const { team}
 
     }catch(err){
         console.log(err);
@@ -87,8 +88,8 @@ const searchTeamLearder =  async (req,res) =>{
 
 module.exports = {
     addTeamLeader,
-    getAllTeamLeader,
-    getTeamLeaderById,
+    getAllTeamLeaders,
+    getTeamLeaderByUserId,
     updateTeamLeader,
     deleteTeamLeader,
     searchTeamLeader,
