@@ -44,6 +44,7 @@ function CreateTeamForm(props) {
                 }
                 addTeamMembershipHandler(team_membership).then((res) => {
                   if(res.status === 201) {
+                    if(member_email_list.size > 0){
                     for (var email of member_email_list) {
                       getUserIdByEmailHandler(email).then((res) => {
                         if (res.status === 200) {
@@ -63,6 +64,7 @@ function CreateTeamForm(props) {
                           });
                         }
                       });
+                    }
                     }
                     props.onHide();
                   }

@@ -25,14 +25,18 @@ function Profile() {
   React.useEffect(() => {
     profileGetHandler().then(res => {
       const user = res.data.user;
-      setUser(user);
-
+      
+      if(user !== undefined) {
+        setUser(user);
       if (user.profile_picture) {
         setProfilePicture("http://localhost:3001/" + user.profile_picture);
       }
       else {
         setProfilePicture(placeholder);
       }
+    }else{
+      setProfilePicture(placeholder);
+    }
     })
   }, []);
 

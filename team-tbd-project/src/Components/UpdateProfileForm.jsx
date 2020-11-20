@@ -28,19 +28,24 @@ function UpdateProfileForm(props) {
   React.useEffect(() => {
     profileGetHandler().then((res) => {
       const user = res.data.user;
+      if(user !== undefined) {
       setFirstname(user.user_firstname);
       setLastname(user.user_lastname);
       setEmail(user.email);
       setPhone(user.user_phone);
       setLocation(user.user_location);
       setBio(user.user_bio);
-
+      
       if (user.profile_picture) {
         setProfilePicture("http://localhost:3001/" + user.profile_picture);
       }
       else {
         setProfilePicture(placeholder);
       }
+    }
+    else {
+      setProfilePicture(placeholder);
+    }
     });
   }, []);
 

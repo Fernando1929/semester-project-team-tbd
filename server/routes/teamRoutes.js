@@ -12,4 +12,8 @@ router.delete("/teams/:tid", teamController.deleteTeam);
 
 router.post("/teams/:tid/team_membership", teamMembershipController.addTeamMembership);
 
+//Testing
+router.get("/teams/user/:id", teamController.getTeamsByUserId);
+
+
 module.exports = router;

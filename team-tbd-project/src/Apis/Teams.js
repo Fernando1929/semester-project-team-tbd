@@ -57,4 +57,14 @@ export const getUserIdByEmailHandler = (email) => {
         })
 }
 
+export const getUserTeamsHandler = () => {
+    return axios
+        .get(`http://localhost:3001/api/teams/user/${Auth.getUserid()}`)
+        .then( response => {
+            return response
+        })
+        .catch(err => {
+            return err.response
+        })
+}
 

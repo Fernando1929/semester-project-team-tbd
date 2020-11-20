@@ -74,10 +74,27 @@ const deleteTeam = async (req,res) => {
     }
 }
 
+
+const getTeamsByUserId = async (req,res) => {
+    try {
+        const teams = await db.query("SELECT team_id,team_name,team_description,date_created FROM users NATURAL INNER JOIN team_members NATURAL INNER JOIN team_membership NATURAL INNER JOIN team WHERE user_id = $1", [req.params.id]);
+        res.status(200).json({
+            status: "success",
+            results: teams.rows.length,
+            data: {
+                teams: teams.rows
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     addTeam,
     getAllTeams,
     getTeamById,
     updateTeam,
-    deleteTeam
+    deleteTeam,
+    getTeamsByUserId
 }
