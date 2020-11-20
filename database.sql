@@ -1,4 +1,4 @@
-CREATE DATABASE synclink;
+-- CREATE DATABASE synclink;
 
 CREATE TABLE account
 (
