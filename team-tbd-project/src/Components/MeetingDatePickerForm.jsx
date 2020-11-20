@@ -1,13 +1,14 @@
 import React from "react";
+import { useState } from "react";
 import { Modal, Button, InputGroup, FormControl } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-// Add un h4 que estrablezca el patron 00:00 de horas y minutos
 function MeetingDatePickerForm(props) {
-  // this.state = {
-  //   date: new Date("2020", "12", "22"),
-  // };
+  // From
+  const [selectedDate, setSelectedDate] = useState(null);
+  // To
+  const [selectedDateTo, setSelectedDateTo] = useState(null);
 
   return (
     <Modal
@@ -27,11 +28,17 @@ function MeetingDatePickerForm(props) {
       <Modal.Body>
         <h4 style={{ fontSize: "20px", color: "#005792" }}>FROM</h4>
 
-        <DatePicker />
+        <DatePicker
+          selected={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+        />
         <h4 style={{ fontSize: "20px", color: "#005792", marginTop: "1rem" }}>
           TO
         </h4>
-        <DatePicker />
+        <DatePicker
+          selected={selectedDateTo}
+          onChange={(date) => setSelectedDateTo(date)}
+        />
 
         <InputGroup className="mb-3" style={{ marginTop: "1.5rem" }}>
           <InputGroup.Prepend>

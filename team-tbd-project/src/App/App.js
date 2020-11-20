@@ -16,14 +16,15 @@ import Profile from "../Pages/User/Profile";
 import Teams from "../Pages/Teams/Teams";
 import Auth from "../utils/Auth";
 import LoginNavbar from "../Components/LoginNavbar";
+import TeamProfile from "../Pages/Teams/TeamProfile";
 
 function App() {
   return (
     <>
       <Router>
-        {Auth.isUserAuthenticated()? <LoginNavbar/>:<SyncLinkNavbar />}
+        {Auth.isUserAuthenticated() ? <LoginNavbar /> : <SyncLinkNavbar />}
         <Switch>
-          <Route path="/" exact component={Home}/>
+          <Route path="/" exact component={Home} />
           <Route path="/Services" component={Services} />
           <Route path="/SignUp" component={SignUp} />
           <Route path="/LogIn" component={LogIn} />
@@ -31,9 +32,10 @@ function App() {
           <Route path="/ContactUs" component={ContactUs} />
           <Route path="/ProfileInfo" component={ProfileInfo} />
           <Route path="/UserSchedule" component={UserSchedule} />
-          <Route path="/LoginValidate" component={LoginValidate}/>
-          <Route path="/Profile" component={Profile}/>
-          <Route path="/Teams" component={Teams}/>
+          <Route path="/LoginValidate" component={LoginValidate} />
+          <Route path="/Profile" component={Profile} />
+          <Route path="/Teams" component={Teams} />
+          <Route path="/TeamProfile" component={TeamProfile} />
         </Switch>
       </Router>
     </>

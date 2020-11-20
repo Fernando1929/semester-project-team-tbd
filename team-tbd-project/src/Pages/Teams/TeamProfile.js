@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../App/App.css";
 import backgroundH from "../../Images/TeamBK2.gif";
 import MeetingDatePickerForm from "../../Components/MeetingDatePickerForm";
 import VotesForm from "../../Components/VotesForm";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 import {
   Button,
@@ -12,24 +14,40 @@ import {
   Card,
   ListGroup,
   ListGroupItem,
+  InputGroup,
+  FormControl,
 } from "react-bootstrap";
 // ToDO List:
 // 1. Implement remove button for when a leader wants to reamove a member
 // 2. For members give them an alert when they vote and remove the vote button affter they do so
-// 3. Complete DatePicker
-// 4.Control The characters on the Team name and descripiton of the team
+// 3. Complete DatePicker---------------------------------------------------------------------------------DONE
+// 4.Control The characters on the Team name and descripiton of the team------------------------------Done
 // 5. Are U Sure to Remove Candidate (POP UP)
-// 6.Find a way to control the lenght of the name so i does not overlap with the bk image
+// 6.Find a way to control the lenght of the name so i does not overlap with the bk image-------------Done
+// 7. pq el navbar no corre luego que lo abres una vez
+// 8. Poner el boton en base al el voto------------------------Done
 
-// Dependencies to install: Install New Dependencies npm install react-bootstrap-date-picker,npm i react-notification-timeline
+// Dependencies to install: Install New Dependencies npm install react-bootstrap-date-picker,npm i react-notification-timeline, npm i react-confirm-alert
 
 function TeamProfile() {
   const [modalShow, setModalShow] = React.useState(false);
-  //Team name
-  var teamName = "Team TBD";
+
+  const [em, setEmail] = useState("");
+  const memberList = [
+    { name: "Maria", email: "LaDuraka@gmail.com" },
+    { name: "Luis", email: "ElPapichulo@hotmail.com" },
+    { name: "Fernando", email: "Meeps@yahoo.com" },
+  ];
+
+  const addMember = (e) => {
+    e.preventDefault();
+    console.log("Add a member", em);
+  };
 
   // If is true shows the Leader Team page else show a reagular team member page
-  var isLeader = true;
+  var isLeader = false;
+  // To control if user voted and wether or not we whow "your vote is required" message
+  var voted = true;
 
   var counterColors = 0;
   var mostRecentColors = [
@@ -39,12 +57,18 @@ function TeamProfile() {
     "#005792",
     "#66D6F5",
   ];
+
+  //Team name
+  var teamName = "Team TBDLLLLLLLLL";
+  var teamDes =
+    " Insert Team Description here, this must have a restriction that already has been implemented now only renders a certain ammount of words testing testing testing long long long ";
+
   var mostRecent = [
-    { name: "12 Nov 2020", link: "/Team1" },
-    { name: "13 Nov 2020", link: "/Team2" },
-    { name: "15 Nov 2020", link: "/Team3" },
-    { name: "18 Nov 3030", link: "/Team4" },
-    { name: "18 Nov 3030", link: "/Team5" },
+    { name: "12 Nov 2020" },
+    { name: "13 Nov 2020" },
+    { name: "15 Nov 2020" },
+    { name: "18 Nov 3030" },
+    { name: "18 Nov 3030" },
   ];
   var Teammembers = [
     { name: "Yeran L Concepción Concepción" },
@@ -60,9 +84,27 @@ function TeamProfile() {
     marginBottom: "1rem",
     backgroundColor: mostRecentColors[mostRecent.length],
   };
+  // To show alert when the leader wants to remove a candidate
+
+  const submit = () => {
+    confirmAlert({
+      title: <h2 style={{ textAlign: "Start" }}>Remove Member</h2>,
+      message: "Are you sure to do this.",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => alert("Your Changes will be permanent"),
+        },
+        {
+          label: "No",
+          onClick: () => alert("The member will not be removed"),
+        },
+      ],
+    });
+  };
 
   return (
-    <div>
+    <div className="TeamProfile">
       <div>
         <Container
           fluid
@@ -77,23 +119,29 @@ function TeamProfile() {
           <Row>
             <Col
               style={{
-                marginTop: "25%",
+                marginTop: "15%",
                 marginBottom: "10%",
                 marginLeft: "5%",
                 marginRight: "50%",
               }}
               sm
             >
-              <h1 style={{ fontSize: "6vw", color: "#4993FA" }}>{teamName}</h1>
+              <h1 style={{ fontSize: "6vw", color: "#4993FA" }}>
+                {teamName.length > 13
+                  ? teamName.substring(0, 13 - 3) + "..."
+                  : teamName}
+              </h1>
+
               <h4
                 style={{
-                  fontSize: "1.5vw",
+                  fontSize: "1.2vw",
                   marginTop: "1rem",
                   fontWeight: "300",
                 }}
               >
-                Insert Team Description here, this must have a restriction on
-                the lenght of the characters/ TODO
+                {teamDes.length > 140
+                  ? teamDes.substring(0, 140 - 3) + "..."
+                  : teamDes}
               </h4>
               <div>
                 {isLeader ? (
@@ -114,28 +162,31 @@ function TeamProfile() {
                   </h1>
                 ) : (
                   <hi>
-                    <Button
-                      className="btn--secondary"
-                      style={{
-                        fontSize: "2vw",
-                        marginBottom: "1rem",
-                        marginTop: "2rem",
-                        backgroundColor: "#005792",
-                      }}
-                      onClick={() => setModalShow(true)}
-                    >
-                      VOTE NOW
-                    </Button>
-
-                    <h4
-                      style={{
-                        color: "#FF5050",
-                        fontSize: "1vw",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      Your have been requested to select a meeting date.
-                    </h4>
+                    {voted ? (
+                      <Button
+                        className="btn--secondary"
+                        style={{
+                          fontSize: "2vw",
+                          marginBottom: "1rem",
+                          marginTop: "2rem",
+                          backgroundColor: "#005792",
+                        }}
+                        onClick={() => setModalShow(true)}
+                      >
+                        VOTE REQUIRED
+                      </Button>
+                    ) : (
+                      <h1
+                        style={{
+                          fontSize: "2vw",
+                          marginBottom: "3.5em",
+                          marginTop: "2rem",
+                        }}
+                      >
+                        {" "}
+                      </h1>
+                    )}
+                    {}
                   </hi>
                 )}
 
@@ -229,9 +280,8 @@ function TeamProfile() {
                 <Row>
                   <Button
                     className="btn--secondary ml-auto p-2"
-                    // change to later when the remove button is implemented
-                    // href="/SignUp"
                     variant="primary"
+                    onClick={submit}
                     style={{
                       backgroundColor: "white",
                       color: "#FF5050",
@@ -246,6 +296,36 @@ function TeamProfile() {
             );
           })}
         </ListGroup>
+        <Row>
+          <Col>
+            <InputGroup style={{ marginBottom: "1rem" }}>
+              <InputGroup.Prepend>
+                <InputGroup.Text>
+                  <i className="fas fa-lock"></i>
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <FormControl
+                type="email"
+                id="Email"
+                placeholder="Email"
+                value={em}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </InputGroup>
+          </Col>
+          <Col>
+            <div className="text-center" style={{ display: "flex-end" }}>
+              <Button
+                className="btn--primary"
+                variant="primary"
+                onClick={(e) => addMember(e)}
+                style={{ float: "right" }}
+              >
+                +
+              </Button>
+            </div>
+          </Col>
+        </Row>
       </div>
     </div>
   );
