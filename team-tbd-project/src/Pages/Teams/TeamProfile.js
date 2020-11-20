@@ -47,7 +47,7 @@ function TeamProfile() {
   // If is true shows the Leader Team page else show a reagular team member page
   var isLeader = false;
   // To control if user voted and wether or not we whow "your vote is required" message
-  var voted = false;
+  var voted = true;
 
   var counterColors = 0;
   var mostRecentColors = [
@@ -163,31 +163,18 @@ function TeamProfile() {
                 ) : (
                   <hi>
                     {voted ? (
-                      ((
-                        <Button
-                          className="btn--secondary"
-                          style={{
-                            fontSize: "2vw",
-                            marginBottom: "1rem",
-                            marginTop: "2rem",
-                            backgroundColor: "#005792",
-                          }}
-                          onClick={() => setModalShow(true)}
-                        >
-                          VOTE NOW
-                        </Button>
-                      ),
-                      (
-                        <h4
-                          style={{
-                            color: "#FF5050",
-                            fontSize: "1vw",
-                            marginBottom: "1rem",
-                          }}
-                        >
-                          Your have been requested to select a meeting date.
-                        </h4>
-                      ))
+                      <Button
+                        className="btn--secondary"
+                        style={{
+                          fontSize: "2vw",
+                          marginBottom: "1rem",
+                          marginTop: "2rem",
+                          backgroundColor: "#005792",
+                        }}
+                        onClick={() => setModalShow(true)}
+                      >
+                        VOTE REQUIRED
+                      </Button>
                     ) : (
                       <h1
                         style={{
