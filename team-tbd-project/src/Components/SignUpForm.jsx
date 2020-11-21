@@ -12,8 +12,9 @@ import {
 
 import "../App/App.css";
 import Auth from "../utils/Auth";
+import {withRouter} from "react-router-dom"; 
 
-function SignUpForm() {
+function SignUpForm(props) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +36,8 @@ function SignUpForm() {
       signupHandler(user).then((res) => {
         if (res.status === 201) {
           Auth.setUserid(res.data.account_id); // account_id = res.data.account_id;
-          window.location.assign("/ProfileInfo"); //change to the other form to fill the profile info
+          props.history.push("/ProfileInfo");
+          
         } else {
           errors.push(res.data);
           setErrors(errors);
@@ -171,4 +173,4 @@ function SignUpForm() {
   );
 }
 
-export default SignUpForm;
+export default withRouter(SignUpForm);
