@@ -242,7 +242,7 @@ class BinarySearchTree {
 
 // Main function
 /**
- * This function receives the information (id and schedule) of all the team members/users that request a new meeting.
+ * This function receives the information (id, schedule, preferredStartHours and preferredEndHours) of all the team members/users that request a new meeting.
  * It also receives a range of dates in which the meeting must be and the minimum period of time that the meeting has to have.
  * Then it returns an array with all the appointments objects where the team can have the meeting.
  * @param {Array} teamMembers An array of objects with the information (id and schedule) of all team members. The format of the object need to be: {id: #, schedule:[{...},{...}]}
@@ -274,6 +274,8 @@ function getMeetingHours(
   var tempLeader = {
     id: teamLeader.id,
     schedule: leaderSc,
+    preferredStartHours: teamLeader.preferredStartHours,
+    preferredEndHours: teamLeader.preferredEndHours,
   };
 
   var teamLeaderPro = getUserFreeHoursTree(
@@ -297,6 +299,8 @@ function getMeetingHours(
     var tempMember = {
       id: member.id,
       schedule: memberSc,
+      preferredStartHours: member.preferredStartHours,
+      preferredEndHours: member.preferredEndHours,
     };
 
     var memberFreeSc = getUserFreeHoursTree(
@@ -518,7 +522,7 @@ function calculateTimeSlot(
 
 /**
  * This function takes the user's information and based on their schedule it calculates all the free hours that the user has.
- * @param user User object with the id and schedule. It must have those two properties. The schedule has to be an array/JSON.
+ * @param user User object with the id, schedule, preferredStartHours and preferredEndHours. It must have those two properties. The schedule has to be an array/JSON.
  * @param {JSONDate} startingDay First possible date for the meeting.
  * @param {JSONDate} finishDay Last possible date for the meeting.
  * @param {Integer} amountHours The minimum number of hours for the meeting.
@@ -538,6 +542,30 @@ function getUserFreeHoursTree(
 ) {
   var freeHoursTree = new BinarySearchTree();
   var data = null;
+
+  var tempStartDay = new Date(startingDay);
+  var tempEndDay = new Date(finishDay);
+  var userPreferredStartArr = user.preferredStartHours.split(":");
+  var userPreferredEndArr = user.preferredEndHours.split(":");
+
+  if (
+    tempStartDay.getHours() < userPreferredStartArr[0] &&
+    tempStartDay.getMinutes() < userPreferredStartArr[1]
+  ) {
+    tempStartDay.setHours(userPreferredStartArr[0], userPreferredStartArr[1]);
+    startingDay = tempStartDay.toISOString();
+  }
+
+  if (
+    tempEndDay.getHours() > userPreferredEndArr[0] &&
+    tempEndDay.getMinutes() > userPreferredEndArr[1]
+  ) {
+    tempEndDay.setHours(userPreferredEndArr[0], userPreferredEndArr[1]);
+    finishDay = tempEndDay.toISOString();
+  }
+
+  // TODO: Añadir la condición de que solo añada una hora como libre si está dentro del rango de horas preferidas.
+  // Entiendo que es algo similar a lo de arriba.
 
   if (user.schedule.length == 0) {
     freeHoursTree.insert({
@@ -1234,21 +1262,30 @@ var OrlandoSchedule = [
   },
 ];
 
-var team = getMeetingHours(
-  [
-    { id: 2, schedule: OrlandoSchedule },
-    { id: 3, schedule: FernandoSchedule },
-    { id: 4, schedule: LuisSchedule },
-    { id: 5, schedule: YeranSchedule },
-    { id: 6, schedule: YaritzaSchedule },
-  ],
-  { id: 1, schedule: MariaSchedule },
-  "2020-11-16T10:30:00.000Z",
-  "2020-11-20T19:30:00.000Z",
-  1,
-  0,
-  "Finally Done",
-  "TeamID"
-);
+// var team = getMeetingHours(
+//   [
+//     { id: 2, schedule: OrlandoSchedule },
+//     { id: 3, schedule: FernandoSchedule },
+//     { id: 4, schedule: LuisSchedule },
+//     { id: 5, schedule: YeranSchedule },
+//     { id: 6, schedule: YaritzaSchedule },
+//   ],
+//   { id: 1, schedule: MariaSchedule },
+//   "2020-11-16T10:30:00.000Z",
+//   "2020-11-20T19:30:00.000Z",
+//   1,
+//   0,
+//   "Finally Done",
+//   "TeamID"
+// );
 
-console.log(team);
+// console.log(team);
+var dateTest = new Date("2020-11-16T10:30:00.000Z");
+console.log(dateTest);
+console.log(dateTest.toISOString());
+console.log(dateTest.getHours());
+console.log(dateTest.getMinutes());
+dateTest.setHours(3, 15);
+console.log(dateTest.toLocaleString());
+console.log(dateTest.getHours());
+console.log(dateTest.getMinutes());
