@@ -1,4 +1,4 @@
-const db = require("../db/index");
+const db = require("../db");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const authTokens = {};

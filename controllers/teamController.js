@@ -1,4 +1,4 @@
-const db = require("../db/index");
+const db = require("../db");
 const moment = require('moment');
 
 const addTeam = async (req,res) => {
