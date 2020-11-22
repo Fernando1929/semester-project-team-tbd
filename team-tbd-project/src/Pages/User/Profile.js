@@ -32,10 +32,10 @@ function Profile() {
         <Card.Header>
           <Nav fill variant="tabs" defaultActiveKey="#first">
             <Nav.Item>
-              <Nav.Link href="#first">General Info</Nav.Link>
+              <Nav.Link onClick={() => {props.history.push("/Profile")}}>General Info</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link href="./Teams">Teams</Nav.Link>
+              <Nav.Link onClick={() => {props.history.push("/Teams")}}>Teams</Nav.Link>
             </Nav.Item>
           </Nav>
         </Card.Header>
