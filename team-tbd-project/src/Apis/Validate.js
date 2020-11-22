@@ -3,7 +3,7 @@ import Auth from "../utils/Auth";
 
 export const validateResend = () => {
   return axios
-    .get(`/api/validation/resend/${Auth.getUserid()}`)
+    .get(`http://localhost:3001/api/validation/resend/${Auth.getUserid()}`)
     .then((response) => {
       return response;
     })

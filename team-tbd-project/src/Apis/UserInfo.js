@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const userInfoHandler = (user) => {
   return axios
-    .post("/api/users", { user })
+    .post("http://localhost:3001/api/users", { user })
     .then((response) => {
       return response;
     })

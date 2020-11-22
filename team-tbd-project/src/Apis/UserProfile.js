@@ -3,7 +3,7 @@ import Auth from "../utils/Auth";
 
 export const profileGetHandler = () => {
   return axios
-    .get(`/api/users/${Auth.getUserid()}`)
+    .get(`http://localhost:3001/api/users/${Auth.getUserid()}`)
     .then((response) => {
       return response.data;
     })
@@ -14,7 +14,7 @@ export const profileGetHandler = () => {
 
 export const profileUpdateHandler = (profile) => {
   return axios
-    .put(`/api/users/${Auth.getUserid()}`, { profile })
+    .put(`http://localhost:3001/api/users/${Auth.getUserid()}`, { profile })
     .then((response) => {
       return response;
     })
@@ -25,7 +25,9 @@ export const profileUpdateHandler = (profile) => {
 
 export const profileEmailUpdateHandler = (account) => {
   return axios
-    .put(`/api/account/email/${account.account_id}`, { account })
+    .put(`http://localhost:3001/api/account/email/${account.account_id}`, {
+      account,
+    })
     .then((response) => {
       return response;
     })

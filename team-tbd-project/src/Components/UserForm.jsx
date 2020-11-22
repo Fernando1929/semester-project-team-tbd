@@ -8,6 +8,7 @@ import {
   Button,
   InputGroup,
   FormControl,
+  Form,
 } from "react-bootstrap";
 import "../App/App.css";
 import Auth from "../utils/Auth";
@@ -16,6 +17,8 @@ function UserForm() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [phone, setPhone] = useState("");
+  const [startWorkingHour, setStartWorkingHour] = useState("");
+  const [endWorkingHour, setEndWorkingHour] = useState("");
   const [street_address, setStreetAddress] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
@@ -31,6 +34,7 @@ function UserForm() {
         user_firstname: firstname,
         user_lastname: lastname,
         user_phone: phone,
+        //TODO: PONER ESTA COSA. NO LO HAGO YO PORQUE NO SE QUE NOMBRE QUIEREN
         user_location: street_address + ", " + city + ", " + country,
         pref_start_work_hour: null,
         pref_end_end_hour: null,
@@ -93,7 +97,7 @@ function UserForm() {
                   onChange={(e) => setLastname(e.target.value)}
                 />
               </InputGroup>
-              <InputGroup style={{ marginBottom: "1rem" }}>
+              <InputGroup>
                 <FormControl
                   type="phone"
                   id="phone"
@@ -106,6 +110,124 @@ function UserForm() {
                   should be numeric. Ex. +17871234567.
                 </label>
               </InputGroup>
+              <label>Working Hours</label>
+              <Form.Row>
+                <Form.Group as={Col} controlId="formGridState">
+                  <Form.Control
+                    as="select"
+                    defaultValue="From"
+                    onChange={(e) => setStartWorkingHour(e.target.value)}
+                  >
+                    <option>*From</option>
+                    <option value="00:00">12:00 AM</option>
+                    <option value="00:30">12:30 AM</option>
+                    <option value="01:00">01:00 AM</option>
+                    <option value="01:30">01:30 AM</option>
+                    <option value="02:00">02:00 AM</option>
+                    <option value="02:30">02:30 AM</option>
+                    <option value="03:00">03:00 AM</option>
+                    <option value="03:30">03:30 AM</option>
+                    <option value="04:00">04:00 AM</option>
+                    <option value="04:30">04:30 AM</option>
+                    <option value="05:00">05:00 AM</option>
+                    <option value="05:30">05:30 AM</option>
+                    <option value="06:00">06:00 AM</option>
+                    <option value="06:30">06:30 AM</option>
+                    <option value="07:00">07:00 AM</option>
+                    <option value="07:30">07:30 AM</option>
+                    <option value="08:00">08:00 AM</option>
+                    <option value="08:30">08:30 AM</option>
+                    <option value="09:00">09:00 AM</option>
+                    <option value="09:30">09:30 AM</option>
+                    <option value="10:00">10:00 AM</option>
+                    <option value="10:30">10:30 AM</option>
+                    <option value="11:00">11:00 AM</option>
+                    <option value="11:30">11:30 AM</option>
+                    <option value="12:00">12:00 PM</option>
+                    <option value="12:30">12:30 PM</option>
+                    <option value="13:00">01:00 PM</option>
+                    <option value="13:30">01:30 PM</option>
+                    <option value="14:00">02:00 PM</option>
+                    <option value="14:30">02:30 PM</option>
+                    <option value="15:00">03:00 PM</option>
+                    <option value="15:30">03:30 PM</option>
+                    <option value="16:00">04:00 PM</option>
+                    <option value="16:30">04:30 PM</option>
+                    <option value="17:00">05:00 PM</option>
+                    <option value="17:30">05:30 PM</option>
+                    <option value="18:00">06:00 PM</option>
+                    <option value="18:30">06:30 PM</option>
+                    <option value="19:00">07:00 PM</option>
+                    <option value="19:30">07:30 PM</option>
+                    <option value="20:00">08:00 PM</option>
+                    <option value="20:30">08:30 PM</option>
+                    <option value="21:00">09:00 PM</option>
+                    <option value="21:30">09:30 PM</option>
+                    <option value="22:00">10:00 PM</option>
+                    <option value="22:30">10:30 PM</option>
+                    <option value="23:00">11:00 PM</option>
+                    <option value="23:30">11:30 PM</option>
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridState">
+                  <Form.Control
+                    as="select"
+                    defaultValue="To"
+                    onChange={(e) => setEndWorkingHour(e.target.value)}
+                  >
+                    <option>*To</option>
+                    <option value="00:00">12:00 AM</option>
+                    <option value="00:30">12:30 AM</option>
+                    <option value="01:00">01:00 AM</option>
+                    <option value="01:30">01:30 AM</option>
+                    <option value="02:00">02:00 AM</option>
+                    <option value="02:30">02:30 AM</option>
+                    <option value="03:00">03:00 AM</option>
+                    <option value="03:30">03:30 AM</option>
+                    <option value="04:00">04:00 AM</option>
+                    <option value="04:30">04:30 AM</option>
+                    <option value="05:00">05:00 AM</option>
+                    <option value="05:30">05:30 AM</option>
+                    <option value="06:00">06:00 AM</option>
+                    <option value="06:30">06:30 AM</option>
+                    <option value="07:00">07:00 AM</option>
+                    <option value="07:30">07:30 AM</option>
+                    <option value="08:00">08:00 AM</option>
+                    <option value="08:30">08:30 AM</option>
+                    <option value="09:00">09:00 AM</option>
+                    <option value="09:30">09:30 AM</option>
+                    <option value="10:00">10:00 AM</option>
+                    <option value="10:30">10:30 AM</option>
+                    <option value="11:00">11:00 AM</option>
+                    <option value="11:30">11:30 AM</option>
+                    <option value="12:00">12:00 PM</option>
+                    <option value="12:30">12:30 PM</option>
+                    <option value="13:00">01:00 PM</option>
+                    <option value="13:30">01:30 PM</option>
+                    <option value="14:00">02:00 PM</option>
+                    <option value="14:30">02:30 PM</option>
+                    <option value="15:00">03:00 PM</option>
+                    <option value="15:30">03:30 PM</option>
+                    <option value="16:00">04:00 PM</option>
+                    <option value="16:30">04:30 PM</option>
+                    <option value="17:00">05:00 PM</option>
+                    <option value="17:30">05:30 PM</option>
+                    <option value="18:00">06:00 PM</option>
+                    <option value="18:30">06:30 PM</option>
+                    <option value="19:00">07:00 PM</option>
+                    <option value="19:30">07:30 PM</option>
+                    <option value="20:00">08:00 PM</option>
+                    <option value="20:30">08:30 PM</option>
+                    <option value="21:00">09:00 PM</option>
+                    <option value="21:30">09:30 PM</option>
+                    <option value="22:00">10:00 PM</option>
+                    <option value="22:30">10:30 PM</option>
+                    <option value="23:00">11:00 PM</option>
+                    <option value="23:30">11:30 PM</option>
+                  </Form.Control>
+                </Form.Group>
+              </Form.Row>
+
               <InputGroup style={{ marginBottom: "1rem" }}>
                 <FormControl
                   type="street_address"
