@@ -546,26 +546,24 @@ function getUserFreeHoursTree(
   var tempStartDay = new Date(startingDay);
   var tempEndDay = new Date(finishDay);
   var userPreferredStartArr = user.preferredStartHours.split(":");
+  var userPreferredStart =
+    parseInt(userPreferredStartArr[0]) +
+    parseInt(userPreferredStartArr[1]) / 60;
   var userPreferredEndArr = user.preferredEndHours.split(":");
+  var userPreferredEnd =
+    parseInt(userPreferredEndArr[0]) + parseInt(userPreferredEndArr[1]) / 60;
 
-  if (
-    tempStartDay.getHours() < userPreferredStartArr[0] &&
-    tempStartDay.getMinutes() < userPreferredStartArr[1]
-  ) {
-    tempStartDay.setHours(userPreferredStartArr[0], userPreferredStartArr[1]);
-    startingDay = tempStartDay.toISOString();
-  }
+  tempStartDay.setHours(
+    parseInt(userPreferredStartArr[0]),
+    parseInt(userPreferredStartArr[1])
+  );
+  startingDay = tempStartDay.toISOString();
 
-  if (
-    tempEndDay.getHours() > userPreferredEndArr[0] &&
-    tempEndDay.getMinutes() > userPreferredEndArr[1]
-  ) {
-    tempEndDay.setHours(userPreferredEndArr[0], userPreferredEndArr[1]);
-    finishDay = tempEndDay.toISOString();
-  }
-
-  // TODO: Añadir la condición de que solo añada una hora como libre si está dentro del rango de horas preferidas.
-  // Entiendo que es algo similar a lo de arriba.
+  tempEndDay.setHours(
+    parseInt(userPreferredEndArr[0]),
+    parseInt(userPreferredEndArr[1])
+  );
+  finishDay = tempEndDay.toISOString();
 
   if (user.schedule.length == 0) {
     freeHoursTree.insert({
@@ -585,17 +583,23 @@ function getUserFreeHoursTree(
     );
 
     if (hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60) {
-      data = {
-        user_schedule_id: countId,
-        event_title: "Free",
-        start_date_time: startingDay,
-        end_date_time: user.schedule[0].start_date_time,
-        r_rule: null,
-        ex_dates: null,
-        user_id: user.id,
-      };
-      countId++;
-      freeHoursTree.insert(data);
+      var temp = new Date(user.schedule[0].start_date_time);
+      if (
+        temp.getHours() + temp.getMinutes() / 60 >= userPreferredStart &&
+        temp.getHours() + temp.getMinutes() / 60 <= userPreferredEnd
+      ) {
+        data = {
+          user_schedule_id: countId,
+          event_title: "Free",
+          start_date_time: startingDay,
+          end_date_time: user.schedule[0].start_date_time,
+          r_rule: null,
+          ex_dates: null,
+          user_id: user.id,
+        };
+        countId++;
+        freeHoursTree.insert(data);
+      }
     }
     data = null;
 
@@ -606,17 +610,31 @@ function getUserFreeHoursTree(
       );
 
       if (hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60) {
-        data = {
-          user_schedule_id: countId,
-          event_title: "Free",
-          start_date_time: user.schedule[i].end_date_time,
-          end_date_time: user.schedule[i + 1].start_date_time,
-          r_rule: null,
-          ex_dates: null,
-          user_id: user.id,
-        };
-        countId++;
-        freeHoursTree.insert(data);
+        var tempStart = new Date(user.schedule[i].end_date_time);
+        var tempEnd = new Date(user.schedule[i + 1].start_date_time);
+        console.log(tempStart.getHours() + tempStart.getMinutes() / 60);
+        console.log(userPreferredStart);
+        if (
+          tempStart.getHours() + tempStart.getMinutes() / 60 >=
+            userPreferredStart &&
+          tempStart.getHours() + tempStart.getMinutes() / 60 <=
+            userPreferredEnd &&
+          tempEnd.getHours() + tempEnd.getMinutes() / 60 >=
+            userPreferredStart &&
+          tempEnd.getHours() + tempEnd.getMinutes() / 60 <= userPreferredEnd
+        ) {
+          data = {
+            user_schedule_id: countId,
+            event_title: "Free",
+            start_date_time: user.schedule[i].end_date_time,
+            end_date_time: user.schedule[i + 1].start_date_time,
+            r_rule: null,
+            ex_dates: null,
+            user_id: user.id,
+          };
+          countId++;
+          freeHoursTree.insert(data);
+        }
       }
     }
 
@@ -626,16 +644,25 @@ function getUserFreeHoursTree(
     );
 
     if (hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60) {
-      data = {
-        user_schedule_id: countId,
-        event_title: "Free",
-        start_date_time: user.schedule[user.schedule.length - 1].end_date_time,
-        end_date_time: finishDay,
-        r_rule: null,
-        ex_dates: null,
-        user_id: user.id,
-      };
-      freeHoursTree.insert(data);
+      var temp = new Date(
+        user.schedule[user.schedule.length - 1].end_date_time
+      );
+      if (
+        temp.getHours() + temp.getMinutes() / 60 >= userPreferredStart &&
+        temp.getHours() + temp.getMinutes() / 60 <= userPreferredEnd
+      ) {
+        data = {
+          user_schedule_id: countId,
+          event_title: "Free",
+          start_date_time:
+            user.schedule[user.schedule.length - 1].end_date_time,
+          end_date_time: finishDay,
+          r_rule: null,
+          ex_dates: null,
+          user_id: user.id,
+        };
+        freeHoursTree.insert(data);
+      }
     }
   }
 
@@ -1262,30 +1289,51 @@ var OrlandoSchedule = [
   },
 ];
 
-// var team = getMeetingHours(
-//   [
-//     { id: 2, schedule: OrlandoSchedule },
-//     { id: 3, schedule: FernandoSchedule },
-//     { id: 4, schedule: LuisSchedule },
-//     { id: 5, schedule: YeranSchedule },
-//     { id: 6, schedule: YaritzaSchedule },
-//   ],
-//   { id: 1, schedule: MariaSchedule },
-//   "2020-11-16T10:30:00.000Z",
-//   "2020-11-20T19:30:00.000Z",
-//   1,
-//   0,
-//   "Finally Done",
-//   "TeamID"
-// );
+var team = getMeetingHours(
+  [
+    {
+      id: 2,
+      schedule: OrlandoSchedule,
+      preferredStartHours: "7:30",
+      preferredEndHours: "22:00",
+    },
+    {
+      id: 3,
+      schedule: FernandoSchedule,
+      preferredStartHours: "7:30",
+      preferredEndHours: "22:00",
+    },
+    {
+      id: 4,
+      schedule: LuisSchedule,
+      preferredStartHours: "7:30",
+      preferredEndHours: "22:00",
+    },
+    {
+      id: 5,
+      schedule: YeranSchedule,
+      preferredStartHours: "7:30",
+      preferredEndHours: "22:00",
+    },
+    {
+      id: 6,
+      schedule: YaritzaSchedule,
+      preferredStartHours: "7:30",
+      preferredEndHours: "22:00",
+    },
+  ],
+  {
+    id: 1,
+    schedule: MariaSchedule,
+    preferredStartHours: "7:30",
+    preferredEndHours: "22:00",
+  },
+  "2020-11-16T00:00:00.000Z",
+  "2020-11-20T00:00:00.000Z",
+  1,
+  0,
+  "Finally Done",
+  "TeamID"
+);
 
 // console.log(team);
-var dateTest = new Date("2020-11-16T10:30:00.000Z");
-console.log(dateTest);
-console.log(dateTest.toISOString());
-console.log(dateTest.getHours());
-console.log(dateTest.getMinutes());
-dateTest.setHours(3, 15);
-console.log(dateTest.toLocaleString());
-console.log(dateTest.getHours());
-console.log(dateTest.getMinutes());
