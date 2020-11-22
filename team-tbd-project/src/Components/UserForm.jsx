@@ -41,7 +41,6 @@ function UserForm(props) {
       userInfoHandler(user).then((res) => {
         //Here send things to the handler
         if (res.status === 201) {
-          //window.location.assign("/LoginValidate"); //test to make sure the redirect happens
           props.history.push("/LoginValidate");
         }
       });

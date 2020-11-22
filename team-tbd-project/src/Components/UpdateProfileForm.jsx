@@ -14,6 +14,7 @@ import {
   profileUpdateHandler,
   profileEmailUpdateHandler,
 } from "../Apis/UserProfile";
+import {withRouter} from "react-router-dom";
 
 function UpdateProfileForm(props) {
   const [firstname, setFirstname] = React.useState("");
@@ -57,7 +58,7 @@ function UpdateProfileForm(props) {
           console.log(res);
           if (res.status === 200) {
             props.onHide();
-            window.location.assign("/Profile");
+            props.history.push("/Profile");
           }
         });
       }
@@ -199,4 +200,4 @@ function UpdateProfileForm(props) {
   );
 }
 
-export default UpdateProfileForm;
+export default withRouter(UpdateProfileForm);
