@@ -5,7 +5,7 @@ import mainLogo from "../../Images/HomeBackground.jpg";
 import Image from "react-bootstrap/Image";
 import UpdateProfileForm from "../../Components/UpdateProfileForm";
 import { profileGetHandler } from "../../Apis/UserProfile";
-
+import { withRouter} from "react-router-dom";
 const sectionText = {
   color: "#5b86e5",
   marginLeft: "1rem",
@@ -16,7 +16,7 @@ const textStyle = {
   marginLeft: "1rem",
 };
 
-function Profile() {
+function Profile(props) {
   const [modalShow, setModalShow] = React.useState(false);
   const [user, setUser] = React.useState({});
 
@@ -32,10 +32,10 @@ function Profile() {
         <Card.Header>
           <Nav fill variant="tabs" defaultActiveKey="#first">
             <Nav.Item>
-              <Nav.Link href="#first">General Info</Nav.Link>
+              <Nav.Link onClick={() => {props.history.push("/Profile")}}>General Info</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link href="./Teams">Teams</Nav.Link>
+              <Nav.Link onClick={() => {props.history.push("/Teams")}}>Teams</Nav.Link>
             </Nav.Item>
           </Nav>
         </Card.Header>
@@ -98,7 +98,7 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default withRouter(Profile);
 
 //Popup form
 

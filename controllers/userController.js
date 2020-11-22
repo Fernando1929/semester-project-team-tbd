@@ -1,4 +1,4 @@
-const db = require("../db/index");
+const db = require("../db");
 const emailServices = require("../services/EmailServices");
 
 const addUser = async (req,res) => {

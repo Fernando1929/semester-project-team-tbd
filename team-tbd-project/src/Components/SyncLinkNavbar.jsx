@@ -2,9 +2,9 @@ import React from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import mainLogo from "../Images/synLogoNM.png";
 import "../App/App.css";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
-function SyncLinkNavbar() {
+function SyncLinkNavbar(props) {
   const navStyle = {
     textDecoration: "none",
   };
@@ -17,7 +17,7 @@ function SyncLinkNavbar() {
       bg="light"
       variant="light"
     >
-      <Navbar.Brand href="/">
+      <Navbar.Brand onClick={() => {props.history.push("/")}}>
         <h2
           className="phoneDisplayNoText"
           style={{
@@ -63,7 +63,7 @@ function SyncLinkNavbar() {
       >
         <Nav className="mr-auto"></Nav>
         <Nav>
-          <Nav.Link href="/" style={navStyle}>
+          <Nav.Link onClick={() => {props.history.push("/")}} style={navStyle}>
             HOME
           </Nav.Link>
           <Link to="/LogIn" style={{ textDecoration: "none", color: "white" }}>
@@ -82,4 +82,4 @@ function SyncLinkNavbar() {
   );
 }
 
-export default SyncLinkNavbar;
+export default withRouter(SyncLinkNavbar);

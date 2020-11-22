@@ -11,8 +11,9 @@ import {
 } from "react-bootstrap";
 import "../App/App.css";
 import Auth from "../utils/Auth";
+import {withRouter} from "react-router-dom";
 
-function UserForm() {
+function UserForm(props) {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [phone, setPhone] = useState("");
@@ -40,7 +41,7 @@ function UserForm() {
       userInfoHandler(user).then((res) => {
         //Here send things to the handler
         if (res.status === 201) {
-          window.location.assign("/LoginValidate"); //test to make sure the redirect happens
+          props.history.push("/LoginValidate");
         }
       });
     }
@@ -158,4 +159,4 @@ function UserForm() {
   );
 }
 
-export default UserForm;
+export default withRouter(UserForm);

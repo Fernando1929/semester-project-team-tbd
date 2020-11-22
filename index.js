@@ -9,6 +9,7 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const path = require("path");
+// const { dirname } = require("path");
 const app = express();
 
 // -------------------------------------Start of middleware---------------
@@ -17,9 +18,9 @@ app.use(express.json());
 app.use(morgan("dev")); // for logging HTTP requests in console
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "team-tbd-project/public")));
+  app.use(express.static(path.join(__dirname, "team-tbd-project/build/")));
 }
-
+//app.use(express.static(path.join(__dirname, "team-tbd-project/build/")));
 // -------------------------------------Start of routes---------------
 app.use("/api", accountRoutes);
 app.use("/api", userRoutes);
@@ -32,7 +33,7 @@ app.use("/api", serviceRoutes);
 //   res.sendFile(path.join(__dirname, "team-tbd-project/public/index.html"));
 // });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
   console.log(`Server has started on port ${port}`);

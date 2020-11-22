@@ -51,7 +51,7 @@ function RecentTeams() {
                         <Card.Title style={{ color: "white" }}>
                           {team.name}
                         </Card.Title>
-                        <Button variant="light" href={team.link}>
+                        <Button variant="light" to={team.link}>
                           ACCESS
                         </Button>
                       </Card.Body>
