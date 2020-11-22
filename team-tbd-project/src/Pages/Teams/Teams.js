@@ -1,8 +1,9 @@
 import React from "react";
 import { Container, Card, Button, Nav, CardDeck } from "react-bootstrap";
 import "../../App/App.css";
+import {withRouter} from "react-router-dom";
 
-function Teams() {
+function Teams(props) {
   //Poner los todos teams del usuario.
   var userTeams = [
     { name: "Team1", link: "/Team1" },
@@ -19,10 +20,10 @@ function Teams() {
           <Card.Header>
             <Nav fill variant="tabs" defaultActiveKey="#first">
               <Nav.Item>
-                <Nav.Link href="./Profile">General Info</Nav.Link>
+                <Nav.Link onClick={() => {props.history.push("/Profile")}}>General Info</Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link href="#first">Teams</Nav.Link>
+                <Nav.Link onClick={() => {props.history.push("/Teams")}}>Teams</Nav.Link>
               </Nav.Item>
             </Nav>
           </Card.Header>
@@ -65,4 +66,4 @@ function Teams() {
   );
 }
 
-export default Teams;
+export default withRouter(Teams);
