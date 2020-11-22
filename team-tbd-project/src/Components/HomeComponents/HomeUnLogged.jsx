@@ -2,6 +2,7 @@ import React from "react";
 import "../../App/App.css";
 import backgroundH from "../../Images/newHomeBk.gif";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function HomeUnLogged() {
   return (
@@ -30,23 +31,25 @@ function HomeUnLogged() {
               <h1 style={{ fontSize: "7vw" }}>SYNCLINK</h1>
               <h3 style={{ fontSize: "2vw" }}>MEET AT THE PERFECT MOMENT</h3>
               <div>
+              <Link  to="/SignUp">
                 <Button
-                  href="/SignUp"
                   className="btn--primary"
                   variant="primary"
                   style={{ fontSize: "2vw", marginBottom: "1rem" }}
                 >
                   GET STARTED
                 </Button>
+                </Link>
               </div>
               <div>
+                <Link to="/LogIn">
                 <Button
-                  href="/LogIn"
                   className="btn--secondary"
                   style={{ fontSize: "2vw" }}
                 >
                   LOG IN
                 </Button>
+                </Link>
               </div>
             </Col>
           </Row>
@@ -96,8 +99,8 @@ function HomeUnLogged() {
                   Take the first step towards organizing your team
                 </div>
                 <div style={{ marginTop: "0.5rem", fontSize: "2vw" }}>
+                  <Link to="/LogIn">
                   <Button
-                    href="/LogIn"
                     className="btn--secondary"
                     variant="primary"
                     style={{
@@ -107,9 +110,9 @@ function HomeUnLogged() {
                   >
                     LOG IN
                   </Button>
-
+                    </Link>
+                    <Link to="/SignUp">
                   <Button
-                    href="/SignUp"
                     variant="light"
                     style={{
                       outline: "none",
@@ -120,6 +123,7 @@ function HomeUnLogged() {
                   >
                     SIGN UP
                   </Button>
+                  </Link>
                 </div>
               </div>
             </Col>

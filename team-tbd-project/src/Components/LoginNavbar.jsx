@@ -1,12 +1,14 @@
 import React from "react";
 import { Navbar, Nav, Button, Image, Dropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import mainLogo from "../Images/synLogoNM.png";
 import profilePic from "../Images/HomeBackground.jpg";
 import "../App/App.css";
 import CreateTeamForm from "../Components/CreateTeamForm";
 import Auth from "../utils/Auth";
-function LoginNavbar() {
+
+
+function LoginNavbar(props) {
   const [modalShow, setModalShow] = React.useState(false);
 
   const navStyle = {
@@ -24,7 +26,7 @@ function LoginNavbar() {
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
-      <Navbar.Brand href="/">
+      <Navbar.Brand to="/">
         <h2
           className="phoneDisplayNoText"
           style={{
@@ -70,10 +72,10 @@ function LoginNavbar() {
       >
         <Nav className="mr-auto"></Nav>
         <Nav>
-          <Nav.Link href="/" style={navStyle}>
+          <Nav.Link to="/" style={navStyle}>
             HOME
           </Nav.Link>
-          <Nav.Link href="/UserSchedule" style={navStyle}>
+          <Nav.Link to="/UserSchedule" style={navStyle}>
             MY SCHEDULE
           </Nav.Link>
           <Dropdown style={navStyle}>
@@ -88,7 +90,7 @@ function LoginNavbar() {
             <Dropdown.Menu style={{ backgroundColor: "#36d1dc" }}>
               {mostRecent.map((team) => {
                 return (
-                  <Dropdown.Item key={team.name} href={team.link}>
+                  <Dropdown.Item key={team.name} to={team.link}>
                     {team.name}
                   </Dropdown.Item>
                 );
@@ -111,7 +113,7 @@ function LoginNavbar() {
             CREATE NEW TEAM
           </Button>
           <CreateTeamForm show={modalShow} onHide={() => setModalShow(false)} />
-          <Link to="/" style={{ textDecoration: "none", color: "white",alignItems: "center", }} onClick={() => window.location.assign("/")}>
+          <Link to="/" style={{ textDecoration: "none", color: "white",alignItems: "center", }} onClick={() => props.history.push("/")}>
             <Button className="btn--primary" variant="primary" style={{
               marginRight: "0.5rem",
               color: "white",
@@ -144,4 +146,4 @@ function LoginNavbar() {
   );
 }
 
-export default LoginNavbar;
+export default withRouter(LoginNavbar);

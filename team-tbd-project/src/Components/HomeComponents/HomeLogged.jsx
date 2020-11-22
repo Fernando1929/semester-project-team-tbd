@@ -84,7 +84,7 @@ function HomeLogged() {
                   <Button
                     className="btn--secondary"
                     variant="primary"
-                    href="/Profile"
+                    to="/Profile"
                     style={{
                       margin: "0.5rem",
                       fontSize: "2vw",
@@ -198,7 +198,7 @@ function HomeLogged() {
                   <Button
                     className="btn--secondary"
                     variant="primary"
-                    href="/Teams"
+                    to="/Teams"
                     style={{
                       margin: "0.5rem",
                       fontSize: "2vw",

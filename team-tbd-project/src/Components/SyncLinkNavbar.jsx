@@ -63,7 +63,7 @@ function SyncLinkNavbar() {
       >
         <Nav className="mr-auto"></Nav>
         <Nav>
-          <Nav.Link href="/" style={navStyle}>
+          <Nav.Link to="/" style={navStyle}>
             HOME
           </Nav.Link>
           <Link to="/LogIn" style={{ textDecoration: "none", color: "white" }}>

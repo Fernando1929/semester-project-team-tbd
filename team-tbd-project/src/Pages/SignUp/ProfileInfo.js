@@ -6,7 +6,7 @@ import "./SignUp.css";
 function ProfileInfo() {
   return (
     <div className="SignUp">
-      <UserForm />
+      <UserForm/>
     </div>
   );
 }

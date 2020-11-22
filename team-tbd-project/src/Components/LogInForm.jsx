@@ -14,8 +14,9 @@ import {
 import "../App/App.css";
 import { loginHandler } from "../Apis/Login";
 import Auth from "../utils/Auth";
+import {withRouter} from "react-router-dom";
 
-function LogInForm() {
+function LogInForm(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error_message, setErrors] = useState([]);
@@ -34,7 +35,7 @@ function LogInForm() {
           Auth.authenticateUser(res.data.token);
           Auth.setUserid(res.data.user_id);
           Auth.setUsername(res.data.username);
-          window.location.assign("/");
+          props.history.push("/");
           console.log("User logged in", res.data);
         } else {
           errors.push(res.data);
@@ -127,4 +128,4 @@ function LogInForm() {
   );
 }
 
-export default LogInForm;
+export default withRouter(LogInForm);
