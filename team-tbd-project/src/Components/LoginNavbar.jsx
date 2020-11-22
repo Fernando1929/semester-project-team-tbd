@@ -113,14 +113,14 @@ function LoginNavbar(props) {
             CREATE NEW TEAM
           </Button>
           <CreateTeamForm show={modalShow} onHide={() => setModalShow(false)} />
-          <Link to="/" style={{ textDecoration: "none", color: "white",alignItems: "center", }}>
+          <Link to="/" style={{ textDecoration: "none", color: "white",alignItems: "center", }} onClick={() => Auth.deauthenticateUser()}>
             <Button className="btn--primary" variant="primary" style={{
               marginRight: "0.5rem",
               color: "white",
               textAlign: "center",
               marginTop: "10px",
               marginBottom: "15px",
-            }}onClick={() => Auth.deauthenticateUser()}>
+            }}>
               LOG OUT
             </Button>
           </Link>
