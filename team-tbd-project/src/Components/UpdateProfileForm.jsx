@@ -15,7 +15,7 @@ import {
   profileUpdateHandler,
   profileEmailUpdateHandler,
 } from "../Apis/UserProfile";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 function UpdateProfileForm(props) {
   const [firstname, setFirstname] = React.useState("");
@@ -160,8 +160,10 @@ function UpdateProfileForm(props) {
           Besides the leading ‘+’ in the country code, all characters should be
           numeric. Ex. +17871234567.
         </label>
+        <div>
+          <label>Working Hours</label>
+        </div>
 
-        <label>Working Hours</label>
         <Form.Row>
           <Form.Group as={Col} controlId="formGridState">
             <Form.Control
