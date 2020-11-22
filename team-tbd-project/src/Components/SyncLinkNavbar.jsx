@@ -17,7 +17,7 @@ function SyncLinkNavbar() {
       bg="light"
       variant="light"
     >
-      <Navbar.Brand href="/">
+      <Navbar.Brand to="/">
         <h2
           className="phoneDisplayNoText"
           style={{

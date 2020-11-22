@@ -27,6 +27,7 @@ class Auth {
       localStorage.removeItem('usertoken');
       localStorage.removeItem('username');
       localStorage.removeItem('user_id');
+      window.location.reload();
     }
   
     static getToken() {

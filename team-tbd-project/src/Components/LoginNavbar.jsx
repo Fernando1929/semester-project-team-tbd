@@ -72,10 +72,10 @@ function LoginNavbar(props) {
       >
         <Nav className="mr-auto"></Nav>
         <Nav>
-          <Nav.Link to="/" style={navStyle}>
+          <Nav.Link style={navStyle}onClick={() => {props.history.push("/")}}>
             HOME
           </Nav.Link>
-          <Nav.Link to="/UserSchedule" style={navStyle}>
+          <Nav.Link style={navStyle} onClick={() => {props.history.push("/UserSchedule")}}>
             MY SCHEDULE
           </Nav.Link>
           <Dropdown style={navStyle}>
@@ -113,7 +113,7 @@ function LoginNavbar(props) {
             CREATE NEW TEAM
           </Button>
           <CreateTeamForm show={modalShow} onHide={() => setModalShow(false)} />
-          <Link to="/" style={{ textDecoration: "none", color: "white",alignItems: "center", }} onClick={() => props.history.push("/")}>
+          <Link to="/" style={{ textDecoration: "none", color: "white",alignItems: "center", }}>
             <Button className="btn--primary" variant="primary" style={{
               marginRight: "0.5rem",
               color: "white",

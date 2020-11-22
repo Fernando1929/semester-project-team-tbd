@@ -81,10 +81,10 @@ function HomeLogged() {
                   Take the first step towards organizing your team
                 </div>
                 <div style={{ marginTop: "0.5rem", fontSize: "2vw" }}>
+                  <Link  to="/Profile">
                   <Button
                     className="btn--secondary"
                     variant="primary"
-                    to="/Profile"
                     style={{
                       margin: "0.5rem",
                       fontSize: "2vw",
@@ -92,6 +92,7 @@ function HomeLogged() {
                   >
                     MY PROFILE
                   </Button>
+                  </Link>
                 </div>
               </div>
             </Col>
@@ -195,10 +196,11 @@ function HomeLogged() {
                 Create or edit a team and share it with your group or join a
                 team that was shared to you
                 <div>
+                  <Link to="/Teams">
                   <Button
                     className="btn--secondary"
                     variant="primary"
-                    to="/Teams"
+                    
                     style={{
                       margin: "0.5rem",
                       fontSize: "2vw",
@@ -206,6 +208,7 @@ function HomeLogged() {
                   >
                     MY TEAMS
                   </Button>
+                  </Link>
                 </div>
               </div>
             </Col>
