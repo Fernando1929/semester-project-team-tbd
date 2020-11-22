@@ -26,7 +26,7 @@ function LoginNavbar(props) {
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
-      <Navbar.Brand to="/">
+      <Navbar.Brand onClick={() => {props.history.push("/")}}>
         <h2
           className="phoneDisplayNoText"
           style={{
