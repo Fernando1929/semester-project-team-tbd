@@ -117,6 +117,22 @@ const deleteTeamMember =  async (req,res) =>{
     }
 }
 
+const getAllMembersExceptLeaderByTeamId = async (req,res) => {
+    try {
+        const members = await db.query("SELECT team_member_id, user_id, pref_start_work_hour, pref_end_work_hour FROM users NATURAL INNER JOIN team_members NATURAL INNER JOIN team_membership NATURAL INNER JOIN team WHERE team_id = $1 AND user_id != (SELECT user_id FROM team NATURAL INNER JOIN team_leader WHERE team_id = $2)",
+        [req.params.tid,req.params.tid]);
+        res.status(200).json({
+            status: "success",
+            results: teams.rows.length,
+            data: {
+                members: members.rows
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 // const searchTeamMember =  async (req,res) =>{
 //     try{
 //         const { team}
@@ -134,4 +150,5 @@ module.exports = {
     getTeamMembersByTeamId,
     updateTeamMember,
     deleteTeamMember,
+    getAllMembersExceptLeaderByTeamId
 }

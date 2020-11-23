@@ -84,6 +84,11 @@ function Profile() {
                 </Row>
 
                 <Row className="justify-content-right">
+                  <h5 style={sectionText}>Working Hours:</h5>
+                  <h4 style={textStyle}>{user.pref_start_work_hour + " - " + user.pref_end_work_hour}</h4>
+                </Row>
+
+                <Row className="justify-content-right">
                   <h5 style={sectionText}>Location:</h5>
                   <h4 style={textStyle}>{user.user_location}</h4>
                 </Row>

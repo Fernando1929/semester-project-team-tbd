@@ -39,8 +39,8 @@ function UpdateProfileForm(props) {
       setPhone(user.user_phone);
       setLocation(user.user_location);
       setBio(user.user_bio);
-      setStartWorkingHour(user.pref_start_work_hour);
-      setEndWorkingHour(user.pref_end_end_hour);
+      setStartWorkingHour(reformat_time(user.pref_start_work_hour));
+      setEndWorkingHour(reformat_time(user.pref_end_end_hour));
       
       if (user.profile_picture) {
         setProfilePicture("http://localhost:3001/" + user.profile_picture);
@@ -54,6 +54,16 @@ function UpdateProfileForm(props) {
     }
     });
   }, []);
+
+  const reformat_time = (time) => {
+    const orig_hours = parseInt(time.split(":")[0]);
+    const conv_hours = (orig_hours % 12) || 12;
+    var res = conv_hours + ":" + time.split(":")[1];
+    res = (orig_hours < 12) ? res + " AM" : res + " PM" ;
+    res = (res.split(":")[0].length == 1) ? "0" + res : res ;
+
+    return res;
+  }
 
   const hiddenFileInput = React.useRef(null);
 

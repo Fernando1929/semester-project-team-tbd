@@ -10,7 +10,6 @@ import { getRecentUserTeamsHandler } from "../Apis/Teams"
 
 function RecentTeams() {
   const [modalShow, setModalShow] = React.useState(false);
-  //Poner los tres teams más recientes del usuario.
   const [userTeams, setUserTeams] = React.useState([]);
 
   React.useEffect(() =>{//Requested before the page is loaded

@@ -1,8 +1,48 @@
 import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import "react-datepicker/dist/react-datepicker.css";
+import { voteCountUpdateHandler } from "../Apis/MeetingOptions"
 
 function VoteForm(props) {
+  const { match: { params } } = props;
+  const [meeting_options, setMeetingOptions] = React.useState([]);
+  const [selected_meeting_id, setSelectedId] = React.useState(null);
+
+  React.useEffect(() =>{//Requested before the page is loaded
+    getMeetingOptionsHandler(params.teamid).then(res => {
+      if (res.status === 200){
+        setMeetingOptions(res.data.data.meetings);
+      }else{//prints errors
+        console.log(res.msg);
+      }
+    }
+    )
+  },[]);
+
+  const submit = () => {
+    // como sacar el id o algo del meeting option seleccionado?
+    // como restringirlo a solo una seleccion?
+    const meeting = {
+      team_id: params.teamid,
+      meeting_option_id: selected_meeting_id,
+    };
+    voteCountUpdateHandler(meeting).then((res) => {
+      if (res.status === 200) {
+        console.log("Vote registered.");
+        alert("Your vote has been registered.");
+        // update something somewhere in the db to indicate that the team member has voted
+
+        // verify if all team members have voted
+
+        // if all members have voted, insert into team_schedule and every user_schedule
+
+        
+        props.onHide();
+        props.history.push(`/TeamProfile/${params.teamid}`);
+      }
+    });
+  }
+
   var posibleDates = [
     {
       user_schedule_id: 1,

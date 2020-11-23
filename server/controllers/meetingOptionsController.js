@@ -20,7 +20,7 @@ const getAllMeetingOptionsByTeamId = async (req,res) => {
             status: "success",
             results: meeting_options.rows.length,
             data: {
-                meeting: meeting_options.rows
+                meetings: meeting_options.rows
             },
         });
     } catch (err) {

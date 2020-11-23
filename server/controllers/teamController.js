@@ -128,5 +128,5 @@ module.exports = {
     deleteTeam,
     getTeamsByUserId,
     getMostRecentTeamsByUserId,
-    getTeamAllInfo
+    getTeamAllInfo,
 }

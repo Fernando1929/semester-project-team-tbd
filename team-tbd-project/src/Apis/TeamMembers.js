@@ -34,6 +34,28 @@ export const getUserIdByMemberIdHandler = (team_member_id) => {
         })
 }
 
+export const getMemberScheduleHandler = (user_id) =>{ 
+    return axios
+        .get(`http://localhost:3001/api/users/${user_id}/schedule`)
+        .then( response => {
+            return response
+        })
+        .catch(err => {
+            return err.response
+        })
+}
+
+export const getAllMembersExceptLeaderHandler = (team_id) => {
+    return axios
+        .get(`http://localhost:3001/api/teams/${team_id}/team_members/absolute`)
+        .then( response => {
+            return response
+        })
+        .catch(err => {
+            return err.response
+        })
+}
+
 // export const memberDeleteHandler = (team_member_id) =>{ 
 //     return axios
 //         .delete(`http://localhost:3001/api/teams/team_members/${team_member_id}`) 

@@ -291,6 +291,7 @@ function TeamProfile(props) {
 
                 {is_leader ? (
                   <MeetingDatePickerForm
+                    {...props}
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                   />
