@@ -3,16 +3,41 @@ const db = require("../db/index");
 const addTeamLeader =  async (req,res) =>{
     try{
         const {user_id} = req.body;
-        const newTeamLeader =  await db.query(
-            "INSERT INTO team_leader(user_id) VALUES($1) RETURNING *",
-            [user_id]
-        );
+        const duplicated = (await leaderExists(user_id)).valueOf();
 
-        res.status(201).json(newTeamLeader.rows[0]);
+        if (!duplicated) {
+            const newTeamLeader =  await db.query(
+                "INSERT INTO team_leader(user_id) VALUES($1) RETURNING *",
+                [user_id]
+            );
+    
+            res.status(201).json(newTeamLeader.rows[0]);
+        }
+        else {
+            res.status(404).json("Team leader record already exists");
+        }
+
     }catch(err){
         console.log(err);
     }
 }
+
+const leaderExists = async (req) => {
+    try {
+      const user_id = req;
+      const leader = await db.query(
+        "SELECT * FROM team_leader WHERE user_id = $1",
+        [user_id]
+      );
+      if (leader.rows.length !== 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
 //Posible is more than one leader option is implemataded
 const getAllTeamLeaders =  async (req,res) =>{
@@ -32,12 +57,26 @@ const getAllTeamLeaders =  async (req,res) =>{
 
 const getTeamLeaderByUserId =  async (req,res) =>{
     try{
-        const { user_id } =  req.body;
-        const teamLeader = await db.query("SELECT * FROM team_leader WHERE user_id = 1$",[user_id]);
+        // const { user_id } =  req.body;
+        const teamLeader = await db.query("SELECT * FROM team_leader WHERE user_id = $1",[req.params.tlid]);
         res.status(200).json({
             status: "success",
             data: {
                 team: teamLeader.rows[0]
+            },
+        });
+    }catch(err){
+        console.log(err);
+    }
+}
+
+const getUserIdByTeamLeader =  async (req,res) =>{
+    try{
+        const user = await db.query("SELECT user_id FROM team NATURAL INNER JOIN team_leader NATURAL INNER JOIN users WHERE team_id = $1",[req.params.tid]);
+        res.status(200).json({
+            status: "success",
+            data: {
+                user: user.rows[0]
             },
         });
     }catch(err){
@@ -90,6 +129,7 @@ module.exports = {
     addTeamLeader,
     getAllTeamLeaders,
     getTeamLeaderByUserId,
+    getUserIdByTeamLeader,
     updateTeamLeader,
     deleteTeamLeader,
     searchTeamLeader,

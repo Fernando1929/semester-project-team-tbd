@@ -3,16 +3,41 @@ const db = require("../db/index");
 const addTeamMember =  async (req,res) =>{
     try{
         const {user_id} = req.body;
-        const newTeamMember =  await db.query(
-            "INSERT INTO team_members (user_id) VALUES($1) RETURNING *",
-            [user_id]
-        );
+        const duplicated = (await memberExists(user_id)).valueOf();
 
-        res.status(201).json(newTeamMember.rows[0]);
+        if (!duplicated) {
+            const newTeamMember =  await db.query(
+                "INSERT INTO team_members (user_id) VALUES($1) RETURNING *",
+                [user_id]
+            );
+    
+            res.status(201).json(newTeamMember.rows[0]);
+        }
+        else {
+            res.status(404).json("Team member record already exists");
+        }
+
     }catch(err){
         console.log(err);
     }
 }
+
+const memberExists = async (req) => {
+    try {
+      const user_id = req;
+      const member = await db.query(
+        "SELECT * FROM team_members WHERE user_id = $1",
+        [user_id]
+      );
+      if (member.rows.length !== 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
 const getAllTeamMembers =  async (req,res) =>{
     try{
@@ -48,8 +73,8 @@ const getTeamMembersByTeamId =  async (req,res) =>{
 
 const getTeamMemberByUserId =  async (req,res) =>{
     try{
-        const {user_id} = req.body;
-        const teamMember = await db.query("SELECT * FROM team_members WHERE user_id = 1$",[user_id]);
+        // const {user_id} = req.body;
+        const teamMember = await db.query("SELECT * FROM team_members WHERE user_id = $1 ORDER BY team_member_id DESC",[req.params.tmid]);
         res.status(200).json({
             status: "success",
             data: {

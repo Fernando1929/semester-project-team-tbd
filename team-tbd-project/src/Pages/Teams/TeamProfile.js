@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../App/App.css";
+import Auth from "../../utils/Auth";
 import backgroundH from "../../Images/TeamBK2.gif";
 import MeetingDatePickerForm from "../../Components/MeetingDatePickerForm";
 import VotesForm from "../../Components/VotesForm";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import { teamGetAllInfoHandler, getUserIdByEmailHandler } from "../../Apis/Teams";
+import { addTeamMemberHandler, getMemberIdByUserIdHandler } from "../../Apis/TeamMembers";
+import { getTeamLeaderUserIdHandler } from "../../Apis/TeamLeader";
+import { addTeamMembershipHandler, membershipDeleteHandler } from "../../Apis/TeamMembership";
+import { getMostRecentEventsHandler } from "../../Apis/TeamSchedule";
 
 import {
   Button,
@@ -29,23 +35,112 @@ import {
 
 // Dependencies to install: Install New Dependencies npm install react-bootstrap-date-picker,npm i react-notification-timeline, npm i react-confirm-alert
 
-function TeamProfile() {
-  const [modalShow, setModalShow] = React.useState(false);
+const mapTeamMemberData = member => ({
+  id: member.team_member_id,
+  name: member.user_firstname + " " + member.user_lastname,
+  email: member.email
+});
 
+const mapRecentEventsData = event => ({
+  id: event.team_schedule_id,
+  date: formatDate(event.start_date_time),
+  start_hour: new Date(event.start_date_time).toLocaleTimeString(),
+  end_hour: new Date(event.end_date_time).toLocaleTimeString(),
+  title: event.event_title
+});
+
+const formatDate = date => {
+  var formattedDate = new Date(date).toDateString().split(" ");
+  formattedDate = formattedDate[2] + "-" + formattedDate[1] + "-" + formattedDate[3];
+  return formattedDate;
+}
+
+function TeamProfile(props) {
+
+  const { match: { params } } = props;
+  const [modalShow, setModalShow] = React.useState(false);
   const [em, setEmail] = useState("");
-  const memberList = [
-    { name: "Maria", email: "LaDuraka@gmail.com" },
-    { name: "Luis", email: "ElPapichulo@hotmail.com" },
-    { name: "Fernando", email: "Meeps@yahoo.com" },
-  ];
+  // const [data, setData] = useState([]);
+  const [team_members, setTeamMembers] = useState([]);
+  const [recent_events, setRecentEvents] = useState([]);
+  const [team_name, setTeamName] = useState("");
+  const [team_description, setTeamDescription] = useState("");
+  const [is_leader, setIsLeader] = useState(false);
+
+  useEffect(() => {
+    // remember to set boolean values (is_leader, voted) and recent events from schedule
+    teamGetAllInfoHandler(params.teamid).then((res) => {
+      if (res.status === 200) {
+        const info = res.data.data.team;
+        // setData(info);
+        setTeamMembers(info.map(mapTeamMemberData));
+        setTeamName(info[0].team_name);
+        setTeamDescription(info[0].team_description);
+      }
+    });  
+  }, [params.teamid]);
+
+  useEffect(() => {
+    getTeamLeaderUserIdHandler(params.teamid).then((res) => {
+      if (res.status === 200) {
+        if (res.data.data.user.user_id === parseInt(Auth.getUserid())) {
+          setIsLeader(true);
+        }
+      }
+    });
+  }, [params.teamid]);
+
+  useEffect(() => {
+    getMostRecentEventsHandler(params.teamid).then((res) => {
+      if (res.status === 200) {
+        const events = res.data.data.events;
+        setRecentEvents(events.map(mapRecentEventsData));
+      }
+    });
+  }, [params.teamid]);
 
   const addMember = (e) => {
     e.preventDefault();
-    console.log("Add a member", em);
+    // console.log("Add a member", em);
+    getUserIdByEmailHandler(em).then((res => {
+      if (res.status === 200) {
+        const user_id = res.data.data.user.user_id;
+        addTeamMemberHandler(user_id).then((res) => {
+          if (res.status === 201) {
+            const team_membership = {
+              team_id: params.teamid,
+              team_member_id: res.data.team_member_id
+            }
+            addTeamMembershipHandler(team_membership).then((res) => {
+              if (res.status === 201) {
+                console.log("new member added"); //woop
+                window.location.assign(`/TeamProfile/${params.teamid}`);
+              }
+            });
+          }
+          else {
+            getMemberIdByUserIdHandler(user_id).then((res) => {
+              if (res.status === 200) {
+                const team_membership = {
+                  team_id: params.teamid,
+                  team_member_id: res.data.data.team.team_member_id
+                }
+                addTeamMembershipHandler(team_membership).then((res) => {
+                  if (res.status === 201) {
+                    console.log("new member added"); //woop
+                    window.location.assign(`/TeamProfile/${params.teamid}`);
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    }));
   };
 
   // If is true shows the Leader Team page else show a reagular team member page
-  var isLeader = false;
+  // var isLeader = false;
   // To control if user voted and wether or not we whow "your vote is required" message
   var voted = true;
 
@@ -58,42 +153,30 @@ function TeamProfile() {
     "#66D6F5",
   ];
 
-  //Team name
-  var teamName = "Team TBDLLLLLLLLL";
-  var teamDes =
-    " Insert Team Description here, this must have a restriction that already has been implemented now only renders a certain ammount of words testing testing testing long long long ";
-
-  var mostRecent = [
-    { name: "12 Nov 2020" },
-    { name: "13 Nov 2020" },
-    { name: "15 Nov 2020" },
-    { name: "18 Nov 3030" },
-    { name: "18 Nov 3030" },
-  ];
-  var Teammembers = [
-    { name: "Yeran L Concepción Concepción" },
-    { name: "Yaritza M. García Chaparro" },
-    { name: "María D. Vilanova García" },
-    { name: "Orlando F. Marrero Soto" },
-    { name: "Luis F. Quiles Ruiz" },
-    { name: "Fernando A. Agosto Quiñones" },
-  ];
+  // var mostRecent = [
+  //   { id: 1, name: "12-Nov-2020" },
+  //   { id: 2, name: "13-Nov-2020" },
+  //   { id: 3, name: "15-Nov-2020" },
+  //   { id: 4, name: "18-Nov-2020" },
+  //   { id: 5, name: "18-Nov-2020" },
+  // ];
 
   var teamStyle = {
     marginTop: "1rem",
     marginBottom: "1rem",
-    backgroundColor: mostRecentColors[mostRecent.length],
+    backgroundColor: mostRecentColors[recent_events.length],
   };
   // To show alert when the leader wants to remove a candidate
 
-  const submit = () => {
+  const removeMember = (member_id, e) => {
+    e.preventDefault();
     confirmAlert({
       title: <h2 style={{ textAlign: "Start" }}>Remove Member</h2>,
-      message: "Are you sure to do this.",
+      message: "Are you sure to do this?",
       buttons: [
         {
           label: "Yes",
-          onClick: () => alert("Your Changes will be permanent"),
+          onClick: () => handleMemberRemove(member_id),
         },
         {
           label: "No",
@@ -102,6 +185,22 @@ function TeamProfile() {
       ],
     });
   };
+
+  const handleMemberRemove = (member_id) => {
+    alert("Your Changes will be permanent");
+    const team_membership = {
+      team_id: params.teamid,
+      team_member_id: member_id
+    }
+    console.log(team_membership);
+    membershipDeleteHandler(team_membership).then((res) => {
+      if (res.status === 204) {
+        console.log("membership deleted");
+        alert("Team member removed.");
+        window.location.assign(`/TeamProfile/${params.teamid}`);
+      }
+    });
+  }
 
   return (
     <div className="TeamProfile">
@@ -127,9 +226,9 @@ function TeamProfile() {
               sm
             >
               <h1 style={{ fontSize: "6vw", color: "#4993FA" }}>
-                {teamName.length > 13
-                  ? teamName.substring(0, 13 - 3) + "..."
-                  : teamName}
+                {team_name.length > 13
+                  ? team_name.substring(0, 13 - 3) + "..."
+                  : team_name}
               </h1>
 
               <h4
@@ -139,12 +238,12 @@ function TeamProfile() {
                   fontWeight: "300",
                 }}
               >
-                {teamDes.length > 140
-                  ? teamDes.substring(0, 140 - 3) + "..."
-                  : teamDes}
+                {team_description.length > 140
+                  ? team_description.substring(0, 140 - 3) + "..."
+                  : team_description}
               </h4>
               <div>
-                {isLeader ? (
+                {is_leader ? (
                   <h1>
                     <Button
                       className="btn--secondary"
@@ -161,7 +260,7 @@ function TeamProfile() {
                     </Button>
                   </h1>
                 ) : (
-                  <hi>
+                  <h1>
                     {voted ? (
                       <Button
                         className="btn--secondary"
@@ -187,10 +286,10 @@ function TeamProfile() {
                       </h1>
                     )}
                     {}
-                  </hi>
+                  </h1>
                 )}
 
-                {isLeader ? (
+                {is_leader ? (
                   <MeetingDatePickerForm
                     show={modalShow}
                     onHide={() => setModalShow(false)}
@@ -212,7 +311,7 @@ function TeamProfile() {
           <h2 style={{ color: "white", marginTop: "1rem" }}>UPCOMING EVENTS</h2>
 
           <Row>
-            {mostRecent.map((team) => {
+            {recent_events.map((event) => {
               teamStyle = {
                 marginTop: "0.5rem",
                 marginBottom: "2rem",
@@ -222,7 +321,7 @@ function TeamProfile() {
               };
               counterColors++;
               return (
-                <Col key={team.name}>
+                <Col key={event.id}>
                   <center>
                     <Card
                       style={{
@@ -235,16 +334,15 @@ function TeamProfile() {
                           style={{ fontSize: "30px", fontWeight: "400" }}
                         >
                           {" "}
-                          {team.name}
+                          {event.title}
                         </Card.Title>
                         <Card.Subtitle className="mb-2 text-muted">
-                          Meting Title
+                          {event.date}
                         </Card.Subtitle>
                         <Card.Text>
-                          Some quick description text to build and make up the
-                          bulk of the card's content.
+                          {event.start_hour + " - " + event.end_hour}
                         </Card.Text>
-                        <Card.Link href="/UserSchedule">
+                        <Card.Link href={`/UserSchedule/${event.date}`}>
                           View on Schedule
                         </Card.Link>
                       </Card.Body>
@@ -272,7 +370,7 @@ function TeamProfile() {
           variant="flush"
           style={{ marginRight: "1rem", marginLeft: "1rem" }}
         >
-          {Teammembers.map((member) => {
+          {team_members.map((member) => {
             return (
               <ListGroupItem key={member.name} style={{ fontSize: "30px" }}>
                 {member.name}
@@ -281,7 +379,7 @@ function TeamProfile() {
                   <Button
                     className="btn--secondary ml-auto p-2"
                     variant="primary"
-                    onClick={submit}
+                    onClick={(e) => removeMember(member.id, e)}
                     style={{
                       backgroundColor: "white",
                       color: "#FF5050",

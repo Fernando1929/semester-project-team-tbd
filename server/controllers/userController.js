@@ -52,6 +52,7 @@ const getUserIdByEmail = async (req,res) => {
 
 const getUserById = async (req,res) => {
     try {
+        console.log(req.params.id);
         const user = await db.query("SELECT * FROM account NATURAL INNER JOIN users WHERE user_id = $1", [req.params.id]);
         res.status(200).json({
             status: "success",

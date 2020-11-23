@@ -3,7 +3,7 @@ import { Modal, Button, InputGroup, Form, FormControl } from "react-bootstrap";
 import Auth from "../utils/Auth";
 import { addTeamHandler, getUserIdByEmailHandler } from "../Apis/Teams";
 import { addTeamLeaderHandler, addTeamLeaderAsMemberHandler } from "../Apis/TeamLeader";
-import { addTeamMemberHandler } from "../Apis/TeamMembers";
+import { addTeamMemberHandler, getMemberIdByUserIdHandler } from "../Apis/TeamMembers";
 import { addTeamMembershipHandler } from "../Apis/TeamMembership";
 
 function CreateTeamForm(props) {
@@ -19,6 +19,14 @@ function CreateTeamForm(props) {
     return email_arr;
   }
 
+  const email_list_len = (email_arr) => {
+    var len = 0;
+    for (var email of email_arr) {
+      len++;
+    }
+    return len;
+  }
+
   const submit = (e) => {
     e.preventDefault();
 
@@ -29,13 +37,50 @@ function CreateTeamForm(props) {
         const team = {
           team_name: team_name,
           team_description: team_description,
-          team_leader_id: res.data.team_leader_id // verify this
+          team_leader_id: res.data.team_leader_id
         }
         addTeamHandler(team).then((res) => {
           if (res.status === 201) {
             const team_id = res.data.team_id;
             let team_membership = {};
-        
+            if(email_list_len(member_email_list) > 0){
+              for (var email of member_email_list) {
+                getUserIdByEmailHandler(email).then((res) => {
+                  if (res.status === 200) {
+                    const user_id = res.data.data.user.user_id;
+                    addTeamMemberHandler(user_id).then((res) => {
+                      if (res.status === 201) {
+                        console.log("added member"); // queseyo
+                        team_membership = {
+                          team_id: team_id,
+                          team_member_id: res.data.team_member_id
+                        }
+                        addTeamMembershipHandler(team_membership).then((res) => {
+                          if (res.status === 201) {
+                            console.log("membership added"); // idk
+                          }
+                        });
+                      }
+                      else {
+                        getMemberIdByUserIdHandler(user_id).then((res) => {
+                          if (res.status === 200) {
+                            team_membership = {
+                              team_id: team_id,
+                              team_member_id: res.data.data.team.team_member_id
+                            }
+                            addTeamMembershipHandler(team_membership).then((res) => {
+                              if (res.status === 201) {
+                                console.log("membership added"); //woop
+                              }
+                            });
+                          }
+                        });
+                      }
+                    });
+                  }
+                });
+              }
+            }
             addTeamLeaderAsMemberHandler(Auth.getUserid()).then((res) => {
               if (res.status === 201) {
                 team_membership = {
@@ -43,35 +88,29 @@ function CreateTeamForm(props) {
                   team_member_id: res.data.team_member_id
                 }
                 addTeamMembershipHandler(team_membership).then((res) => {
-                  if(res.status === 201) {
-                    if(member_email_list.size > 0){
-                    for (var email of member_email_list) {
-                      getUserIdByEmailHandler(email).then((res) => {
-                        if (res.status === 200) {
-                          addTeamMemberHandler(res.data.data.user.user_id).then((res) => {
-                            if (res.status === 201) {
-                              console.log("added member"); // queseyo
-                              team_membership = {
-                                team_id: team_id,
-                                team_member_id: res.data.team_member_id
-                              }
-                              addTeamMembershipHandler(team_membership).then((res) => {
-                                if (res.status === 201) {
-                                  console.log("membership added"); // idk
-                                }
-                              });
-                            }
-                          });
-                        }
-                      });
-                    }
-                    }
-                    props.onHide();
+                  if (res.status === 201) {
+                    console.log("yay");
                   }
                 });
-        
+              }
+              else {
+                getMemberIdByUserIdHandler(Auth.getUserid()).then((res) => {
+                  if (res.status === 200) {
+                    team_membership = {
+                      team_id: team_id,
+                      team_member_id: res.data.data.team.team_member_id
+                    }
+                    addTeamMembershipHandler(team_membership).then((res) => {
+                      if (res.status === 201) {
+                        console.log("yay");
+                      }
+                    });
+                  }
+                });
               }
             });
+            props.onHide();
+            window.location.assign(`/`);
           }
         });
       }

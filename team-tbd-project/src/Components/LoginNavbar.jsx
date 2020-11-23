@@ -8,10 +8,26 @@ import "../App/App.css";
 import CreateTeamForm from "../Components/CreateTeamForm";
 import Auth from "../utils/Auth";
 import { profileGetHandler } from "../Apis/UserProfile";
+import { getUserTeamsHandler } from "../Apis/Teams"
 
 function LoginNavbar() {
   const [modalShow, setModalShow] = React.useState(false);
   const [profile_picture, setProfilePicture] = React.useState("");
+  const [userTeams, setUserTeams] = React.useState([]);
+
+  var today = new Date().toDateString().split(" ");
+  today = today[2] + "-" + today[1] + "-" + today[3];
+
+  React.useEffect(() =>{//Requested before the page is loaded
+    getUserTeamsHandler().then(res =>{//handler get the teams
+      if (res.status === 200){
+        setUserTeams(res.data.data.teams);
+      }else{//prints errors
+        console.log(res.msg);
+      }
+    }
+    )
+  },[]);
 
   React.useEffect(() => {
     profileGetHandler().then(res => {
@@ -96,7 +112,7 @@ function LoginNavbar() {
           <Nav.Link href="/" style={navStyle}>
             HOME
           </Nav.Link>
-          <Nav.Link href="/UserSchedule" style={navStyle}>
+          <Nav.Link href={`/UserSchedule/${today}`} style={navStyle}>
             MY SCHEDULE
           </Nav.Link>
           <Dropdown style={navStyle}>
@@ -109,10 +125,10 @@ function LoginNavbar() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu style={{ backgroundColor: "#36d1dc" }}>
-              {mostRecent.map((team) => {
+              {userTeams.map((team) => {
                 return (
-                  <Dropdown.Item key={team.name} href={team.link}>
-                    {team.name}
+                  <Dropdown.Item key={team.team_id} href={`/TeamProfile/${team.team_id}`}>
+                    {team.team_name}
                   </Dropdown.Item>
                 );
               })}

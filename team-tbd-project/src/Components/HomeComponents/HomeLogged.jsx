@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 /* MODIFY THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS LINE 212*/
 
 function HomeLogged() {
+  var today = new Date().toDateString().split(" ");
+  today = today[2] + "-" + today[1] + "-" + today[3];
   return (
     <div>
       <div className="SyncLinkWelcome">
@@ -135,7 +137,7 @@ function HomeLogged() {
                 <div>
                   {/* ADD THE CORECT LINK PATH WHEN CREATED AT  MY SCHEDULE BUTTON */}
                   <Link
-                    to="/UserSchedule"
+                    to={`/UserSchedule/${today}`}
                     style={{ textDecoration: "none", color: "white" }}
                   >
                     <Button

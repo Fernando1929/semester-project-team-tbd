@@ -28,7 +28,7 @@ export const teamGetAllInfoHandler = (team_id) => { // MUST UPDATE TO ADD VOTING
     return axios
         .get(`http://localhost:3001/api/teams/${team_id}/allinfo`)
         .then( response => {
-            return response.data
+            return response
         })
         .catch(err => {
             return err.response
@@ -48,7 +48,7 @@ export const teamUpdateHandler = (team) => {
 
 export const getUserIdByEmailHandler = (email) => {
     return axios
-        .get(`http://localhost:3001/api/users/${email}`)
+        .get(`http://localhost:3001/api/users/${email}/by_email`)
         .then( response => {
             return response
         })
@@ -68,3 +68,13 @@ export const getUserTeamsHandler = () => {
         })
 }
 
+export const getRecentUserTeamsHandler = () => {
+    return axios
+        .get(`http://localhost:3001/api/teams/user/${Auth.getUserid()}/recent`)
+        .then( response => {
+            return response
+        })
+        .catch(err => {
+            return err.response
+        })
+}

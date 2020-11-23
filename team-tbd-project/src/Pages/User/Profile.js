@@ -25,6 +25,7 @@ function Profile() {
   React.useEffect(() => {
     profileGetHandler().then(res => {
       const user = res.data.user;
+      // console.log(res.data.data.user);
       
       if(user !== undefined) {
         setUser(user);

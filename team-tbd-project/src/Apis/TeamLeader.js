@@ -22,3 +22,25 @@ export const addTeamLeaderAsMemberHandler = (user_id) => {
             return err.response
         })
 }
+
+export const getLeaderIdByUserIdHandler = (user_id) => {
+    return axios
+        .get(`http://localhost:3001/api/teams/team_leader/${user_id}`) // fix team id
+        .then( response => {
+            return response
+        })
+        .catch(err => {
+            return err.response
+        })
+}
+
+export const getTeamLeaderUserIdHandler = (team_id) => {
+    return axios
+        .get(`http://localhost:3001/api/teams/${team_id}/team_leader`)
+        .then( response => {
+            return response
+        })
+        .catch(err => {
+            return err.response
+        })
+}

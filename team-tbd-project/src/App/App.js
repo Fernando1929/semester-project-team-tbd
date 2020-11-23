@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import SyncLinkNavbar from "../Components/SyncLinkNavbar";
@@ -34,15 +34,15 @@ function App() {
           <Route path="/ContactUs" component={ContactUs} />
           <Route path="/ProfileInfo" render={() => Auth.getUserid() !== null ?
            <ProfileInfo/> : <Redirect to="SignUp"/> } />
-          <Route path="/UserSchedule" render={() => Auth.isUserAuthenticated() ?
-           <UserSchedule/> : <Redirect to="LogIn"/> }  />
+          <Route path="/UserSchedule/:date" render={(props) => Auth.isUserAuthenticated() ?
+           <UserSchedule {...props}/> : <Redirect to="LogIn"/> }  />
           <Route path="/LoginValidate" component={LoginValidate} />
           <Route path="/Profile" render={() => Auth.isUserAuthenticated() ?
            <Profile/> : <Redirect to="LogIn"/> } />
           <Route path="/Teams" render={() => Auth.isUserAuthenticated() ?
            <Teams/> : <Redirect to="LogIn"/>}/>
-          <Route path="/TeamProfile" render={() => Auth.isUserAuthenticated() ?
-           <TeamProfile/> : <Redirect to="LogIn"/>} />
+          <Route path="/TeamProfile/:teamid" render={(props) => Auth.isUserAuthenticated() ?
+           <TeamProfile {...props}/> : <Redirect to="LogIn"/>} />
         </Switch>
       </Router>
     </>

@@ -54,7 +54,7 @@ function Teams() {
                           {" "}
                           {team.team_name}{" "}
                         </Card.Title>
-                        <Button variant="light" href={`Team/${team.team_id}`}>
+                        <Button variant="light" href={`/TeamProfile/${team.team_id}`}>
                           ACCESS
                         </Button>
                       </Card.Body>

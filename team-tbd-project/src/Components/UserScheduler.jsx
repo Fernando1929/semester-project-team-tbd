@@ -57,9 +57,10 @@ const mapAppointmentData = appointment => ({
   exDate: appointment.ex_dates
 });
 
-function UserScheduler() {
+function UserScheduler(props) {
+    const { match: { params } } = props;
     const [loading, setLoading] = useState(true);
-    const [currentDate, setCurrentDate] = useState(new Date().toLocaleDateString());
+    const [currentDate, setCurrentDate] = useState(new Date(params.date).toLocaleDateString());
     const [currentViewName, setCurrentViewName] = useState('Day');
     const [data, setData] = useState([]);
 
