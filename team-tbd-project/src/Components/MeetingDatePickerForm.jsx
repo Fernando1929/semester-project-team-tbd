@@ -30,7 +30,7 @@ const mapMemberData = (member, schedule) => {
 
 const mapLeaderData = (leader, schedule) => {
   return {
-    id: member.team_leader_id,
+    id: leader.team_leader_id,
     schedule: schedule,
     preferredStartHours: reformat_time(leader.pref_start_work_hour),
     preferredEndHours: reformat_time(leader.pref_end_work_hour)

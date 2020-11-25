@@ -60,7 +60,7 @@ function UpdateProfileForm(props) {
     const conv_hours = (orig_hours % 12) || 12;
     var res = conv_hours + ":" + time.split(":")[1];
     res = (orig_hours < 12) ? res + " AM" : res + " PM" ;
-    res = (res.split(":")[0].length == 1) ? "0" + res : res ;
+    res = (res.split(":")[0].length === 1) ? "0" + res : res ;
 
     return res;
   }
