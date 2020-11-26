@@ -45,7 +45,7 @@ function TeamProfile() {
   };
 
   // If is true shows the Leader Team page else show a reagular team member page
-  var isLeader = false;
+  var isLeader = true;
   // To control if user voted and wether or not we whow "your vote is required" message
   var voted = true;
 
@@ -59,9 +59,22 @@ function TeamProfile() {
   ];
 
   //Team name
-  var teamName = "Team TBDLLLLLLLLL";
+  var teamName = "Tbd";
   var teamDes =
-    " Insert Team Description here, this must have a restriction that already has been implemented now only renders a certain ammount of words testing testing testing long long long ";
+    " Iaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaanimooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo ";
+  var imageStyle = { marginTop: "55%", marginBottom: "60%", marginLeft: "18%" };
+  if (teamName.length < 8) {
+    imageStyle = { marginTop: "80%", marginBottom: "150%", marginLeft: "18%" };
+    // var temp = imageStyle.marginBottom.substr(
+    //   0,
+    //   imageStyle.marginBottom.length - 1
+    // );
+    // imageStyle.marginBottom = parseInt(temp) + (8 - teamName.length) * 9 + "%";
+    // temp = imageStyle.marginTop.substr(0, imageStyle.marginTop.length - 1);
+    // imageStyle.marginTop = parseInt(temp) + (8 - teamName.length) * 9 + "%";
+  } else {
+    imageStyle = { marginTop: "80%", marginBottom: "80%", marginLeft: "18%" };
+  }
 
   var mostRecent = [
     { name: "12 Nov 2020" },
@@ -108,8 +121,9 @@ function TeamProfile() {
       <div>
         <Container
           fluid
-          className="d-flex align-items-start"
+          className="d-flex align-items-start "
           style={{
+            maxWidth: "auto",
             backgroundImage: "url(" + backgroundH + ")",
             backgroundSize: "100% auto",
             backgroundRepeat: "no-repeat",
@@ -117,49 +131,34 @@ function TeamProfile() {
           }}
         >
           <Row>
-            <Col
-              style={{
-                marginTop: "15%",
-                marginBottom: "10%",
-                marginLeft: "5%",
-                marginRight: "50%",
-              }}
-              sm
-            >
-              <h1 style={{ fontSize: "6vw", color: "#4993FA" }}>
-                {teamName.length > 13
-                  ? teamName.substring(0, 13 - 3) + "..."
+            <Col style={imageStyle} sm>
+              <h1
+                style={{
+                  fontSize: "6vw",
+                  color: "#4993FA",
+                  // marginTop: "40%",
+                }}
+              >
+                {teamName.length > 9
+                  ? teamName.substring(0, 8) + "..."
                   : teamName}
               </h1>
 
-              <h4
-                style={{
-                  fontSize: "1.2vw",
-                  marginTop: "1rem",
-                  fontWeight: "300",
-                }}
-              >
-                {teamDes.length > 140
-                  ? teamDes.substring(0, 140 - 3) + "..."
-                  : teamDes}
-              </h4>
               <div>
                 {isLeader ? (
-                  <h1>
-                    <Button
-                      className="btn--secondary"
-                      variant="primary"
-                      style={{
-                        fontSize: "2vw",
-                        marginBottom: "3rem",
-                        marginTop: "5%",
-                        backgroundColor: "#005792",
-                      }}
-                      onClick={() => setModalShow(true)}
-                    >
-                      New Meeting
-                    </Button>
-                  </h1>
+                  <Button
+                    className="btn--secondary"
+                    variant="primary"
+                    style={{
+                      fontSize: "2vw",
+                      whiteSpace: "nowrap",
+                      backgroundColor: "#005792",
+                      // marginBottom: "140%",
+                    }}
+                    onClick={() => setModalShow(true)}
+                  >
+                    New Meeting
+                  </Button>
                 ) : (
                   <hi>
                     {voted ? (
@@ -167,9 +166,10 @@ function TeamProfile() {
                         className="btn--secondary"
                         style={{
                           fontSize: "2vw",
-                          marginBottom: "1rem",
-                          marginTop: "2rem",
+
                           backgroundColor: "#005792",
+                          whiteSpace: "nowrap",
+                          marginBottom: "1rem",
                         }}
                         onClick={() => setModalShow(true)}
                       >
@@ -182,11 +182,8 @@ function TeamProfile() {
                           marginBottom: "3.5em",
                           marginTop: "2rem",
                         }}
-                      >
-                        {" "}
-                      </h1>
+                      ></h1>
                     )}
-                    {}
                   </hi>
                 )}
 
@@ -209,7 +206,33 @@ function TeamProfile() {
 
       <div className="LearnMore">
         <Container fluid>
-          <h2 style={{ color: "white", marginTop: "1rem" }}>UPCOMING EVENTS</h2>
+          <Row className="AddSchedule d-flex justify-content-start align-items-center">
+            <Card
+              className="text-center"
+              style={{
+                marginRight: "1%",
+                marginLeft: "1%",
+                marginTop: "1%",
+              }}
+            >
+              <Card.Body>
+                <Card.Title>Description</Card.Title>
+                <Card.Text>
+                  <h3
+                    style={{
+                      fontSize: "1.2vw",
+
+                      fontWeight: "400",
+                    }}
+                  >
+                    {teamDes}
+                  </h3>
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Row>
+
+          <h2 style={{ color: "white", marginTop: "1%" }}>UPCOMING EVENTS</h2>
 
           <Row>
             {mostRecent.map((team) => {

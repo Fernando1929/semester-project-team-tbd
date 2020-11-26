@@ -85,7 +85,11 @@ function VoteForm(props) {
         <Button onClick={props.onHide} variant="light">
           Close
         </Button>
-        <Button className="btn--primary" variant="primary">
+        <Button
+          onClick={props.onHide}
+          className="btn--primary"
+          variant="primary"
+        >
           Submit
         </Button>
       </Modal.Footer>
