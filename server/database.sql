@@ -1,6 +1,6 @@
 CREATE DATABASE synclink;
 
-\c synclink;
+\C synclink;
 
 CREATE TABLE account
 (

@@ -14,7 +14,7 @@ export const addMeetingOptionHandler = meeting =>{
 
 export const voteCountUpdateHandler = (meeting) =>{ 
     return axios
-        .put(`http://localhost:3001/api/teams/${meeting.team_id}/meeting_options/${meeting.meeting_option_id}/vote`)
+        .put(`http://localhost:3001/api/teams/${meeting.team_id}/meeting_options/${meeting.meeting_option_id}/vote/${Auth.getUserid}`)
         .then( response => {
             return response
         })
@@ -22,10 +22,11 @@ export const voteCountUpdateHandler = (meeting) =>{
             return err.response
         })
 }
-//Needs team_id
-export const getMeetingOptionsHandler = (team_id) => {// This call the route which runs the algorithm and returns the hours to display for voting
-    return axios
-        .get(`http://localhost:3001/api/teams/${team_id}`)//Fix URL later
+
+export const getMeetingOptionsHandler = (team_id) => {
+        console.log("getMeetingOptionsHandler");
+        return axios
+        .get(`http://localhost:3001/api/teams/${team_id}/meeting_options`)
         .then( response => {
             return response
         })

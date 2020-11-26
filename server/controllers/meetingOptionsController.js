@@ -4,7 +4,7 @@ const addMeetingOption = async (req,res) => {
     try {
         const { event_title, start_date_time, end_date_time, r_rule, ex_dates, vote_count, team_id } = req.body.meeting;
         const newMeetingOpt = await db.query(
-            "INSERT INTO meeting_option (event_title, start_date_time, end_date_time, r_rule, ex_dates, vote_count, team_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+            "INSERT INTO meeting_options (event_title, start_date_time, end_date_time, r_rule, ex_dates, vote_count, team_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
             [event_title, start_date_time, end_date_time, r_rule, ex_dates, vote_count, team_id]
         );
         res.status(201).json(newMeetingOpt.rows[0]);
@@ -15,7 +15,7 @@ const addMeetingOption = async (req,res) => {
 
 const getAllMeetingOptionsByTeamId = async (req,res) => {
     try {
-        const meeting_options = await db.query("SELECT * FROM meeting_option WHERE team_id = $1", [req.params.tid]);
+        const meeting_options = await db.query("SELECT * FROM meeting_options WHERE team_id = $1", [req.params.tid]);
         res.status(200).json({
             status: "success",
             results: meeting_options.rows.length,
@@ -30,7 +30,7 @@ const getAllMeetingOptionsByTeamId = async (req,res) => {
 
 const getMeetingOptionByOptIdAndTeamId = async (req,res) => {
     try {
-        const meeting_option = await db.query("SELECT * FROM meeting_option WHERE team_id = $1 AND meeting_option_id = $2", [req.params.tid, req.params.mid]);
+        const meeting_option = await db.query("SELECT * FROM meeting_options WHERE team_id = $1 AND meeting_option_id = $2", [req.params.tid, req.params.mid]);
         res.status(200).json({
             status: "success",
             results: meeting_option.rows.length,
@@ -65,7 +65,7 @@ const updateMeetingOption = async (req,res) => {
     try {
         const { event_title, start_date_time, end_date_time, r_rule, ex_dates } = req.body.meeting;
         const result = await db.query(
-            "UPDATE meeting_option SET event_title = $1, start_date_time = $2, end_date_time = $3, r_rule = $4, ex_dates = $5 WHERE team_id = $6 AND meeting_option_id = $7 RETURNING *",
+            "UPDATE meeting_options SET event_title = $1, start_date_time = $2, end_date_time = $3, r_rule = $4, ex_dates = $5 WHERE team_id = $6 AND meeting_option_id = $7 RETURNING *",
             [event_title, start_date_time, end_date_time, r_rule, ex_dates, req.params.tid, req.params.mid]
             ); 
 
@@ -83,7 +83,7 @@ const updateMeetingOption = async (req,res) => {
 const updateMeetingVoteCount = async (req,res) => {
     try {
         const result = await db.query(
-            "UPDATE meeting_option SET vote_count = (vote_count + 1) WHERE team_id = $1 AND meeting_option_id = $2 RETURNING *",
+            "UPDATE meeting_options SET vote_count = (vote_count + 1) WHERE team_id = $1 AND meeting_option_id = $2 RETURNING *",
             [req.params.tid, req.params.mid]
             ); 
 

@@ -108,8 +108,8 @@ function MeetingDatePickerForm(props) {
     //   params.teamid,
     // );
 
-    // verify output
-   // console.log(meeting_options);
+    //verify output
+    //console.log(meeting_options);
 
     // insert meeting options (algorithm output) to meeting_options table
     // for (var meeting of meeting_options) {

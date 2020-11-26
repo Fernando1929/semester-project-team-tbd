@@ -2,24 +2,29 @@ import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import "react-datepicker/dist/react-datepicker.css";
 import { addMeetingOptionHandler, getMeetingOptionsHandler, voteCountUpdateHandler } from "../Apis/MeetingOptions";
+import {withRouter} from "react-router-dom";
 
 function VoteForm(props) {
   const { match: { params } } = props;
   const [meeting_options, setMeetingOptions] = React.useState([]);
   const [selected_meeting_id, setSelectedId] = React.useState(null);
+  var Dates = [];
 
   React.useEffect(() =>{//Requested before the page is loaded
     getMeetingOptionsHandler(params.teamid).then(res => {
       if (res.status === 200){
-        setMeetingOptions(res.data.data.meetings);
-      }else{//prints errors
+        let r = [];
+        r =  res.data.data.meetings
+        fixx(r);
+      }else{
         console.log(res.msg);
       }
     }
     )
   },[]);
 
-  const submit = () => {
+  const submit = (e) => {
+    e.prevetDefault();
     // como sacar el id o algo del meeting option seleccionado?
     // como restringirlo a solo una seleccion?
     // maybe un la tabla con solo un slot para llenar osea la opcion escogida (fecha)
@@ -32,19 +37,20 @@ function VoteForm(props) {
 
     //maybe add a way to undo the vote***
     voteCountUpdateHandler(meeting).then((res) => {
-      // if (res.status === 200) {
-      //   console.log("Vote registered.");
-      //   alert("Your vote has been registered.");
-      //   isVotingDone(team_id).then((res) =>{ //verifies if all the team members voted and return the meeting with more votes
-      //     if(res.status === 200){
-      //       //add the meeting to all the team members
-      //       addMeetingToTeamScheduleHandler(meeting).then((res) => {
-      //         //On the backend when adding the meeting to team schedule add on the team_members
-      //       })
-      //       alert("All team members have voted. The meeting with more votes is been added to your schedule.");
-      //     }
-      //     //Do not thing
-      //   });
+      console.log(res);
+      if (res.status === 200) {
+        console.log("Vote registered.");
+        alert("Your vote has been registered.");
+        // isVotingDone(team_id).then((res) =>{ //verifies if all the team members voted and return the meeting with more votes
+        //   if(res.status === 200){
+        //     //add the meeting to all the team members
+        //     addMeetingToTeamScheduleHandler(meeting).then((res) => {
+        //       //On the backend when adding the meeting to team schedule add on the team_members
+        //     })
+        //     alert("All team members have voted. The meeting with more votes is been added to your schedule.");
+        //   }
+        //   //Do not thing
+        // });
 
         
         // update something somewhere in the db to indicate that the team member has voted
@@ -61,49 +67,19 @@ function VoteForm(props) {
         
         props.onHide();
         props.history.push(`/TeamProfile/${params.teamid}`);
-     // }
+      }
     });
   }
 
-  var posibleDates = [
-    {
-      user_schedule_id: 1,
-      event_title: "Free",
-      start_date_time: "2020-11-09T12:00:00.057Z",
-      end_date_time: "2020-11-09T22:00:00.000Z",
-      r_rule: null,
-      ex_dates: null,
-      user_id: 1,
-    },
-    {
-      user_schedule_id: 2,
-      event_title: "Free",
-      start_date_time: "2020-11-09T22:30:00.000Z",
-      end_date_time: "2020-11-10T11:30:30.057Z",
-      r_rule: null,
-      ex_dates: null,
-      user_id: 1,
-    },
-    {
-      user_schedule_id: 3,
-      event_title: "Free",
-      start_date_time: "2020-11-10T21:30:00.000Z",
-      end_date_time: "2020-11-11T11:30:30.057Z",
-      r_rule: null,
-      ex_dates: null,
-      user_id: 1,
-    },
-  ];
-
-  var fixDates = [];
-  {
-    posibleDates.map((date) => {
-      var date = new Date(date.start_date_time);
-      date = date.toLocaleString();
-
-      fixDates.push(date);
-    });
-  }
+  const fixx = (r) => {
+      setMeetingOptions(r);
+      // meeting_options.map((date) => {
+      //   var date = new Date(date.start_date_time);
+      //   date = date.toLocaleString();
+  
+      //   Dates.push(date);
+      // });
+  };
 
   return (
     <Modal
@@ -121,34 +97,35 @@ function VoteForm(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {fixDates.map((date) => {
+      {meeting_options.map((date) => {
+
           return (
             <center>
-              <Button
+              <Button key={meeting_options.indexOf(date)}
                 className="btn--secondary"
                 style={{
                   marginBottom: "10px",
                 }}
               >
-                <Form.Check
+                <Form.Check 
                   style={{
                     color: "white",
                     fontSize: "100%",
                     height: "40%",
                   }}
                   type="checkbox"
-                  label={date}
+                  label={date.event_title}
                 />
               </Button>
             </center>
           );
-        })}
+})}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide} variant="light">
           Close
         </Button>
-        <Button className="btn--primary" variant="primary">
+        <Button className="btn--primary" variant="primary" onClick={(e) => submit()}>
           Submit
         </Button>
       </Modal.Footer>
@@ -156,4 +133,4 @@ function VoteForm(props) {
   );
 }
 
-export default VoteForm;
+export default withRouter(VoteForm);
