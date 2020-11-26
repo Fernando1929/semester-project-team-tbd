@@ -72,3 +72,8 @@ CREATE TABLE meeting_options (
     ex_dates varchar(120),
     vote_count integer,
     team_id integer references team(team_id));
+
+CREATE TABLE meeting_options_votes (
+    meeting_option_id integer references meeting_options(meeting_option_id),
+    team_member_id integer references team_members(team_member_id),
+    primary key(meeting_option_id,team_member_id));
