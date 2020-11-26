@@ -22,7 +22,7 @@ export const voteCountUpdateHandler = (meeting) =>{
             return err.response
         })
 }
-
+//Needs team_id
 export const getMeetingOptionsHandler = (team_id) => {// This call the route which runs the algorithm and returns the hours to display for voting
     return axios
         .get(`http://localhost:3001/api/teams/${team_id}`)//Fix URL later
@@ -33,3 +33,4 @@ export const getMeetingOptionsHandler = (team_id) => {// This call the route whi
             return err.response
         })
 }
+

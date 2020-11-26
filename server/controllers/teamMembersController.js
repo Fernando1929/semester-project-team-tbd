@@ -133,6 +133,19 @@ const getAllMembersExceptLeaderByTeamId = async (req,res) => {
     }
 }
 
+const getTeamMembersScheduleByTeamId = async (req,res) => {// is this query gonna work?? Test for the algorithm
+    try{
+        const teamMembersSchedule = await db.query("SELECT user_schedule FROM user NATURAL INNER JOIN user_schedule NATURAL INNER JOIN team_member NATURAL INNER JOIN team_membership where team_id = $1",[req.params.tid]);
+        res.status(200).json({
+            status: "success",
+            results: teamMembersSchedule.rows.length,
+            data:teamMembersSchedule.rows,
+        })
+    }catch(err){
+        console.log(err);
+    }
+}
+
 // const searchTeamMember =  async (req,res) =>{
 //     try{
 //         const { team}

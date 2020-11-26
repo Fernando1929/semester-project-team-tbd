@@ -90,6 +90,15 @@ const deleteTeamMembership =  async (req,res) =>{
     }
 }
 
+const countTeamMemberships = async (req, res) => {
+    try{
+        const count = await db.query("SELECT COUNT(*) team_members NATURAL INNER JOIN team_membership NATURAL INNER JOIN teams where team_id =$1",[req.params.tmid]);
+        res.status(200).json({count:`${count}`});
+    }catch(err){
+        console.log(err);
+    }
+}
+
 // const searchTeamMembership =  async (req,res) =>{//Needs completion finish later
 //     try{
 //         const { team}
@@ -107,4 +116,5 @@ module.exports = {
     getTeamMembershipByMemberId,
     updateTeamMembership,
     deleteTeamMembership,
+    countTeamMemberships,
 }

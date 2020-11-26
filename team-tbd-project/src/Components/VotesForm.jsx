@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import "react-datepicker/dist/react-datepicker.css";
-import { getMeetingOptionsHandler, voteCountUpdateHandler } from "../Apis/MeetingOptions";
+import { addMeetingOptionHandler, getMeetingOptionsHandler, voteCountUpdateHandler } from "../Apis/MeetingOptions";
 
 function VoteForm(props) {
   const { match: { params } } = props;
@@ -24,14 +24,29 @@ function VoteForm(props) {
     // como restringirlo a solo una seleccion?
     // maybe un la tabla con solo un slot para llenar osea la opcion escogida (fecha)
     // se puede contar por el mismo valor y se puede diferenciar de otras 
-    const meeting = {
+    
+    const meeting = {// no necesitas el member id para votar??
       team_id: params.teamid,
       meeting_option_id: selected_meeting_id,
     };
+
+    //maybe add a way to undo the vote***
     voteCountUpdateHandler(meeting).then((res) => {
-      if (res.status === 200) {
-        console.log("Vote registered.");
-        alert("Your vote has been registered.");
+      // if (res.status === 200) {
+      //   console.log("Vote registered.");
+      //   alert("Your vote has been registered.");
+      //   isVotingDone(team_id).then((res) =>{ //verifies if all the team members voted and return the meeting with more votes
+      //     if(res.status === 200){
+      //       //add the meeting to all the team members
+      //       addMeetingToTeamScheduleHandler(meeting).then((res) => {
+      //         //On the backend when adding the meeting to team schedule add on the team_members
+      //       })
+      //       alert("All team members have voted. The meeting with more votes is been added to your schedule.");
+      //     }
+      //     //Do not thing
+      //   });
+
+        
         // update something somewhere in the db to indicate that the team member has voted
         // votes table for each team ?? and Once the voting has been completed is marked as done cuz data cannot be deleted idk
         
@@ -46,7 +61,7 @@ function VoteForm(props) {
         
         props.onHide();
         props.history.push(`/TeamProfile/${params.teamid}`);
-      }
+     // }
     });
   }
 
@@ -79,6 +94,7 @@ function VoteForm(props) {
       user_id: 1,
     },
   ];
+
   var fixDates = [];
   {
     posibleDates.map((date) => {

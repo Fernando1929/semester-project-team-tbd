@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Modal, Button, InputGroup, FormControl } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { getMeetingHours } from "../Algorithm/CalculateMeetingHour";
+//import { getMeetingHours } from "../Algorithm/CalculateMeetingHour";
 // import { } from "../Apis/Teams";
 import { getLeaderUserInfoHandler, getLeaderScheduleHandler } from "../Apis/TeamLeader";
 import { getMemberScheduleHandler, getAllMembersExceptLeaderHandler } from "../Apis/TeamMembers";
@@ -97,19 +97,19 @@ function MeetingDatePickerForm(props) {
     });
 
     // call algorithm
-    const meeting_options = getMeetingHours(
-      team_members_list,
-      team_leader,
-      selectedDate,
-      selectedDateTo,
-      hours,
-      minutes,
-      "Team Meeting",
-      params.teamid,
-    );
+    // const meeting_options = getMeetingHours(
+    //   team_members_list,
+    //   team_leader,
+    //   selectedDate,
+    //   selectedDateTo,
+    //   hours,
+    //   minutes,
+    //   "Team Meeting",
+    //   params.teamid,
+    // );
 
     // verify output
-    console.log(meeting_options);
+   // console.log(meeting_options);
 
     // insert meeting options (algorithm output) to meeting_options table
     // for (var meeting of meeting_options) {

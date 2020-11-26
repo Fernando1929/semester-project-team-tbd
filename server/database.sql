@@ -1,5 +1,7 @@
 CREATE DATABASE synclink;
 
+\c synclink;
+
 CREATE TABLE account
 (
     account_id serial primary key,
