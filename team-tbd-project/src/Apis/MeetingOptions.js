@@ -3,7 +3,7 @@ import Auth from "../utils/Auth";
 
 export const addMeetingOptionHandler = meeting =>{ 
     return axios
-        .post(`http://localhost:3001/api/teams/${meeting.team_id}/meeting_options`,{meeting})
+        .post(`/api/teams/${meeting.team_id}/meeting_options`,{meeting})
         .then( response => {
             return response
         })
@@ -14,7 +14,7 @@ export const addMeetingOptionHandler = meeting =>{
 
 export const voteCountUpdateHandler = (meeting) =>{ 
     return axios
-        .put(`http://localhost:3001/api/teams/${meeting.team_id}/meeting_options/${meeting.meeting_option_id}/votes`)
+        .put(`/api/teams/${meeting.team_id}/meeting_options/${meeting.meeting_option_id}/votes`)
         .then( response => {
             return response
         })
@@ -25,7 +25,7 @@ export const voteCountUpdateHandler = (meeting) =>{
 
 export const getMeetingOptionsHandler = (team_id) => {
         return axios
-        .get(`http://localhost:3001/api/teams/${team_id}/meeting_options`)
+        .get(`/api/teams/${team_id}/meeting_options`)
         .then( response => {
             return response
         })
@@ -36,7 +36,7 @@ export const getMeetingOptionsHandler = (team_id) => {
 
 export const voteHandler = (vote) => {
     return axios
-    .post(`http://localhost:3001/api/vote/meeting_options`,{vote})  
+    .post(`/api/vote/meeting_options`,{vote})  
     .then( response => {
         return response
     })
@@ -47,7 +47,7 @@ export const voteHandler = (vote) => {
 
 export const isVotingDoneHandler = (team_id) => {
     return axios
-    .get(`http://localhost:3001/api/vote/team/${team_id}/meeting_options/currentState`)
+    .get(`/api/vote/team/${team_id}/meeting_options/currentState`)
     .then( response => {
         return response
     })
@@ -58,7 +58,7 @@ export const isVotingDoneHandler = (team_id) => {
 
 export const getFinalMeetingHandler = (team_id) => {
     return axios
-    .get(`http://localhost:3001/api/vote/team/${team_id}/meeting_options/final`)
+    .get(`/api/vote/team/${team_id}/meeting_options/final`)
     .then( response => {
         return response
     })
@@ -69,7 +69,7 @@ export const getFinalMeetingHandler = (team_id) => {
 
 export const voteCheckHandler = (team_id) => {
     return axios
-    .get(`http://localhost:3001/api/vote/team/${team_id}/team_member/${Auth.getUserid()}`)
+    .get(`/api/vote/team/${team_id}/team_member/${Auth.getUserid()}`)
     .then( response => {
         return response
     })
@@ -80,7 +80,7 @@ export const voteCheckHandler = (team_id) => {
 
 export const deleteVotesByTeamHandler = (team_id) => {
     return axios
-    .delete(`http://localhost:3001/api/vote/team/${team_id}/meeting_options/delete`)
+    .delete(`/api/vote/team/${team_id}/meeting_options/delete`)
     .then( response => {
         return response
     })
@@ -91,7 +91,7 @@ export const deleteVotesByTeamHandler = (team_id) => {
 
 export const deleteOptionsByTeamHandler = (team_id) => {
     return axios
-    .delete(`http://localhost:3001/api/teams/${team_id}/meeting_options`)
+    .delete(`/api/teams/${team_id}/meeting_options`)
     .then( response => {
         return response
     })

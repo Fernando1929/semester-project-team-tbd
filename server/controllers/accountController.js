@@ -1,6 +1,7 @@
 const db = require("../../db");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+require("dotenv").config();
 const authTokens = {};
 
 const signup = async (req, res) => {
@@ -111,7 +112,7 @@ const validateAccount = async (req, res) => {
     );
 
     res.status(200);
-    res.redirect("http://localhost:3000/LogIn");
+    //res.redirect("http://localhost:3000/LogIn");
   } catch (err) {
     console.log(err);
   }

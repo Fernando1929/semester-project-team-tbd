@@ -3,7 +3,7 @@ import Auth from "../utils/Auth";
 
 export const addTeamLeaderHandler = (user_id) => {
     return axios
-        .post(`http://localhost:3001/api/teams/1/team_leader`, {user_id}) // change to team id
+        .post(`/api/teams/1/team_leader`, {user_id}) // change to team id
         .then( response => {
             return response
         })
@@ -14,7 +14,7 @@ export const addTeamLeaderHandler = (user_id) => {
 
 export const addTeamLeaderAsMemberHandler = (user_id) => {
     return axios
-        .post(`http://localhost:3001/api/teams/1/team_members`, {user_id}) // change to team id
+        .post(`/api/teams/1/team_members`, {user_id}) // change to team id
         .then( response => {
             return response
         })
@@ -25,7 +25,7 @@ export const addTeamLeaderAsMemberHandler = (user_id) => {
 
 export const getLeaderIdByUserIdHandler = (user_id) => {
     return axios
-        .get(`http://localhost:3001/api/teams/team_leader/${user_id}`)
+        .get(`/api/teams/team_leader/${user_id}`)
         .then( response => {
             return response
         })
@@ -36,7 +36,7 @@ export const getLeaderIdByUserIdHandler = (user_id) => {
 
 export const getTeamLeaderUserIdHandler = (team_id) => {
     return axios
-        .get(`http://localhost:3001/api/teams/${team_id}/team_leader`)
+        .get(`/api/teams/${team_id}/team_leader`)
         .then( response => {
             return response
         })
@@ -47,7 +47,7 @@ export const getTeamLeaderUserIdHandler = (team_id) => {
 
 export const getLeaderUserInfoHandler = () => {
     return axios
-        .get(`http://localhost:3001/api/users/${Auth.getUserid()}`)
+        .get(`/api/users/${Auth.getUserid()}`)
         .then( response => {
             return response
         })
@@ -58,7 +58,7 @@ export const getLeaderUserInfoHandler = () => {
 
 export const getLeaderScheduleHandler = () =>{ 
     return axios
-        .get(`http://localhost:3001/api/users/${Auth.getUserid()}/schedule`)
+        .get(`/api/users/${Auth.getUserid()}/schedule`)
         .then( response => {
             return response
         })

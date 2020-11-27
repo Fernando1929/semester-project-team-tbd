@@ -4,7 +4,7 @@ import Auth from "../utils/Auth";
 
 export const addTeamHandler = (team) => {
     return axios
-        .post(`http://localhost:3001/api/teams`, {team})
+        .post(`/api/teams`, {team})
         .then( response => {
             return response
         })
@@ -15,7 +15,7 @@ export const addTeamHandler = (team) => {
 
 export const teamGetHandler = (team_id) => {
     return axios
-        .get(`http://localhost:3001/api/teams/${team_id}`)
+        .get(`/api/teams/${team_id}`)
         .then( response => {
             return response.data
         })
@@ -26,7 +26,7 @@ export const teamGetHandler = (team_id) => {
 
 export const teamGetAllInfoHandler = (team_id) => { // MUST UPDATE TO ADD VOTING AND SCHEDULE INFO
     return axios
-        .get(`http://localhost:3001/api/teams/${team_id}/allinfo`)
+        .get(`/api/teams/${team_id}/allinfo`)
         .then( response => {
             return response
         })
@@ -37,7 +37,7 @@ export const teamGetAllInfoHandler = (team_id) => { // MUST UPDATE TO ADD VOTING
 
 export const teamUpdateHandler = (team) => {
     return axios
-        .put(`http://localhost:3001/api/teams/${team.team_id}`, {team})
+        .put(`/api/teams/${team.team_id}`, {team})
         .then( response => {
             return response
         })
@@ -48,7 +48,7 @@ export const teamUpdateHandler = (team) => {
 
 export const getUserIdByEmailHandler = (email) => {
     return axios
-        .get(`http://localhost:3001/api/users/${email}/by_email`)
+        .get(`/api/users/${email}/by_email`)
         .then( response => {
             return response
         })
@@ -59,7 +59,7 @@ export const getUserIdByEmailHandler = (email) => {
 
 export const getUserTeamsHandler = () => {
     return axios
-        .get(`http://localhost:3001/api/teams/user/${Auth.getUserid()}`)
+        .get(`/api/teams/user/${Auth.getUserid()}`)
         .then( response => {
             return response
         })
@@ -70,7 +70,7 @@ export const getUserTeamsHandler = () => {
 
 export const getRecentUserTeamsHandler = () => {
     return axios
-        .get(`http://localhost:3001/api/teams/user/${Auth.getUserid()}/recent`)
+        .get(`/api/teams/user/${Auth.getUserid()}/recent`)
         .then( response => {
             return response
         })

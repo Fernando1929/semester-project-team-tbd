@@ -36,7 +36,7 @@ export const profileEmailUpdateHandler = (account) => {
 
 export const profilePictureUpdateHandler = (formData, config) => {
     return axios
-        .put(`http://localhost:3001/api/users/${Auth.getUserid()}/picture`, formData, config)
+        .put(`/api/users/${Auth.getUserid()}/picture`, formData, config)
         .then( response => {
             return response
         })

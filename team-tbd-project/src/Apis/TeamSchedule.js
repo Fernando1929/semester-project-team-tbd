@@ -13,7 +13,7 @@ import axios from 'axios';
 
 export const getMostRecentEventsHandler = (team_id) =>{ 
     return axios
-        .get(`http://localhost:3001/api/teams/${team_id}/schedule/recent`)
+        .get(`/api/teams/${team_id}/schedule/recent`)
         .then( response => {
             return response
         })
@@ -25,7 +25,7 @@ export const getMostRecentEventsHandler = (team_id) =>{
 export const addMeetingToTeamScheduleHandler = appointment =>{ 
     console.log(appointment);
     return axios
-        .post(`http://localhost:3001/api/teams/${appointment.team_id}/schedule`,appointment)
+        .post(`/api/teams/${appointment.team_id}/schedule`,appointment)
         .then( response => {
             return response
         })
