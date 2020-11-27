@@ -172,6 +172,20 @@ function TeamProfile(props) {
   //   { id: 5, name: "18-Nov-2020" },
   // ];
 
+  var imageStyle = { marginTop: "55%", marginBottom: "60%", marginLeft: "18%" };
+  if (team_name.length < 8) {
+    imageStyle = { marginTop: "80%", marginBottom: "150%", marginLeft: "18%" };
+    // var temp = imageStyle.marginBottom.substr(
+    //   0,
+    //   imageStyle.marginBottom.length - 1
+    // );
+    // imageStyle.marginBottom = parseInt(temp) + (8 - teamName.length) * 9 + "%";
+    // temp = imageStyle.marginTop.substr(0, imageStyle.marginTop.length - 1);
+    // imageStyle.marginTop = parseInt(temp) + (8 - teamName.length) * 9 + "%";
+  } else {
+    imageStyle = { marginTop: "80%", marginBottom: "80%", marginLeft: "18%" };
+  }
+
   var teamStyle = {
     marginTop: "1rem",
     marginBottom: "1rem",
@@ -218,8 +232,9 @@ function TeamProfile(props) {
       <div>
         <Container
           fluid
-          className="d-flex align-items-start"
+          className="d-flex align-items-start "
           style={{
+            maxWidth: "auto",
             backgroundImage: "url(" + backgroundH + ")",
             backgroundSize: "100% auto",
             backgroundRepeat: "no-repeat",
@@ -227,49 +242,34 @@ function TeamProfile(props) {
           }}
         >
           <Row>
-            <Col
-              style={{
-                marginTop: "15%",
-                marginBottom: "10%",
-                marginLeft: "5%",
-                marginRight: "50%",
-              }}
-              sm
-            >
-              <h1 style={{ fontSize: "6vw", color: "#4993FA" }}>
-                {team_name.length > 13
-                  ? team_name.substring(0, 13 - 3) + "..."
+            <Col style={imageStyle} sm>
+              <h1
+                style={{
+                  fontSize: "6vw",
+                  color: "#4993FA",
+                  // marginTop: "40%",
+                }}
+              >
+                {team_name.length > 9
+                  ? team_name.substring(0, 8) + "..."
                   : team_name}
               </h1>
 
-              <h4
-                style={{
-                  fontSize: "1.2vw",
-                  marginTop: "1rem",
-                  fontWeight: "300",
-                }}
-              >
-                {team_description.length > 140
-                  ? team_description.substring(0, 140 - 3) + "..."
-                  : team_description}
-              </h4>
               <div>
                 {is_leader ? (
-                  <h1>
-                    <Button
-                      className="btn--secondary"
-                      variant="primary"
-                      style={{
-                        fontSize: "2vw",
-                        marginBottom: "3rem",
-                        marginTop: "5%",
-                        backgroundColor: "#005792",
-                      }}
-                      onClick={() => setModalShow(true)}
-                    >
-                      New Meeting
-                    </Button>
-                  </h1>
+                  <Button
+                    className="btn--secondary"
+                    variant="primary"
+                    style={{
+                      fontSize: "2vw",
+                      whiteSpace: "nowrap",
+                      backgroundColor: "#005792",
+                      // marginBottom: "140%",
+                    }}
+                    onClick={() => setModalShow(true)}
+                  >
+                    New Meeting
+                  </Button>
                 ) : (
                   <h1>
                     {showVoting ? (
@@ -277,9 +277,10 @@ function TeamProfile(props) {
                         className="btn--secondary"
                         style={{
                           fontSize: "2vw",
-                          marginBottom: "1rem",
-                          marginTop: "2rem",
+
                           backgroundColor: "#005792",
+                          whiteSpace: "nowrap",
+                          marginBottom: "1rem",
                         }}
                         onClick={() => setModalShow(true)}
                       >
@@ -292,11 +293,8 @@ function TeamProfile(props) {
                           marginBottom: "3.5em",
                           marginTop: "2rem",
                         }}
-                      >
-                        {" "}
-                      </h1>
+                      ></h1>
                     )}
-                    {}
                   </h1>
                 )}
 
@@ -321,7 +319,33 @@ function TeamProfile(props) {
 
       <div className="LearnMore">
         <Container fluid>
-          <h2 style={{ color: "white", marginTop: "1rem" }}>UPCOMING EVENTS</h2>
+          <Row className="AddSchedule d-flex justify-content-start align-items-center">
+            <Card
+              className="text-center"
+              style={{
+                marginRight: "1%",
+                marginLeft: "1%",
+                marginTop: "1%",
+              }}
+            >
+              <Card.Body>
+                <Card.Title>Description</Card.Title>
+                <Card.Text>
+                  <h3
+                    style={{
+                      fontSize: "1.2vw",
+
+                      fontWeight: "400",
+                    }}
+                  >
+                    {team_description}
+                  </h3>
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Row>
+
+          <h2 style={{ color: "white", marginTop: "1%" }}>UPCOMING EVENTS</h2>
 
           <Row>
             {recent_events.map((event) => {
