@@ -13,7 +13,6 @@ export const addTeamMembershipHandler = (team_membership) => {
 }
 
 export const membershipDeleteHandler = (team_membership) =>{ 
-    // console.log(team_membership);
     return axios
         .delete(`http://localhost:3001/api/teams/${team_membership.team_id}/team_membership/${team_membership.team_member_id}`) 
         .then( response => {

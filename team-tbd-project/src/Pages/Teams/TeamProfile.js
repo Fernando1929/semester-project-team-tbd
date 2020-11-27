@@ -12,6 +12,7 @@ import { getTeamLeaderUserIdHandler } from "../../Apis/TeamLeader";
 import { addTeamMembershipHandler, membershipDeleteHandler } from "../../Apis/TeamMembership";
 import { getMostRecentEventsHandler } from "../../Apis/TeamSchedule";
 import { getMeetingOptions } from "../../Apis/MeetingOptions";
+import { withRouter } from "react-router-dom";
 
 import {
   Button,
@@ -24,17 +25,6 @@ import {
   InputGroup,
   FormControl,
 } from "react-bootstrap";
-// ToDO List:
-// 1. Implement remove button for when a leader wants to reamove a member
-// 2. For members give them an alert when they vote and remove the vote button affter they do so
-// 3. Complete DatePicker---------------------------------------------------------------------------------DONE
-// 4.Control The characters on the Team name and descripiton of the team------------------------------Done
-// 5. Are U Sure to Remove Candidate (POP UP)
-// 6.Find a way to control the lenght of the name so i does not overlap with the bk image-------------Done
-// 7. pq el navbar no corre luego que lo abres una vez
-// 8. Poner el boton en base al el voto------------------------Done
-
-// Dependencies to install: Install New Dependencies npm install react-bootstrap-date-picker,npm i react-notification-timeline, npm i react-confirm-alert
 
 const mapTeamMemberData = member => ({
   id: member.team_member_id,
@@ -60,7 +50,7 @@ function TeamProfile(props) {
 
   const { match: { params } } = props;
   const [modalShow, setModalShow] = React.useState(false);
-  const [em, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   // const [data, setData] = useState([]);
   const [team_members, setTeamMembers] = useState([]);
   const [recent_events, setRecentEvents] = useState([]);
@@ -113,8 +103,11 @@ function TeamProfile(props) {
 
   const addMember = (e) => {
     e.preventDefault();
-    getUserIdByEmailHandler(em).then((res => {
-      if (res.status === 200) {
+    if(email.length === 0){
+        alert("Enter an email");
+    }else{
+    getUserIdByEmailHandler(email).then((res => { //change to send an object instead of sending the email in the URL
+      if (res.status === 200) {///Verify undefined
         const user_id = res.data.data.user.user_id;
         addTeamMemberHandler(user_id).then((res) => {
           if (res.status === 201) {
@@ -125,7 +118,8 @@ function TeamProfile(props) {
             addTeamMembershipHandler(team_membership).then((res) => {
               if (res.status === 201) {
                 console.log("new member added"); //woop
-                window.location.assign(`/TeamProfile/${params.teamid}`);
+                props.history.push(`/TeamProfile/${params.teamid}`);
+                window.location.reload();
               }
             });
           }
@@ -139,7 +133,7 @@ function TeamProfile(props) {
                 addTeamMembershipHandler(team_membership).then((res) => {
                   if (res.status === 201) {
                     console.log("new member added"); //woop
-                    window.location.assign(`/TeamProfile/${params.teamid}`);
+                    window.location.reload();
                   }
                 });
               }
@@ -147,7 +141,8 @@ function TeamProfile(props) {
           }
         });
       }
-    }));
+    })); 
+    }
   };
 
   // If is true shows the Leader Team page else show a reagular team member page
@@ -213,8 +208,9 @@ function TeamProfile(props) {
     membershipDeleteHandler(team_membership).then((res) => {
       if (res.status === 204) {
         console.log("membership deleted");
-        alert("Team member removed.");
-        window.location.assign(`/TeamProfile/${params.teamid}`);
+        //alert("Team member removed.");
+        //props.history.push(`/TeamProfile/${params.teamid}`);
+        window.location.reload();
       }
     });
   }
@@ -303,19 +299,19 @@ function TeamProfile(props) {
                   </h1>
                 )}
 
-                {is_leader ? (
+                {/* {is_leader ? (
                   <MeetingDatePickerForm
                     {...props}
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                   />
-                ) : (
+                ) : ( */}
                   <VotesForm
                     {...props}
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                   />
-                )}
+                {/* )} */}
               </div>
             </Col>
           </Row>
@@ -448,8 +444,8 @@ function TeamProfile(props) {
                 type="email"
                 id="Email"
                 placeholder="Email"
-                value={em}
-                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value.toLocaleLowerCase())}
               />
             </InputGroup>
           </Col>
@@ -471,4 +467,4 @@ function TeamProfile(props) {
   );
 }
 
-export default TeamProfile;
+export default withRouter(TeamProfile);

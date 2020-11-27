@@ -1,4 +1,6 @@
+const { query } = require("express");
 const db = require("../db/index");
+const team_membership = require("./teamMembershipController");
 
 const addMeetingOption = async (req,res) => {
     try {
@@ -30,7 +32,7 @@ const getAllMeetingOptionsByTeamId = async (req,res) => {
 
 const getMeetingOptionByOptIdAndTeamId = async (req,res) => {
     try {
-        const meeting_option = await db.query("SELECT * FROM meeting_option WHERE team_id = $1 AND meeting_option_id = $2", [req.params.tid, req.params.mid]);
+        const meeting_option = await db.query("SELECT * FROM meeting_options WHERE team_id = $1 AND meeting_option_id = $2", [req.params.tid, req.params.mid]);
         res.status(200).json({
             status: "success",
             results: meeting_option.rows.length,
@@ -65,7 +67,7 @@ const updateMeetingOption = async (req,res) => {
     try {
         const { event_title, start_date_time, end_date_time, r_rule, ex_dates } = req.body.meeting;
         const result = await db.query(
-            "UPDATE meeting_option SET event_title = $1, start_date_time = $2, end_date_time = $3, r_rule = $4, ex_dates = $5 WHERE team_id = $6 AND meeting_option_id = $7 RETURNING *",
+            "UPDATE meeting_options SET event_title = $1, start_date_time = $2, end_date_time = $3, r_rule = $4, ex_dates = $5 WHERE team_id = $6 AND meeting_option_id = $7 RETURNING *",
             [event_title, start_date_time, end_date_time, r_rule, ex_dates, req.params.tid, req.params.mid]
             ); 
 
@@ -83,7 +85,7 @@ const updateMeetingOption = async (req,res) => {
 const updateMeetingVoteCount = async (req,res) => {
     try {
         const result = await db.query(
-            "UPDATE meeting_option SET vote_count = (vote_count + 1) WHERE team_id = $1 AND meeting_option_id = $2 RETURNING *",
+            "UPDATE meeting_options SET vote_count = (vote_count + 1) WHERE team_id = $1 AND meeting_option_id = $2 RETURNING *",
             [req.params.tid, req.params.mid]
             ); 
 
