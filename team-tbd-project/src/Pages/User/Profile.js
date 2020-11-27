@@ -17,6 +17,15 @@ const textStyle = {
   marginLeft: "1rem",
 };
 
+const reformat_time = (time) => {
+  const orig_hours = parseInt(time.split(":")[0]);
+  const conv_hours = (orig_hours % 12) || 12;
+  var res = conv_hours + ":" + time.split(":")[1];
+  res = (orig_hours < 12) ? res + " AM" : res + " PM" ;
+
+  return res;
+}
+
 function Profile() {
   const [modalShow, setModalShow] = React.useState(false);
   const [user, setUser] = React.useState({});
@@ -85,7 +94,10 @@ function Profile() {
 
                 <Row className="justify-content-right">
                   <h5 style={sectionText}>Working Hours:</h5>
-                  <h4 style={textStyle}>{user.pref_start_work_hour + " - " + user.pref_end_work_hour}</h4>
+                  <h4 style={textStyle}>
+                    {(user.pref_start_work_hour && user.pref_end_work_hour) ? 
+                      reformat_time(user.pref_start_work_hour) + " - " + reformat_time(user.pref_end_work_hour) : ""}
+                  </h4>
                 </Row>
 
                 <Row className="justify-content-right">

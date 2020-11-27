@@ -164,14 +164,6 @@ function TeamProfile(props) {
     "#66D6F5",
   ];
 
-  // var mostRecent = [
-  //   { id: 1, name: "12-Nov-2020" },
-  //   { id: 2, name: "13-Nov-2020" },
-  //   { id: 3, name: "15-Nov-2020" },
-  //   { id: 4, name: "18-Nov-2020" },
-  //   { id: 5, name: "18-Nov-2020" },
-  // ];
-
   var imageStyle = { marginTop: "55%", marginBottom: "60%", marginLeft: "18%" };
   if (team_name.length < 8) {
     imageStyle = { marginTop: "80%", marginBottom: "150%", marginLeft: "18%" };
@@ -254,6 +246,19 @@ function TeamProfile(props) {
                   ? team_name.substring(0, 8) + "..."
                   : team_name}
               </h1>
+              {/* <h4
+                style={{
+                  fontSize: "1.5vw",
+                  marginTop: "1rem",
+                  marginBottom: "1rem",
+                  marginLeft: "0.5rem",
+                  fontWeight: "300",
+                }}
+              >
+                {team_description.length > 140
+                  ? team_description.substring(0, 140 - 3) + "..."
+                  : team_description}
+              </h4> */}
 
               <div>
                 {is_leader ? (
@@ -319,7 +324,7 @@ function TeamProfile(props) {
 
       <div className="LearnMore">
         <Container fluid>
-          <Row className="AddSchedule d-flex justify-content-start align-items-center">
+          {/* <Row className="AddSchedule d-flex justify-content-start align-items-center">
             <Card
               className="text-center"
               style={{
@@ -343,7 +348,7 @@ function TeamProfile(props) {
                 </Card.Text>
               </Card.Body>
             </Card>
-          </Row>
+          </Row> */}
 
           <h2 style={{ color: "white", marginTop: "1%" }}>UPCOMING EVENTS</h2>
 

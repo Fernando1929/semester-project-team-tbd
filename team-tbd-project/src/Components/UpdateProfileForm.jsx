@@ -23,8 +23,8 @@ function UpdateProfileForm(props) {
   const [lastname, setLastname] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [phone, setPhone] = React.useState("");
-  const [startWorkingHour, setStartWorkingHour] = React.useState("");
-  const [endWorkingHour, setEndWorkingHour] = React.useState("");
+  const [startWorkingHour, setStartWorkingHour] = React.useState(null);
+  const [endWorkingHour, setEndWorkingHour] = React.useState(null);
   const [location, setLocation] = React.useState("");
   const [bio, setBio] = React.useState("");
   const [profile_picture, setProfilePicture] = React.useState("");
@@ -32,27 +32,28 @@ function UpdateProfileForm(props) {
   React.useEffect(() => {
     profileGetHandler().then((res) => {
       const user = res.data.user;
-      if(user !== undefined) {
-      setFirstname(user.user_firstname);
-      setLastname(user.user_lastname);
-      setEmail(user.email);
-      setPhone(user.user_phone);
-      setLocation(user.user_location);
-      setBio(user.user_bio);
 
-      if(user.pref_start_work_hour !== undefined) {
-        // setStartWorkingHour(reformat_time(user.pref_start_work_hour));
-      }
-      if (user.pref_end_work_hour !== undefined) {
-        // setEndWorkingHour(reformat_time(user.pref_end_end_hour));
-      }
-      
-      if (user.profile_picture) {
-        setProfilePicture("http://localhost:3001/" + user.profile_picture);
-      }
-      else {
-        setProfilePicture(placeholder);
-      }
+      if(user !== undefined) {
+        setFirstname(user.user_firstname);
+        setLastname(user.user_lastname);
+        setEmail(user.email);
+        setPhone(user.user_phone);
+        setLocation(user.user_location);
+        setBio(user.user_bio);
+
+        if(user.pref_start_work_hour !== undefined && user.pref_start_work_hour !== null) {
+          setStartWorkingHour(reformat_time(user.pref_start_work_hour));
+        }
+        if (user.pref_end_work_hour !== undefined && user.pref_end_work_hour !== null) {
+          setEndWorkingHour(reformat_time(user.pref_end_work_hour));
+        }
+        
+        if (user.profile_picture) {
+          setProfilePicture("http://localhost:3001/" + user.profile_picture);
+        }
+        else {
+          setProfilePicture(placeholder);
+        }
     }
     else {
       setProfilePicture(placeholder);
@@ -64,7 +65,6 @@ function UpdateProfileForm(props) {
     const orig_hours = parseInt(time.split(":")[0]);
     const conv_hours = (orig_hours % 12) || 12;
     var res = conv_hours + ":" + time.split(":")[1];
-    res = (orig_hours < 12) ? res + " AM" : res + " PM" ;
     res = (res.split(":")[0].length == 1) ? "0" + res : res ;
 
     return res;
