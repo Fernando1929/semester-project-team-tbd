@@ -1,5 +1,7 @@
-import alasql from "alasql";
-import rrule from "rrule";
+// import alasql from "alasql";
+// import rrule from "rrule";
+const alasql = require("alasql");
+const rrule = require("rrule");
 
 // Created by Yaritza M. García Chaparro for INSO4101 class project
 

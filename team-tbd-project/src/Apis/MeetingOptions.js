@@ -22,3 +22,14 @@ export const voteCountUpdateHandler = (meeting) =>{
             return err.response
         })
 }
+
+export const getMeetingOptions = (team_id) =>{ 
+    return axios
+        .get(`http://localhost:3001/api/teams/${team_id}/meeting_options`)
+        .then( response => {
+            return response
+        })
+        .catch(err => {
+            return err.response
+        })
+}

@@ -11,6 +11,7 @@ import { addTeamMemberHandler, getMemberIdByUserIdHandler } from "../../Apis/Tea
 import { getTeamLeaderUserIdHandler } from "../../Apis/TeamLeader";
 import { addTeamMembershipHandler, membershipDeleteHandler } from "../../Apis/TeamMembership";
 import { getMostRecentEventsHandler } from "../../Apis/TeamSchedule";
+import { getMeetingOptions } from "../../Apis/MeetingOptions";
 
 import {
   Button,
@@ -66,6 +67,7 @@ function TeamProfile(props) {
   const [team_name, setTeamName] = useState("");
   const [team_description, setTeamDescription] = useState("");
   const [is_leader, setIsLeader] = useState(false);
+  const [showVoting, setVoting] = useState(false);
 
   useEffect(() => {
     // remember to set boolean values (is_leader, voted) and recent events from schedule
@@ -91,6 +93,16 @@ function TeamProfile(props) {
   }, [params.teamid]);
 
   useEffect(() => {
+    getMeetingOptions(params.teamid).then((res) => {
+      if (res.status === 200) {
+        if (res.data.results !== 0) {
+          setVoting(true);
+        }
+      }
+    });
+  }, [params.teamid]);
+
+  useEffect(() => {
     getMostRecentEventsHandler(params.teamid).then((res) => {
       if (res.status === 200) {
         const events = res.data.data.events;
@@ -101,7 +113,6 @@ function TeamProfile(props) {
 
   const addMember = (e) => {
     e.preventDefault();
-    // console.log("Add a member", em);
     getUserIdByEmailHandler(em).then((res => {
       if (res.status === 200) {
         const user_id = res.data.data.user.user_id;
@@ -142,7 +153,7 @@ function TeamProfile(props) {
   // If is true shows the Leader Team page else show a reagular team member page
   // var isLeader = false;
   // To control if user voted and wether or not we whow "your vote is required" message
-  var voted = true;
+  // var voted = true;
 
   var counterColors = 0;
   var mostRecentColors = [
@@ -261,7 +272,7 @@ function TeamProfile(props) {
                   </h1>
                 ) : (
                   <h1>
-                    {voted ? (
+                    {showVoting ? (
                       <Button
                         className="btn--secondary"
                         style={{
@@ -297,6 +308,7 @@ function TeamProfile(props) {
                   />
                 ) : (
                   <VotesForm
+                    {...props}
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                   />

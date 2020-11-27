@@ -12,8 +12,7 @@ import { addMeetingOptionHandler } from "../Apis/MeetingOptions";
 
 const reformat_time = (time) => {
   const orig_hours = parseInt(time.split(":")[0]);
-  const conv_hours = (orig_hours % 12) || 12;
-  var res = conv_hours + ":" + time.split(":")[1];
+  var res = orig_hours + ":" + time.split(":")[1];
 
   return res;
 }
@@ -30,7 +29,7 @@ const mapMemberData = (member, schedule) => {
 
 const mapLeaderData = (leader, schedule) => {
   return {
-    id: member.team_leader_id,
+    id: leader.user_id,
     schedule: schedule,
     preferredStartHours: reformat_time(leader.pref_start_work_hour),
     preferredEndHours: reformat_time(leader.pref_end_work_hour)
@@ -57,73 +56,59 @@ function MeetingDatePickerForm(props) {
     r_rule: meeting.r_rule,
     ex_dates: meeting.ex_dates,
     vote_count: 0,
-    team_id: params.teamid
+    team_id: parseInt(params.teamid)
   });
 
-  const generateMeeting = (e) => {
-    e.preventDefault();
-    const hours = parseInt(duration.split(":")[0]);
-    const minutes = parseInt(duration.split(":")[1]);
-
-    // gather and format all necessary data for algorithm function
-    let team_members_list = [];
-    let team_leader = {};
-
-    getLeaderScheduleHandler().then((res) => {
-      if (res.status === 200) {
-        const lead_sched = res.data.data.schedule;
-
-        getLeaderUserInfoHandler().then((res) => {
-          if (res.status === 200) {
-            team_leader = mapLeaderData(res.data.data.user, lead_sched);
-
-            getAllMembersExceptLeaderHandler(params.teamid).then((res) => { // test this handler
-              if(res.status === 200) {
-                let member_sched = [];
-
-                for (var team_member of res.data.data) {
-                  getMemberScheduleHandler(team_member.user_id).then((res) => {
-                    if (res.status === 200) {
-                      member_sched = res.data.data.schedule;
-                      team_members_list.push(mapMemberData(team_member, member_sched));
-                    }
-                  });
-                }
-              }
-            });
-          }
-        });
+  const buildmemberlist = async (members) => {
+    try {
+      var result = [];
+      for (var team_member of members) {
+        const response = (await getMemberScheduleHandler(team_member.user_id)).valueOf();
+        const member_sched = response.data.data.schedule;
+        result.push(mapMemberData(team_member, member_sched));
       }
-    });
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-    // call algorithm
-    const meeting_options = getMeetingHours(
-      team_members_list,
-      team_leader,
-      selectedDate,
-      selectedDateTo,
-      hours,
-      minutes,
-      "Team Meeting",
-      params.teamid,
-    );
+  const generateMeeting = async(e) => {
+    try {
+      e.preventDefault();
+      const hours = parseInt(duration.split(":")[0]);
+      const minutes = parseInt(duration.split(":")[1]);
 
-    // verify output
-    console.log(meeting_options);
+      const lead_sched = (await getLeaderScheduleHandler()).valueOf().data.data.schedule;
+      const team_leader = mapLeaderData((await getLeaderUserInfoHandler()).valueOf().data.data.user, lead_sched);
+      const absolute_members = (await getAllMembersExceptLeaderHandler(params.teamid)).valueOf().data.data.members;
+      const team_members_list = await buildmemberlist(absolute_members);
 
-    // insert meeting options (algorithm output) to meeting_options table
-    // for (var meeting of meeting_options) {
-    //   addMeetingOptionHandler(meeting.map(mapMeetingOptData)).then((res) => {
-    //     if (res.status === 201) {
-    //       console.log("Meeting option added");
-    //     }
-    //   });
-    // }
+      const meeting_options = getMeetingHours(
+        team_members_list,
+        team_leader,
+        new Date(selectedDate).toISOString(),
+        new Date(selectedDateTo).toISOString(),
+        hours,
+        minutes,
+        "Team Meeting",
+        params.teamid,
+      ).map(mapMeetingOptData);
 
-    alert("Meeting generation successful. \nThe voting process has begun.");
-    props.onHide();
-    props.history.push(`/TeamProfile/${params.teamid}`);
+      // verify output
+      console.log(meeting_options);
 
+      for (var meeting of meeting_options) {
+        await addMeetingOptionHandler(meeting);
+      }
+
+      alert("Meeting generation successful. \nThe voting process has begun.");
+      props.onHide();
+      props.history.push(`/TeamProfile/${params.teamid}`);
+
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

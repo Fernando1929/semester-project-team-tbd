@@ -123,7 +123,7 @@ const getAllMembersExceptLeaderByTeamId = async (req,res) => {
         [req.params.tid,req.params.tid]);
         res.status(200).json({
             status: "success",
-            results: teams.rows.length,
+            results: members.rows.length,
             data: {
                 members: members.rows
             },

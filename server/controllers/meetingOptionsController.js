@@ -4,7 +4,7 @@ const addMeetingOption = async (req,res) => {
     try {
         const { event_title, start_date_time, end_date_time, r_rule, ex_dates, vote_count, team_id } = req.body.meeting;
         const newMeetingOpt = await db.query(
-            "INSERT INTO meeting_option (event_title, start_date_time, end_date_time, r_rule, ex_dates, vote_count, team_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+            "INSERT INTO meeting_options (event_title, start_date_time, end_date_time, r_rule, ex_dates, vote_count, team_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
             [event_title, start_date_time, end_date_time, r_rule, ex_dates, vote_count, team_id]
         );
         res.status(201).json(newMeetingOpt.rows[0]);
@@ -15,7 +15,7 @@ const addMeetingOption = async (req,res) => {
 
 const getAllMeetingOptionsByTeamId = async (req,res) => {
     try {
-        const meeting_options = await db.query("SELECT * FROM meeting_option WHERE team_id = $1", [req.params.tid]);
+        const meeting_options = await db.query("SELECT * FROM meeting_options WHERE team_id = $1", [req.params.tid]);
         res.status(200).json({
             status: "success",
             results: meeting_options.rows.length,
