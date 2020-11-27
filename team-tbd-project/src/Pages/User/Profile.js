@@ -7,6 +7,7 @@ import Image from "react-bootstrap/Image";
 import UpdateProfileForm from "../../Components/UpdateProfileForm";
 import { profileGetHandler } from "../../Apis/UserProfile";
 import { withRouter} from "react-router-dom";
+
 const sectionText = {
   color: "#5b86e5",
   marginLeft: "1rem",
@@ -26,7 +27,7 @@ const reformat_time = (time) => {
   return res;
 }
 
-function Profile() {
+function Profile(props) {
   const [modalShow, setModalShow] = React.useState(false);
   const [user, setUser] = React.useState({});
   const [profile_picture, setProfilePicture] = React.useState("");

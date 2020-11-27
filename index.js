@@ -29,6 +29,7 @@ app.use("/api", teamScheduleRoutes);
 app.use("/api", teamRoutes);
 app.use("/api", serviceRoutes);
 
+//IDK what is this btw
 // app.get("*", (req, res) => {
 //   res.sendFile(path.join(__dirname, "team-tbd-project/public/index.html"));
 // });

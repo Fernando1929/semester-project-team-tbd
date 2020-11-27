@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Container, Card, Button, Nav, CardDeck } from "react-bootstrap";
 import "../../App/App.css";
-import {getUserTeamsHandler} from "../../Apis/Teams"
+import {getUserTeamsHandler} from "../../Apis/Teams";
+import { withRouter} from "react-router-dom";
 
-function Teams() {
+function Teams(props) {
   const [userTeams, setUserTeams] = useState([]);
 
   React.useEffect(() =>{//Requested before the page is loaded
