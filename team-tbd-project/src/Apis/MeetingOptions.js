@@ -67,3 +67,35 @@ export const getFinalMeetingHandler = (team_id) => {
     })
 } 
 
+export const voteCheckHandler = (team_id) => {
+    return axios
+    .get(`http://localhost:3001/api/vote/team/${team_id}/team_member/${Auth.getUserid()}`)
+    .then( response => {
+        return response
+    })
+    .catch(err => {
+        return err.response
+    })
+}
+
+export const deleteVotesByTeamHandler = (team_id) => {
+    return axios
+    .delete(`http://localhost:3001/api/vote/team/${team_id}/meeting_options/delete`)
+    .then( response => {
+        return response
+    })
+    .catch(err => {
+        return err.response
+    })
+}
+
+export const deleteOptionsByTeamHandler = (team_id) => {
+    return axios
+    .delete(`http://localhost:3001/api/teams/${team_id}/meeting_options`)
+    .then( response => {
+        return response
+    })
+    .catch(err => {
+        return err.response
+    })
+}

@@ -3,8 +3,7 @@ import { useState } from "react";
 import { Modal, Button, InputGroup, FormControl } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-//import { getMeetingHours } from "../Algorithm/CalculateMeetingHour";
-// import { } from "../Apis/Teams";
+import { getMeetingHours } from "../Algorithm/CalculateMeetingHour";
 import { getLeaderUserInfoHandler, getLeaderScheduleHandler } from "../Apis/TeamLeader";
 import { getMemberScheduleHandler, getAllMembersExceptLeaderHandler } from "../Apis/TeamMembers";
 import { addMeetingOptionHandler } from "../Apis/MeetingOptions";
@@ -104,7 +103,8 @@ function MeetingDatePickerForm(props) {
 
       alert("Meeting generation successful. \nThe voting process has begun.");
       props.onHide();
-      props.history.push(`/TeamProfile/${params.teamid}`);
+      // props.history.push(`/TeamProfile/${params.teamid}`);
+      window.location.reload();
 
     } catch (error) {
       console.log(error);

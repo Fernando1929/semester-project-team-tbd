@@ -110,7 +110,8 @@ function CreateTeamForm(props) {
               }
             });
             props.onHide();
-            window.location.assign(`/`);
+            // props.history.push("/Profile");
+            window.location.reload();
           }
         });
       }

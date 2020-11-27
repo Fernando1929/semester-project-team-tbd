@@ -1,11 +1,20 @@
 import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import "react-datepicker/dist/react-datepicker.css";
-import { addMeetingOptionHandler, getMeetingOptionsHandler, voteCountUpdateHandler, voteHandler, isVotingDoneHandler, getFinalMeetingHandler } from "../Apis/MeetingOptions";
-import {withRouter} from "react-router-dom";
-import Auth from "../utils/Auth";
+import { 
+  addMeetingOptionHandler, 
+  getMeetingOptionsHandler, 
+  voteCountUpdateHandler, 
+  voteHandler, 
+  isVotingDoneHandler, 
+  getFinalMeetingHandler,
+  deleteOptionsByTeamHandler,
+  deleteVotesByTeamHandler
+ } from "../Apis/MeetingOptions";
 import {getMemberIdByUserIdHandler, addMeetingToTeamMembersHandler} from "../Apis/TeamMembers";
 import {addMeetingToTeamScheduleHandler} from "../Apis/TeamSchedule";
+import {withRouter} from "react-router-dom";
+import Auth from "../utils/Auth";
 
 function VoteForm(props) {
   const { match: { params } } = props;
@@ -71,7 +80,20 @@ function VoteForm(props) {
                           addMeetingToTeamMembersHandler(appointment).then((res) => {//On the backend when adding the meeting to team schedule add on the team_members
                             if(res.status === 201){
                               console.log("Done");
-                              alert("All team members have voted. The meeting with more votes is been added to your schedule.");
+                              alert("All team members have voted. The meeting with the most votes has been added to your schedule.");
+                              deleteVotesByTeamHandler(params.teamid).then((res) => {
+                                if (res.status === 204) {
+                                  console.log("Options votes deleted")
+                                  deleteOptionsByTeamHandler(params.teamid).then((res) => {
+                                    if (res.status === 204) {
+                                      console.log("Meeting options deleted")
+                                      window.location.reload();
+                                    }
+                                  });
+                                }
+                              });
+                              // props.history.push(`/TeamProfile/${params.teamid}`);
+                              window.location.reload();
                             }  
                           });
                         }
@@ -141,7 +163,7 @@ function VoteForm(props) {
                     height: "40%",
                   }}
                   type="checkbox"
-                  label={date.event_title}
+                  label={(new Date(date.start_date_time).toLocaleString())}
                   onChangeCapture= {(e) => { setSelectedId(date.meeting_option_id)}}
                 />
               </Button>

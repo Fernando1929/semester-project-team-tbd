@@ -16,6 +16,8 @@ router.delete("/teams/:tid/meeting_options", meetingOptionsController.deleteAllM
 router.post("/vote/meeting_options", meetingOptionsVotesController.addMeetingOptionVote);
 router.get("/vote/team/:tid/meeting_options/currentState", meetingOptionsVotesController.isVotingDone);
 router.get("/vote/team/:tid/meeting_options/final", meetingOptionsController.getMeetingsWithMostVotes);
+router.get("/vote/team/:tid/team_member/:tmid", meetingOptionsVotesController.hasMemberVoted);
 router.post("/vote/team/:tid/meeting_options/setevent", meetingOptionsVotesController.setEvent);
+router.delete("/vote/team/:tid/meeting_options/delete", meetingOptionsVotesController.deleteMeetingOptionVoteByTeam);
 
 module.exports = router;

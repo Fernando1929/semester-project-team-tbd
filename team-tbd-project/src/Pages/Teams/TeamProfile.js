@@ -11,7 +11,7 @@ import { addTeamMemberHandler, getMemberIdByUserIdHandler } from "../../Apis/Tea
 import { getTeamLeaderUserIdHandler } from "../../Apis/TeamLeader";
 import { addTeamMembershipHandler, membershipDeleteHandler } from "../../Apis/TeamMembership";
 import { getMostRecentEventsHandler } from "../../Apis/TeamSchedule";
-import { getMeetingOptions } from "../../Apis/MeetingOptions";
+import { getMeetingOptionsHandler, voteCheckHandler } from "../../Apis/MeetingOptions";
 import { withRouter } from "react-router-dom";
 
 import {
@@ -82,14 +82,13 @@ function TeamProfile(props) {
     });
   }, [params.teamid]);
 
-  useEffect(() => {
-    getMeetingOptions(params.teamid).then((res) => {
-      if (res.status === 200) {
-        if (res.data.results !== 0) {
-          setVoting(true);
-        }
-      }
-    });
+  useEffect(async() => {
+    const optionCount = (await getMeetingOptionsHandler(params.teamid)).valueOf().data.results;
+    const hasVoted = (await voteCheckHandler(params.teamid)).valueOf().data.data;
+    console.log(hasVoted);
+    if (optionCount !== 0 && !hasVoted) {
+      setVoting(true);
+    }
   }, [params.teamid]);
 
   useEffect(() => {
@@ -299,19 +298,19 @@ function TeamProfile(props) {
                   </h1>
                 )}
 
-                {/* {is_leader ? (
+                {is_leader ? (
                   <MeetingDatePickerForm
                     {...props}
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                   />
-                ) : ( */}
+                ) : (
                   <VotesForm
                     {...props}
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                   />
-                {/* )} */}
+                )}
               </div>
             </Col>
           </Row>

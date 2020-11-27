@@ -93,7 +93,9 @@ function UpdateProfileForm(props) {
       profilePictureUpdateHandler(formData, config).then(res => {
         if(res.status === 200){
   
-          window.location.assign("/Profile");
+          // window.location.assign("/Profile");
+          // props.history.push("/Profile");
+          window.location.reload();
         }
       });
     }
@@ -122,7 +124,8 @@ function UpdateProfileForm(props) {
           console.log(res);
           if (res.status === 200) {
             props.onHide();
-            props.history.push("/Profile");
+            // props.history.push("/Profile");
+            window.location.reload();
           }
         });
       }

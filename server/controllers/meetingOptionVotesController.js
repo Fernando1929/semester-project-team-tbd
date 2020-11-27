@@ -48,8 +48,34 @@ const setEvent = async (req,res) => {
     }
 }
 
+const hasMemberVoted = async (req,res) => {
+    try {
+        // const {team_id} = req.body;
+        const vote = await db.query("SELECT team_member_id FROM team_members NATURAL INNER JOIN meeting_options_votes NATURAL INNER JOIN meeting_options WHERE user_id = $1 AND team_id = $2", [req.params.tmid, req.params.tid]);
+        if (parseInt(vote.rowCount) !== 0) {
+            return res.status(200).json({data: true});
+        }
+        res.status(200).json({data: false});
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const deleteMeetingOptionVoteByTeam = async (req,res) => {
+    try {
+        const result = await db.query("DELETE FROM meeting_options_votes WHERE meeting_option_id IN (SELECT meeting_option_id FROM meeting_options WHERE team_id = $1)", [req.params.tid])
+        res.status(204).json({
+            status: "success",
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     addMeetingOptionVote,
     isVotingDone,
     setEvent,
+    hasMemberVoted,
+    deleteMeetingOptionVoteByTeam
 }

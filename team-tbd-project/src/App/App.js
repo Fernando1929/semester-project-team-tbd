@@ -25,13 +25,10 @@ function App() {
         {Auth.isUserAuthenticated() ? <LoginNavbar /> : <SyncLinkNavbar />}
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/Services" component={Services} />
           <Route path="/SignUp" render={() => Auth.isUserAuthenticated() ?
            <Redirect to="/"/>: <SignUp/> }/>
           <Route path="/LogIn" render={() => Auth.isUserAuthenticated() ?
            <Redirect to="/"/>: <LogIn/> }/>
-          <Route path="/AboutUs" component={AboutUs} />
-          <Route path="/ContactUs" component={ContactUs} />
           <Route path="/ProfileInfo" render={() => Auth.getUserid() !== null ?
            <ProfileInfo/> : <Redirect to="SignUp"/> } />
           <Route path="/UserSchedule/:date" render={(props) => Auth.isUserAuthenticated() ?

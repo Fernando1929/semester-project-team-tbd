@@ -1536,13 +1536,13 @@ var team = getMeetingHours(
   "TeamID"
 );
 
-console.log(team);
-team.forEach((element) => {
-  console.log("-------------");
-  console.log(new Date(element.start_date_time).toLocaleString());
-  console.log(new Date(element.end_date_time).toLocaleString());
-  console.log("-------------");
-});
+// console.log(team);
+// team.forEach((element) => {
+//   console.log("-------------");
+//   console.log(new Date(element.start_date_time).toLocaleString());
+//   console.log(new Date(element.end_date_time).toLocaleString());
+//   console.log("-------------");
+// });
 
 // Test getUserFreeHoursTree
 
