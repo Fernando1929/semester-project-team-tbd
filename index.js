@@ -1,9 +1,9 @@
-const accountRoutes = require("./routes/accountRoutes");
-const userRoutes = require("./routes/userRoutes");
-const userScheduleRoutes = require("./routes/userScheduleRoutes");
-const teamScheduleRoutes = require("./routes/teamScheduleRoutes");
-const teamRoutes = require("./routes/teamRoutes");
-const serviceRoutes = require("./routes/serviceRoutes");
+const accountRoutes = require("./server/routes/accountRoutes");
+const userRoutes = require("./server/routes/userRoutes");
+const userScheduleRoutes = require("./server/routes/userScheduleRoutes");
+const teamScheduleRoutes = require("./server/routes/teamScheduleRoutes");
+const teamRoutes = require("./server/routes/teamRoutes");
+const serviceRoutes = require("./server/routes/serviceRoutes");
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -20,7 +20,7 @@ app.use(morgan("dev")); // for logging HTTP requests in console
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "team-tbd-project/build/")));
 }
-//app.use(express.static(path.join(__dirname, "team-tbd-project/build/")));
+app.use(express.static(path.join(__dirname, "team-tbd-project/build/")));
 // -------------------------------------Start of routes---------------
 app.use("/api", accountRoutes);
 app.use("/api", userRoutes);

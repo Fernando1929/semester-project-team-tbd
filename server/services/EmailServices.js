@@ -1,7 +1,7 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 const SMTPTransport = require("nodemailer/lib/smtp-transport");
-const db = require("../db");
+const db = require("../../db");
 
 const emailVerification = async(req) =>{//needs tweaks
     try {
