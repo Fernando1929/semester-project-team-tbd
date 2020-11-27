@@ -79,8 +79,6 @@ const updateTeamMembership =  async (req,res) =>{
 
 const deleteTeamMembership =  async (req,res) =>{
     try{
-        // console.log(req.body);
-        // const {team_member_id} = req.body.team_membership;
         const result = await db.query("DELETE FROM team_membership WHERE team_id = $1 AND team_member_id = $2",[req.params.tid, req.params.tmid]);
         res.status(204).json({//Verificar si hay que borrar de otro lado tambien
             status: "success",
@@ -90,14 +88,6 @@ const deleteTeamMembership =  async (req,res) =>{
     }
 }
 
-const countTeamMemberships = async (req, res) => {
-    try{
-        const count = await db.query("SELECT COUNT(*) team_members NATURAL INNER JOIN team_membership NATURAL INNER JOIN teams where team_id =$1",[req.params.tmid]);
-        res.status(200).json({count:`${count}`});
-    }catch(err){
-        console.log(err);
-    }
-}
 
 // const searchTeamMembership =  async (req,res) =>{//Needs completion finish later
 //     try{
@@ -116,5 +106,4 @@ module.exports = {
     getTeamMembershipByMemberId,
     updateTeamMembership,
     deleteTeamMembership,
-    countTeamMemberships,
 }

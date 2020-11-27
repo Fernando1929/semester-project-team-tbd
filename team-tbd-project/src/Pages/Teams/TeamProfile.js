@@ -11,6 +11,7 @@ import { addTeamMemberHandler, getMemberIdByUserIdHandler } from "../../Apis/Tea
 import { getTeamLeaderUserIdHandler } from "../../Apis/TeamLeader";
 import { addTeamMembershipHandler, membershipDeleteHandler } from "../../Apis/TeamMembership";
 import { getMostRecentEventsHandler } from "../../Apis/TeamSchedule";
+import { withRouter } from "react-router-dom";
 
 import {
   Button,
@@ -90,13 +91,11 @@ function TeamProfile(props) {
 
   const addMember = (e) => {
     e.preventDefault();
-    // console.log("Add a member", em);
     if(email.length === 0){
-        //push an error
-        alert("Enter an email"); //for now
+        alert("Enter an email");
     }else{
-    getUserIdByEmailHandler(email).then((res => {
-      if (res.status === 200) {
+    getUserIdByEmailHandler(email).then((res => { //change to send an object instead of sending the email in the URL
+      if (res.status === 200) {///Verify undefined
         const user_id = res.data.data.user.user_id;
         addTeamMemberHandler(user_id).then((res) => {
           if (res.status === 201) {
@@ -107,7 +106,8 @@ function TeamProfile(props) {
             addTeamMembershipHandler(team_membership).then((res) => {
               if (res.status === 201) {
                 console.log("new member added"); //woop
-                window.location.assign(`/TeamProfile/${params.teamid}`);
+                props.history.push(`/TeamProfile/${params.teamid}`);
+                window.location.reload();
               }
             });
           }
@@ -121,7 +121,7 @@ function TeamProfile(props) {
                 addTeamMembershipHandler(team_membership).then((res) => {
                   if (res.status === 201) {
                     console.log("new member added"); //woop
-                    props.history.push(`/TeamProfile/${params.teamid}`);
+                    window.location.reload();
                   }
                 });
               }
@@ -190,8 +190,9 @@ function TeamProfile(props) {
     membershipDeleteHandler(team_membership).then((res) => {
       if (res.status === 204) {
         console.log("membership deleted");
-        alert("Team member removed.");
-        window.location.assign(`/TeamProfile/${params.teamid}`);
+        //alert("Team member removed.");
+        //props.history.push(`/TeamProfile/${params.teamid}`);
+        window.location.reload();
       }
     });
   }
@@ -403,7 +404,7 @@ function TeamProfile(props) {
                 id="Email"
                 placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.toLocaleLowerCase())}
               />
             </InputGroup>
           </Col>
@@ -425,4 +426,4 @@ function TeamProfile(props) {
   );
 }
 
-export default TeamProfile;
+export default withRouter(TeamProfile);

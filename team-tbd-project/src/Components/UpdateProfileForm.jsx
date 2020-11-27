@@ -39,8 +39,8 @@ function UpdateProfileForm(props) {
       setPhone(user.user_phone);
       setLocation(user.user_location);
       setBio(user.user_bio);
-      setStartWorkingHour(reformat_time(user.pref_start_work_hour));
-      setEndWorkingHour(reformat_time(user.pref_end_end_hour));
+      //setStartWorkingHour(reformat_time(user.pref_start_work_hour));
+      //setEndWorkingHour(reformat_time(user.pref_end_end_hour));
       
       if (user.profile_picture) {
         setProfilePicture("http://localhost:3001/" + user.profile_picture);

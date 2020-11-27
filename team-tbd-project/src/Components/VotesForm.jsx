@@ -1,8 +1,11 @@
 import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import "react-datepicker/dist/react-datepicker.css";
-import { addMeetingOptionHandler, getMeetingOptionsHandler, voteCountUpdateHandler } from "../Apis/MeetingOptions";
+import { addMeetingOptionHandler, getMeetingOptionsHandler, voteCountUpdateHandler, voteHandler, isVotingDoneHandler, getFinalMeetingHandler } from "../Apis/MeetingOptions";
 import {withRouter} from "react-router-dom";
+import Auth from "../utils/Auth";
+import {getMemberIdByUserIdHandler, addMeetingToTeamMembersHandler} from "../Apis/TeamMembers";
+import {addMeetingToTeamScheduleHandler} from "../Apis/TeamSchedule";
 
 function VoteForm(props) {
   const { match: { params } } = props;
@@ -23,52 +26,77 @@ function VoteForm(props) {
     )
   },[]);
 
-  const submit = (e) => {
-    e.prevetDefault();
+  const option = (e) => {
     // como sacar el id o algo del meeting option seleccionado?
     // como restringirlo a solo una seleccion?
     // maybe un la tabla con solo un slot para llenar osea la opcion escogida (fecha)
     // se puede contar por el mismo valor y se puede diferenciar de otras 
-    
-    const meeting = {// no necesitas el member id para votar??
-      team_id: params.teamid,
-      meeting_option_id: selected_meeting_id,
-    };
+    submit(); // para la seleccion de uno solo elemento para votar
+  }
 
-    //maybe add a way to undo the vote***
-    voteCountUpdateHandler(meeting).then((res) => {
-      console.log(res);
-      if (res.status === 200) {
-        console.log("Vote registered.");
-        alert("Your vote has been registered.");
-        // isVotingDone(team_id).then((res) =>{ //verifies if all the team members voted and return the meeting with more votes
-        //   if(res.status === 200){
-        //     //add the meeting to all the team members
-        //     addMeetingToTeamScheduleHandler(meeting).then((res) => {
-        //       //On the backend when adding the meeting to team schedule add on the team_members
-        //     })
-        //     alert("All team members have voted. The meeting with more votes is been added to your schedule.");
-        //   }
-        //   //Do not thing
-        // });
+  const submit = (e) => {
+    e.preventDefault();
+    props.onHide();
 
-        
-        // update something somewhere in the db to indicate that the team member has voted
-        // votes table for each team ?? and Once the voting has been completed is marked as done cuz data cannot be deleted idk
-        
-        // verify if all team members have voted
-        // why not verify it everytime a team member votes then you remove the problem of constant checking 
+    const user_id = parseInt(Auth.getUserid());
 
-        // if all members have voted, insert into team_schedule and every user_schedule
-        // I think this is completely backend cuz is using user info 
-        // Route that is called when everyone has completely voted
-        // Backend method to add a meeting to all the members schedules including the team schedules
+    getMemberIdByUserIdHandler(user_id).then((res) => {
+      if(res.status === 200){// verify response
+      
+      const team_member_id = res.data.data.team.team_member_id;
+      const vote = {
+        team_member_id: team_member_id,
+        meeting_option_id: selected_meeting_id,
+      };
+      
+      const meeting = {
+        team_id: params.teamid,
+        meeting_option_id: selected_meeting_id,
+      };
+      
+      voteHandler(vote).then(() => {//Add the vote to the table
+        voteCountUpdateHandler(meeting).then((res) => {
+          if (res.status === 200) {
+            console.log("Vote registered.");
+            alert("Your vote has been registered.");
+            isVotingDoneHandler(params.teamid).then((res) =>{ //verifies if all the team members voted and return the meeting with more votes
+              if(res.status === 200){
+                  if(res.data.data === true){
+                  getFinalMeetingHandler(params.teamid).then((res) => {
+                    //add the meeting to all the team members
+                    const appointment = res.data.data.meeting[0];
+                    addMeetingToTeamScheduleHandler(appointment).then((res) => {
+                      console.log("casi");
+                        if(res.status === 201){
+                          addMeetingToTeamMembersHandler(appointment).then((res) => {//On the backend when adding the meeting to team schedule add on the team_members
+                            if(res.status === 201){
+                              console.log("Done");
+                              alert("All team members have voted. The meeting with more votes is been added to your schedule.");
+                            }  
+                          });
+                        }
+                      });
+                    });
+                  }
+                }
+              });
+            // update something somewhere in the db to indicate that the team member has voted
+            // votes table for each team ?? and Once the voting has been completed is marked as done cuz data cannot be deleted idk
+            
+            // verify if all team members have voted
+            // why not verify it everytime a team member votes then you remove the problem of constant checking 
 
-        
-        props.onHide();
-        props.history.push(`/TeamProfile/${params.teamid}`);
+            // if all members have voted, insert into team_schedule and every user_schedule
+            // I think this is completely backend cuz is using user info 
+            // Route that is called when everyone has completely voted
+            // Backend method to add a meeting to all the members schedules including the team schedules
+            //props.history.push(`/TeamProfile/${params.teamid}`); //Change to 
+             // window.location.reload();
+            }
+          });
+        });
       }
-    });
+    });  
   }
 
   const fixx = (r) => {
@@ -98,10 +126,9 @@ function VoteForm(props) {
       </Modal.Header>
       <Modal.Body>
       {meeting_options.map((date) => {
-
           return (
-            <center>
-              <Button key={meeting_options.indexOf(date)}
+            <center key={meeting_options.indexOf(date)}>
+              <Button 
                 className="btn--secondary"
                 style={{
                   marginBottom: "10px",
@@ -115,6 +142,7 @@ function VoteForm(props) {
                   }}
                   type="checkbox"
                   label={date.event_title}
+                  onChangeCapture= {(e) => { setSelectedId(date.meeting_option_id)}}
                 />
               </Button>
             </center>
@@ -125,7 +153,7 @@ function VoteForm(props) {
         <Button onClick={props.onHide} variant="light">
           Close
         </Button>
-        <Button className="btn--primary" variant="primary" onClick={(e) => submit()}>
+        <Button className="btn--primary" variant="primary" onClick={(e) => submit(e)}>
           Submit
         </Button>
       </Modal.Footer>
