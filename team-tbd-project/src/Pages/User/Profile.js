@@ -1,7 +1,8 @@
 import React from "react";
 import "../../App/App.css";
 import { Container, Row, Col, Card, Button, Nav } from "react-bootstrap";
-import mainLogo from "../../Images/HomeBackground.jpg";
+// import mainLogo from "../../Images/HomeBackground.jpg";
+import placeholder from "../../Images/placeholder.png";
 import Image from "react-bootstrap/Image";
 import UpdateProfileForm from "../../Components/UpdateProfileForm";
 import { profileGetHandler } from "../../Apis/UserProfile";
@@ -16,13 +17,36 @@ const textStyle = {
   marginLeft: "1rem",
 };
 
-function Profile(props) {
+const reformat_time = (time) => {
+  const orig_hours = parseInt(time.split(":")[0]);
+  const conv_hours = (orig_hours % 12) || 12;
+  var res = conv_hours + ":" + time.split(":")[1];
+  res = (orig_hours < 12) ? res + " AM" : res + " PM" ;
+
+  return res;
+}
+
+function Profile() {
   const [modalShow, setModalShow] = React.useState(false);
   const [user, setUser] = React.useState({});
+  const [profile_picture, setProfilePicture] = React.useState("");
 
   React.useEffect(() => {
     profileGetHandler().then(res => {
-      setUser(res.data.user);
+      const user = res.data.user;
+      // console.log(res.data.data.user);
+      
+      if(user !== undefined) {
+        setUser(user);
+      if (user.profile_picture) {
+        setProfilePicture("http://localhost:3001/" + user.profile_picture);
+      }
+      else {
+        setProfilePicture(placeholder);
+      }
+    }else{
+      setProfilePicture(placeholder);
+    }
     })
   }, []);
 
@@ -45,7 +69,7 @@ function Profile(props) {
               <Col>
                 <center>
                   <Image
-                    src={mainLogo}
+                    src={profile_picture}
                     width="300"
                     height="300"
                     roundedCircle
@@ -66,6 +90,14 @@ function Profile(props) {
                 <Row className="justify-content-right">
                   <h5 style={sectionText}>Phone Number:</h5>
                   <h4 style={textStyle}>{user.user_phone}</h4>
+                </Row>
+
+                <Row className="justify-content-right">
+                  <h5 style={sectionText}>Working Hours:</h5>
+                  <h4 style={textStyle}>
+                    {(user.pref_start_work_hour && user.pref_end_work_hour) ? 
+                      reformat_time(user.pref_start_work_hour) + " - " + reformat_time(user.pref_end_work_hour) : ""}
+                  </h4>
                 </Row>
 
                 <Row className="justify-content-right">

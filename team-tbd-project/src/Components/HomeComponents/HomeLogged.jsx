@@ -1,5 +1,5 @@
 import React from "react";
-import "../../App/App.css"
+import "../../App/App.css";
 import backgroundH from "../../Images/SyncLinkLogged.gif";
 import RecentTeams from "../RecentTeams";
 import { Button, Col, Container, Row } from "react-bootstrap";
@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 /* MODIFY THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS LINE 212*/
 
 function HomeLogged() {
+  var today = new Date().toDateString().split(" ");
+  today = today[2] + "-" + today[1] + "-" + today[3];
   return (
     <div>
       <div className="SyncLinkWelcome">
@@ -27,7 +29,7 @@ function HomeLogged() {
               style={{
                 textAlign: "center",
                 marginTop: "50%",
-                marginBottom: "45%",
+                marginBottom: "50%",
                 marginLeft: "18%",
               }}
               sm
@@ -135,7 +137,10 @@ function HomeLogged() {
               <div>
                 <div>
                   {/* ADD THE CORECT LINK PATH WHEN CREATED AT  MY SCHEDULE BUTTON */}
-                  <Link to="/UserSchedule" style={{textDecoration: "none",color: "white",}}>
+                  <Link
+                    to={`/UserSchedule/${today}`}
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
                     <Button
                       className="btn--primary"
                       variant="primary"

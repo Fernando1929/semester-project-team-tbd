@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Card, Button, Nav, CardDeck } from "react-bootstrap";
 import "../../App/App.css";
-import {withRouter} from "react-router-dom";
+import {getUserTeamsHandler} from "../../Apis/Teams"
 
-function Teams(props) {
-  //Poner los todos teams del usuario.
-  var userTeams = [
-    { name: "Team1", link: "/Team1" },
-    { name: "Team2", link: "/Team2" },
-    { name: "Team3", link: "/Team3" },
-    { name: "Team4", link: "/Team4" },
-    { name: "Team5", link: "/Team5" },
-  ];
+function Teams() {
+  const [userTeams, setUserTeams] = useState([]);
+
+  React.useEffect(() =>{//Requested before the page is loaded
+    getUserTeamsHandler().then(res =>{//handler get the teams
+      if (res.status === 200){
+        setUserTeams(res.data.data.teams);
+      }else{//prints errors
+        console.log(res.msg);
+      }
+    }
+    )
+  },[]);
 
   return (
     <div className="Teams">
@@ -29,10 +33,10 @@ function Teams(props) {
           </Card.Header>
 
           <Card style={{ borderRadius: "15px", marginTop: "1rem" }}>
-            <CardDeck style={{ marginLeft: "4rem" }}>
+            <CardDeck style={{ color: "white", marginLeft: "4rem" }}>
               {userTeams.map((team) => {
                 return (
-                  <center key={team.name}>
+                  <center key={team.team_id}>
                     <Card
                       style={{
                         marginTop: "1rem",
@@ -48,9 +52,9 @@ function Teams(props) {
                       <Card.Body>
                         <Card.Title style={{ color: "white" }}>
                           {" "}
-                          {team.name}{" "}
+                          {team.team_name}{" "}
                         </Card.Title>
-                        <Button variant="light" href={team.link}>
+                        <Button variant="light" href={`/TeamProfile/${team.team_id}`}>
                           ACCESS
                         </Button>
                       </Card.Body>

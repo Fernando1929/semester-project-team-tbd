@@ -2,10 +2,10 @@ const db = require("../db");
 
 const addTeamScheduleEvent = async (req,res) => {
     try {
-        const { event_name, start_time, end_time, days, team_id } = req.body;
+        const { event_title, start_date_time, end_date_time, r_rule, ex_dates } = req.body;
         const newEvent = await db.query(
-            "INSERT INTO team_schedule (event_name, start_time, end_time, days, team_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-            [event_name, start_time, end_time, days, team_id]
+            "INSERT INTO team_schedule (event_title, start_date_time, end_date_time, r_rule, ex_dates, team_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+            [event_title, start_date_time, end_date_time, r_rule, ex_dates, req.params.tid]
         );
         res.status(201).json(newEvent.rows[0]);
     } catch (err) {
@@ -37,6 +37,20 @@ const getTeamScheduleEventById = async (req,res) => {
             status: "success",
             data: {
                 schedule_event: schedule_event.rows[0]
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const getMostRecentEventsByTeamId = async (req,res) => {
+    try {
+        const events = await db.query("SELECT * FROM team_schedule WHERE team_id = $1 AND start_date_time >= NOW() ORDER BY start_date_time", [req.params.tid]);
+        res.status(200).json({
+            status: "success",
+            data: {
+                events: events.rows
             },
         });
     } catch (err) {
@@ -80,6 +94,7 @@ module.exports = {
     addTeamScheduleEvent,
     getIndividualTeamSchedule,
     getTeamScheduleEventById,
+    getMostRecentEventsByTeamId,
     updateTeamScheduleEvent,
     deleteTeamScheduleEvent
 }

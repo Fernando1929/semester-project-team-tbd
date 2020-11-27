@@ -17,6 +17,10 @@ const addUser = async (req,res) => {
 
 const getAllUsers = async (req,res) => {
     try {
+        if (req.body) {
+            const result = await getUserIdByEmail(req,res);
+            return result;
+        }
         const allUsers = await db.query("SELECT * FROM users");
         res.status(200).json({
             status: "success",
@@ -30,8 +34,25 @@ const getAllUsers = async (req,res) => {
     }
 }
 
+const getUserIdByEmail = async (req,res) => {
+    try {
+        // const {email} = req.body;
+        console.log(req.params.email);
+        const user = await db.query("SELECT user_id FROM users NATURAL INNER JOIN account WHERE email = $1", [req.params.email]);
+        res.status(200).json({
+            status: "success",
+            data: {
+                user: user.rows[0]
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 const getUserById = async (req,res) => {
     try {
+        console.log(req.params.id);
         const user = await db.query("SELECT * FROM account NATURAL INNER JOIN users WHERE user_id = $1", [req.params.id]);
         res.status(200).json({
             status: "success",
@@ -65,6 +86,25 @@ const updateUser = async (req,res) => {
     }
 }
 
+const updateProfilePicture = async (req,res) => {
+    try {
+        const profile_picture = req.file.path;
+        const result = await db.query(
+            "UPDATE users SET profile_picture = $1 WHERE user_id = $2 RETURNING *",
+            [profile_picture, req.params.id]
+        ); 
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                user: result.rows[0]
+            },
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 const deleteUser = async (req,res) => {
     try {
         const result = await db.query("DELETE FROM user_schedule WHERE user_id = $1", [req.params.id])
@@ -80,6 +120,8 @@ module.exports = {
     addUser,
     getAllUsers,
     getUserById,
+    getUserIdByEmail,
     updateUser,
+    updateProfilePicture,
     deleteUser
 }

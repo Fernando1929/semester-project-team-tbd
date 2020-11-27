@@ -1,5 +1,5 @@
-const accountController = require("../controllers/accountController");
-const emailServices = require("../services/EmailServices");
+const accountController = require("./accountController");
+const emailServices = require("../../services/EmailServices");
 
 const confimationById = async (req,res) => {
     try {

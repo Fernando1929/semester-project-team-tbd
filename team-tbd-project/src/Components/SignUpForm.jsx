@@ -35,6 +35,7 @@ function SignUpForm(props) {
       //Here send things to the handler
       signupHandler(user).then((res) => {
         if (res.status === 201) {
+          //Auth.authenticateUser("token");//Look into Later**
           Auth.setUserid(res.data.account_id); // account_id = res.data.account_id;
           props.history.push("/ProfileInfo");
           
