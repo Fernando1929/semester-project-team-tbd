@@ -1,5 +1,5 @@
 const { query } = require("express");
-const db = require("../db/index");
+const db = require("../../db");
 const team_membership = require("./teamMembershipController");
 
 const addMeetingOption = async (req,res) => {

@@ -112,7 +112,7 @@ const validateAccount = async (req, res) => {
     );
 
     res.status(200);
-    //res.redirect("http://localhost:3000/LogIn");
+    res.redirect(process.env.SERVER_URL+"/LogIn");
   } catch (err) {
     console.log(err);
   }

@@ -5,6 +5,7 @@ import { addTeamHandler, getUserIdByEmailHandler } from "../Apis/Teams";
 import { addTeamLeaderHandler, addTeamLeaderAsMemberHandler } from "../Apis/TeamLeader";
 import { addTeamMemberHandler, getMemberIdByUserIdHandler } from "../Apis/TeamMembers";
 import { addTeamMembershipHandler } from "../Apis/TeamMembership";
+import {withRouter} from "react-router-dom";
 
 function CreateTeamForm(props) {
   const [team_name, setTeamName] = React.useState("");
@@ -110,7 +111,6 @@ function CreateTeamForm(props) {
               }
             });
             props.onHide();
-            // props.history.push("/Profile");
             window.location.reload();
           }
         });
@@ -171,4 +171,4 @@ function CreateTeamForm(props) {
   );
 }
 
-export default CreateTeamForm;
+export default withRouter(CreateTeamForm);

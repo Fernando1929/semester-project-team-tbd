@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Container, Card, Button, Nav, CardDeck } from "react-bootstrap";
 import "../../App/App.css";
 import {getUserTeamsHandler} from "../../Apis/Teams";
-import { withRouter} from "react-router-dom";
+import { Link, withRouter} from "react-router-dom";
 
 function Teams(props) {
   const [userTeams, setUserTeams] = useState([]);
@@ -55,9 +55,11 @@ function Teams(props) {
                           {" "}
                           {team.team_name}{" "}
                         </Card.Title>
-                        <Button variant="light" href={`/TeamProfile/${team.team_id}`}>
+                        <Link onClick = {(e) => {props.history.push(`/TeamProfile/${team.team_id}`)}}>
+                        <Button variant="light" >
                           ACCESS
                         </Button>
+                        </Link>
                       </Card.Body>
                     </Card>
                   </center>

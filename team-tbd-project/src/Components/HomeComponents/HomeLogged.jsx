@@ -3,12 +3,12 @@ import "../../App/App.css";
 import backgroundH from "../../Images/SyncLinkLogged.gif";
 import RecentTeams from "../RecentTeams";
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 /* TO DO CHANGE THE LINK PATH WHEN THE PROFILE SECTION IS COMPLETED LINE 90*/
 /* ADD THE CORRECT LINK PATH WHEN CREATED AT MY SCHEDULE BUTTON LINE 147*/
 /* MODIFY THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS LINE 212*/
 
-function HomeLogged() {
+function HomeLogged(props) {
   var today = new Date().toDateString().split(" ");
   today = today[2] + "-" + today[1] + "-" + today[3];
   return (
@@ -138,7 +138,7 @@ function HomeLogged() {
                 <div>
                   {/* ADD THE CORECT LINK PATH WHEN CREATED AT  MY SCHEDULE BUTTON */}
                   <Link
-                    to={`/UserSchedule/${today}`}
+                    onClick={(e) => {props.history.push(`/UserSchedule/${today}`)}}
                     style={{ textDecoration: "none", color: "white" }}
                   >
                     <Button
@@ -284,4 +284,4 @@ function HomeLogged() {
   );
 }
 
-export default HomeLogged;
+export default withRouter(HomeLogged);

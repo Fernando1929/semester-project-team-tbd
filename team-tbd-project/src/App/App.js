@@ -17,7 +17,6 @@ import TeamProfile from "../Pages/Teams/TeamProfile";
 
 function App() {
   return (
-    <>
       <Router>
         {Auth.isUserAuthenticated() ? <LoginNavbar /> : <SyncLinkNavbar />}
         <Switch>
@@ -39,7 +38,6 @@ function App() {
            <TeamProfile {...props}/> : <Redirect to="LogIn"/>} />
         </Switch>
       </Router>
-    </>
   );
 }
 

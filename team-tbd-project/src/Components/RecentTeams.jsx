@@ -2,13 +2,14 @@ import React from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import CreateTeamForm from "../Components/CreateTeamForm";
 import { getRecentUserTeamsHandler } from "../Apis/Teams"
-
+import { propTypes } from "react-bootstrap/esm/Image";
+import {withRouter} from "react-router-dom";
 // TODO
 // 1. modificar texto para que cuando se achique la pantaya llege un punt que salgan 3... y tabien que suceda cuadno el nombre sea largo
 // 2. hacer los bordes mas redondos de los teams buttons
 // 10/18/2020 BY YERAN: ADDED THE MODAL(POP-UP) FOR THE TEAM CREATION.
 
-function RecentTeams() {
+function RecentTeams(props) {
   const [modalShow, setModalShow] = React.useState(false);
   const [userTeams, setUserTeams] = React.useState([]);
 
@@ -65,7 +66,7 @@ function RecentTeams() {
                         <Card.Title style={{ color: "white" }}>
                           {team.team_name}
                         </Card.Title>
-                        <Button variant="light" to={`/TeamProfile/${team.team_id}`}>
+                        <Button variant="light" onClick={(e) => {props.history.push(`/TeamProfile/${team.team_id}`)}}>
                           ACCESS
                         </Button>
                       </Card.Body>
@@ -110,4 +111,4 @@ function RecentTeams() {
     </div>
   );
 }
-export default RecentTeams;
+export default withRouter(RecentTeams);

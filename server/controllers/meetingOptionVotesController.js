@@ -1,5 +1,5 @@
 const { query } = require("express");
-const db = require("../db/index");
+const db = require("../../db");
 
 
 const addMeetingOptionVote = async (req,res) => {

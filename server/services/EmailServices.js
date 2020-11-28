@@ -29,7 +29,7 @@ const emailVerification = async(req) =>{//needs tweaks
                 ------------------------
                 Username:${username}.
                 ------------------------
-                Please click this link to activate your account:${process.env.SERVER_URL+"api/confirmation/"+account_id}`
+                Please click this link to activate your account:${process.env.SERVER_URL+"/api/confirmation/"+account_id}`
                 //html: ``, // Make pretty email here**
               };
     

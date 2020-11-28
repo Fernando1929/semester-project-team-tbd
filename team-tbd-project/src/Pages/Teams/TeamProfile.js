@@ -118,7 +118,6 @@ function TeamProfile(props) {
               if (res.status === 201) {
                 console.log("new member added"); //woop
                 props.history.push(`/TeamProfile/${params.teamid}`);
-                window.location.reload();
               }
             });
           }
@@ -132,7 +131,8 @@ function TeamProfile(props) {
                 addTeamMembershipHandler(team_membership).then((res) => {
                   if (res.status === 201) {
                     console.log("new member added"); //woop
-                    window.location.reload();
+                    props.history.push(`/TeamProfile/${params.teamid}`);
+                    window.location.reload(false);
                   }
                 });
               }
@@ -207,10 +207,13 @@ function TeamProfile(props) {
     membershipDeleteHandler(team_membership).then((res) => {
       if (res.status === 204) {
         console.log("membership deleted");
-        //alert("Team member removed.");
-        //props.history.push(`/TeamProfile/${params.teamid}`);
-        window.location.reload();
+        alert("Team member removed.");
+       
       }
+     
+      props.history.push(`/TeamProfile/${params.teamid}`);
+      window.location.reload(false);
+      //props.history.href(`/TeamProfile/${params.teamid}`);
     });
   }
 
