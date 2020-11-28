@@ -104,7 +104,7 @@ function MeetingDatePickerForm(props) {
       alert("Meeting generation successful. \nThe voting process has begun.");
       props.onHide();
       // props.history.push(`/TeamProfile/${params.teamid}`);
-      window.location.reload();
+      window.location.reload(false);
 
     } catch (error) {
       console.log(error);

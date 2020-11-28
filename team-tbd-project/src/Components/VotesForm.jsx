@@ -35,15 +35,8 @@ function VoteForm(props) {
     )
   },[]);
 
-  const option = (e) => {
-    // como sacar el id o algo del meeting option seleccionado?
-    // como restringirlo a solo una seleccion?
-    // maybe un la tabla con solo un slot para llenar osea la opcion escogida (fecha)
-    // se puede contar por el mismo valor y se puede diferenciar de otras 
-    submit(); // para la seleccion de uno solo elemento para votar
-  }
 
-  const submit = (e) => {
+  const submit =(e) => {
     e.preventDefault();
     props.onHide();
 
@@ -63,17 +56,22 @@ function VoteForm(props) {
         meeting_option_id: selected_meeting_id,
       };
       
-      voteHandler(vote).then(() => {//Add the vote to the table
+      voteHandler(vote).then( () => {//Add the vote to the table
         voteCountUpdateHandler(meeting).then((res) => {
+          console.log("voteCountUpdateHandler")
           if (res.status === 200) {
             console.log("Vote registered.");
-            alert("Your vote has been registered.");
-            isVotingDoneHandler(params.teamid).then((res) =>{ //verifies if all the team members voted and return the meeting with more votes
+            //alert("Your vote has been registered.");
+             isVotingDoneHandler(params.teamid).then((res) =>{ //verifies if all the team members voted and return the meeting with more votes
+              console.log("isVotingDoneHandler");
               if(res.status === 200){
                   if(res.data.data === true){
                   getFinalMeetingHandler(params.teamid).then((res) => {
+                    console.log("getFinalMeetingHandler");
                     //add the meeting to all the team members
                     const appointment = res.data.data.meeting[0];
+
+                    console.log("meeting",res.data,appointment);
                     addMeetingToTeamScheduleHandler(appointment).then((res) => {
                       console.log("casi");
                         if(res.status === 201){
@@ -87,13 +85,13 @@ function VoteForm(props) {
                                   deleteOptionsByTeamHandler(params.teamid).then((res) => {
                                     if (res.status === 204) {
                                       console.log("Meeting options deleted")
-                                      window.location.reload();
+                                      //window.location.reload(false);
                                     }
                                   });
                                 }
                               });
                               // props.history.push(`/TeamProfile/${params.teamid}`);
-                              window.location.reload();
+                              //window.location.reload(false);
                             }  
                           });
                         }
@@ -113,12 +111,14 @@ function VoteForm(props) {
             // Route that is called when everyone has completely voted
             // Backend method to add a meeting to all the members schedules including the team schedules
             //props.history.push(`/TeamProfile/${params.teamid}`); //Change to 
-             // window.location.reload();
+            
             }
           });
         });
+        
       }
     });  
+    window.location.reload(false);
   }
 
   const fixx = (r) => {

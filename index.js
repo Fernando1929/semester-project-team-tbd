@@ -20,10 +20,10 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev")); // for logging HTTP requests in console
 
-// if (process.env.NODE_ENV === "production") {
-//   app.use(express.static(path.join(__dirname, "team-tbd-project/build/")));
-// }
-app.use(express.static(path.join(__dirname, "team-tbd-project/build/")));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "team-tbd-project/build/")));
+}
+// app.use(express.static(path.join(__dirname, "team-tbd-project/build/")));
 // -------------------------------------Start of routes---------------
 app.use("/api", accountRoutes);
 app.use("/api", userRoutes);

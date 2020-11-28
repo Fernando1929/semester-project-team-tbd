@@ -1,6 +1,6 @@
-CREATE DATABASE synclink;
+-- CREATE DATABASE synclink;
 
-\c synclink;
+-- \c synclink;
 
 CREATE TABLE account
 (

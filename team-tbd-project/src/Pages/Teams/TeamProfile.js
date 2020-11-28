@@ -85,16 +85,17 @@ function TeamProfile(props) {
   useEffect(async() => {
     const optionCount = (await getMeetingOptionsHandler(params.teamid)).valueOf().data.results;
     const hasVoted = (await voteCheckHandler(params.teamid)).valueOf().data.data;
-    console.log(hasVoted);
-    if (optionCount !== 0 && !hasVoted) {
+    if (!hasVoted && parseInt(optionCount) !== 0) {
       setVoting(true);
     }
   }, [params.teamid]);
 
-  useEffect(() => {
-    getMostRecentEventsHandler(params.teamid).then((res) => {
+  useEffect(async() => {
+    await (getMostRecentEventsHandler(params.teamid)).then((res) => {
+      console.log(res.data);
       if (res.status === 200) {
         const events = res.data.data.events;
+        console.log(events);
         setRecentEvents(events.map(mapRecentEventsData));
       }
     });
@@ -117,7 +118,8 @@ function TeamProfile(props) {
             addTeamMembershipHandler(team_membership).then((res) => {
               if (res.status === 201) {
                 console.log("new member added"); //woop
-                props.history.push(`/TeamProfile/${params.teamid}`);
+                //props.history.push(`/TeamProfile/${params.teamid}`);
+                window.location.reload(false);
               }
             });
           }
@@ -131,7 +133,6 @@ function TeamProfile(props) {
                 addTeamMembershipHandler(team_membership).then((res) => {
                   if (res.status === 201) {
                     console.log("new member added"); //woop
-                    props.history.push(`/TeamProfile/${params.teamid}`);
                     window.location.reload(false);
                   }
                 });
@@ -210,10 +211,8 @@ function TeamProfile(props) {
         alert("Team member removed.");
        
       }
-     
-      props.history.push(`/TeamProfile/${params.teamid}`);
       window.location.reload(false);
-      //props.history.href(`/TeamProfile/${params.teamid}`);
+     
     });
   }
 
