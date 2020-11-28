@@ -91,6 +91,7 @@ function CreateTeamForm(props) {
       await addTeamMembershipHandler(team_membership);
     }
     props.onHide();
+    // props.history.push("/");
     window.location.reload(false);
   };
 
