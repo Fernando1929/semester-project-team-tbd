@@ -12,11 +12,14 @@ function CreateTeamForm(props) {
   const [team_description, setTeamDescription] = React.useState("");
 
   const parse_emails = (email_string) => {
-    let email_arr = email_string.split(",");
-    for (var email of email_arr) {
-      email = email.trim();
+    if (email_string !== ""){
+      let email_arr = email_string.split(",");
+      for (var email of email_arr) {
+        email = email.trim();
+      }
+      return email_arr;
     }
-    return email_arr;
+    return [];
   }
 
   const email_list_len = (email_arr) => {
@@ -53,7 +56,7 @@ function CreateTeamForm(props) {
     let team_membership = {};
 
     if(email_list_len(member_email_list) > 0) {
-
+      // console.log(member_email_list);
       for (var email of member_email_list) {
         const user_id = (await getUserIdByEmailHandler(email)).valueOf().data.data.user.user_id;
         const addmember = (await addTeamMemberHandler(user_id)).valueOf();
@@ -72,23 +75,23 @@ function CreateTeamForm(props) {
         }
         await addTeamMembershipHandler(team_membership);        
       }
-
-      const addleadermember = (await addTeamLeaderAsMemberHandler(Auth.getUserid())).valueOf();
-      if (addleadermember.status === 201) {
-        team_membership = {
-          team_id: team_id,
-          team_member_id: addleadermember.data.team_member_id
-        }
-      }
-      else {
-        const leadermember_id = (await getMemberIdByUserIdHandler(Auth.getUserid())).valueOf().data.data.team.team_member_id;
-        team_membership = {
-          team_id: team_id,
-          team_member_id: leadermember_id
-        }
-      }
-      await addTeamMembershipHandler(team_membership);
     }
+    const addleadermember = (await addTeamLeaderAsMemberHandler(Auth.getUserid())).valueOf();
+    if (addleadermember.status === 201) {
+      team_membership = {
+        team_id: team_id,
+        team_member_id: addleadermember.data.team_member_id
+      }
+    }
+    else {
+      const leadermember_id = (await getMemberIdByUserIdHandler(Auth.getUserid())).valueOf().data.data.team.team_member_id;
+      team_membership = {
+        team_id: team_id,
+        team_member_id: leadermember_id
+      }
+    }
+    await addTeamMembershipHandler(team_membership);
+    
     props.onHide();
     // props.history.push("/");
     window.location.reload();
