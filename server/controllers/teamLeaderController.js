@@ -58,7 +58,7 @@ const getAllTeamLeaders =  async (req,res) =>{
 const getTeamLeaderByUserId =  async (req,res) =>{
     try{
         // const { user_id } =  req.body;
-        const teamLeader = await db.query("SELECT * FROM team_leader WHERE user_id = $1",[req.params.tlid]);
+        const teamLeader = await db.query("SELECT * FROM team_leader WHERE user_id = $1 ORDER BY team_leader_id DESC",[req.params.tlid]);
         res.status(200).json({
             status: "success",
             data: {
