@@ -52,6 +52,10 @@ const login = async (req, res) => {
     );
     const user_exists = queryreturn.rows[0];
     const user = (user_e) => {
+      if(!user_exists){
+        return res.status(403).json("user does not exist");
+      }
+
       return (
         (user_e["username"] === username || user_e["email"] === username) &&
         user_e["account_validation"] === true &&

@@ -35,7 +35,7 @@ app.use("/api", teamMemberRoutes);
 app.use("/api", teamLeaderRoutes);
 app.use("/api", meetingOptionRoutes);
 
-//IDK what is this btw
+//For non static routes
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "team-tbd-project/build/"));
 });

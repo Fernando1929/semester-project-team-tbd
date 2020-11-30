@@ -36,7 +36,7 @@ function LogInForm(props) {
           Auth.setUserid(res.data.user_id);
           Auth.setUsername(res.data.username);
           props.history.push("/");
-          window.location.reload();
+          window.location.reload(false);
           console.log("User logged in", res.data);
         } else {
           errors.push(res.data);

@@ -70,7 +70,6 @@ function VoteForm(props) {
                     console.log("getFinalMeetingHandler");
                     //add the meeting to all the team members
                     const appointment = res.data.data.meeting[0];
-
                     console.log("meeting",res.data,appointment);
                     addMeetingToTeamScheduleHandler(appointment).then((res) => {
                       console.log("casi");
@@ -85,13 +84,10 @@ function VoteForm(props) {
                                   deleteOptionsByTeamHandler(params.teamid).then((res) => {
                                     if (res.status === 204) {
                                       console.log("Meeting options deleted")
-                                      //window.location.reload(false);
                                     }
                                   });
                                 }
                               });
-                              // props.history.push(`/TeamProfile/${params.teamid}`);
-                              //window.location.reload(false);
                             }  
                           });
                         }
@@ -100,18 +96,6 @@ function VoteForm(props) {
                   }
                 }
               });
-            // update something somewhere in the db to indicate that the team member has voted
-            // votes table for each team ?? and Once the voting has been completed is marked as done cuz data cannot be deleted idk
-            
-            // verify if all team members have voted
-            // why not verify it everytime a team member votes then you remove the problem of constant checking 
-
-            // if all members have voted, insert into team_schedule and every user_schedule
-            // I think this is completely backend cuz is using user info 
-            // Route that is called when everyone has completely voted
-            // Backend method to add a meeting to all the members schedules including the team schedules
-            //props.history.push(`/TeamProfile/${params.teamid}`); //Change to 
-            
             }
           });
         });
@@ -123,12 +107,6 @@ function VoteForm(props) {
 
   const fixx = (r) => {
       setMeetingOptions(r);
-      // meeting_options.map((date) => {
-      //   var date = new Date(date.start_date_time);
-      //   date = date.toLocaleString();
-  
-      //   Dates.push(date);
-      // });
   };
 
   return (
