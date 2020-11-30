@@ -52,9 +52,6 @@ const login = async (req, res) => {
     );
     const user_exists = queryreturn.rows[0];
     const user = (user_e) => {
-      if(!user_exists){
-        return res.status(403).json("user does not exist");
-      }
 
       return (
         (user_e["username"] === username || user_e["email"] === username) &&
@@ -63,7 +60,7 @@ const login = async (req, res) => {
       );
     };
 
-    if (user(user_exists)) {
+    if (user_exists && user(user_exists)) {
       var authToken = generateAuthToken();
       // Store authentication token
       authTokens[authToken] = user;
