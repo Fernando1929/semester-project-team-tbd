@@ -2,10 +2,10 @@ import React from "react";
 import "../../App/App.css";
 import UserScheduler from "../../Components/UserScheduler";
 
-function UserSchedule() {
+function UserSchedule(props) {
   return (
     <div className="UserSchedule">
-      <UserScheduler />
+      <UserScheduler {...props}/>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 const SMTPTransport = require("nodemailer/lib/smtp-transport");
-const db = require("../db/index");
+const db = require("../../db");
 
 const emailVerification = async(req) =>{//needs tweaks
     try {
@@ -29,7 +29,7 @@ const emailVerification = async(req) =>{//needs tweaks
                 ------------------------
                 Username:${username}.
                 ------------------------
-                Please click this link to activate your account:${process.env.SERVER_URL+account_id}`
+                Please click this link to activate your account:${process.env.SERVER_URL+"/api/confirmation/"+account_id}`
                 //html: ``, // Make pretty email here**
               };
     

@@ -1,6 +1,7 @@
-const db = require("../db/index");
+const db = require("../../db");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+require("dotenv").config();
 const authTokens = {};
 
 const signup = async (req, res) => {
@@ -51,6 +52,7 @@ const login = async (req, res) => {
     );
     const user_exists = queryreturn.rows[0];
     const user = (user_e) => {
+
       return (
         (user_e["username"] === username || user_e["email"] === username) &&
         user_e["account_validation"] === true &&
@@ -58,7 +60,7 @@ const login = async (req, res) => {
       );
     };
 
-    if (user(user_exists)) {
+    if (user_exists && user(user_exists)) {
       var authToken = generateAuthToken();
       // Store authentication token
       authTokens[authToken] = user;
@@ -110,7 +112,8 @@ const validateAccount = async (req, res) => {
       [1, req]
     );
 
-    res.status(200).json({ status: "success" });
+    res.status(200);
+    res.redirect(process.env.SERVER_URL+"/LogIn");
   } catch (err) {
     console.log(err);
   }

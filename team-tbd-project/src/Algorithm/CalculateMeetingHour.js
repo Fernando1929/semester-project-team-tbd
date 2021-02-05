@@ -1,5 +1,7 @@
-import alasql from "alasql";
-import rrule from "rrule";
+// import alasql from "alasql";
+// import rrule from "rrule";
+const alasql = require("alasql");
+const rrule = require("rrule");
 
 // Created by Yaritza M. García Chaparro for INSO4101 class project
 
@@ -31,6 +33,7 @@ class BinarySearchTree {
   constructor() {
     // root of a binary search tree
     this.root = null;
+    this.length = 0;
   }
 
   // Counts all nodes that are on the left side of the given node.
@@ -55,7 +58,11 @@ class BinarySearchTree {
 
     // root is null then node will
     // be added to the tree and made root.
-    if (this.root === null) this.root = newNode;
+    if (this.root === null) {
+      this.root = newNode;
+      this.length++;
+    }
+
     // find the correct position in the
     // tree and add the node
     else this.insertNode(this.root, newNode);
@@ -68,7 +75,10 @@ class BinarySearchTree {
     // data move left of the tree
     if (newNode.data.start_date_time < node.data.start_date_time) {
       // if left is null insert node here
-      if (node.left === null || node.left === undefined) node.left = newNode;
+      if (node.left === null || node.left === undefined) {
+        node.left = newNode;
+        this.length++;
+      }
       // if left is not null recur until
       // null is found
       else this.insertNode(node.left, newNode);
@@ -78,7 +88,10 @@ class BinarySearchTree {
     // data move right of the tree
     else {
       // if right is null insert node here
-      if (node.right === null || node.right === undefined) node.right = newNode;
+      if (node.right === null || node.right === undefined) {
+        node.right = newNode;
+        this.length++;
+      }
       // if right is not null recur until
       // null is found
       else this.insertNode(node.right, newNode);
@@ -124,9 +137,11 @@ class BinarySearchTree {
       // deleting node with one children
       if (node.left === null || node.left === undefined) {
         node = node.right;
+        this.length--;
         return node;
       } else if (node.right === null || node.right === undefined) {
         node = node.left;
+        this.length--;
         return node;
       }
 
@@ -137,6 +152,7 @@ class BinarySearchTree {
       node.data = aux.data;
 
       node.right = this.removeNode(node.right, aux.data);
+      this.length--;
       return node;
     }
   }
@@ -162,6 +178,11 @@ class BinarySearchTree {
   // returns root node of the tree
   getRootNode() {
     return this.root;
+  }
+
+  // returns the total number of nodes in the tree
+  getLength() {
+    return this.length;
   }
 
   // Performs inorder traversal of a tree
@@ -242,7 +263,7 @@ class BinarySearchTree {
 
 // Main function
 /**
- * This function receives the information (id and schedule) of all the team members/users that request a new meeting.
+ * This function receives the information (id, schedule, preferredStartHours and preferredEndHours) of all the team members/users that request a new meeting.
  * It also receives a range of dates in which the meeting must be and the minimum period of time that the meeting has to have.
  * Then it returns an array with all the appointments objects where the team can have the meeting.
  * @param {Array} teamMembers An array of objects with the information (id and schedule) of all team members. The format of the object need to be: {id: #, schedule:[{...},{...}]}
@@ -255,7 +276,7 @@ class BinarySearchTree {
  * @param {Integer} userId Identification number of the user or team to which the hours will be added.
  * @return {Array} An array of appointment objects with all the possible hours for the meeting.
  */
-function getMeetingHours(
+export function getMeetingHours(
   teamMembers,
   teamLeader,
   startingDay,
@@ -274,6 +295,8 @@ function getMeetingHours(
   var tempLeader = {
     id: teamLeader.id,
     schedule: leaderSc,
+    preferredStartHours: teamLeader.preferredStartHours,
+    preferredEndHours: teamLeader.preferredEndHours,
   };
 
   var teamLeaderPro = getUserFreeHoursTree(
@@ -297,6 +320,8 @@ function getMeetingHours(
     var tempMember = {
       id: member.id,
       schedule: memberSc,
+      preferredStartHours: member.preferredStartHours,
+      preferredEndHours: member.preferredEndHours,
     };
 
     var memberFreeSc = getUserFreeHoursTree(
@@ -518,7 +543,7 @@ function calculateTimeSlot(
 
 /**
  * This function takes the user's information and based on their schedule it calculates all the free hours that the user has.
- * @param user User object with the id and schedule. It must have those two properties. The schedule has to be an array/JSON.
+ * @param user User object with the id, schedule, preferredStartHours and preferredEndHours. It must have those two properties. The schedule has to be an array/JSON.
  * @param {JSONDate} startingDay First possible date for the meeting.
  * @param {JSONDate} finishDay Last possible date for the meeting.
  * @param {Integer} amountHours The minimum number of hours for the meeting.
@@ -539,38 +564,100 @@ function getUserFreeHoursTree(
   var freeHoursTree = new BinarySearchTree();
   var data = null;
 
+  var tempStartDay = new Date(startingDay);
+  var tempEndDay = new Date(finishDay);
+  var userPreferredStartArr = user.preferredStartHours.split(":");
+  var userPreferredStart =
+    parseInt(userPreferredStartArr[0]) +
+    parseInt(userPreferredStartArr[1]) / 60;
+  var userPreferredEndArr = user.preferredEndHours.split(":");
+  var userPreferredEnd =
+    parseInt(userPreferredEndArr[0]) + parseInt(userPreferredEndArr[1]) / 60;
+
+  tempStartDay.setHours(
+    parseInt(userPreferredStartArr[0]),
+    parseInt(userPreferredStartArr[1]),
+    0,
+    0
+  );
+  startingDay = tempStartDay.toISOString();
+
+  tempEndDay.setHours(
+    parseInt(userPreferredEndArr[0]),
+    parseInt(userPreferredEndArr[1]),
+    0,
+    0
+  );
+  finishDay = tempEndDay.toISOString();
+
   if (user.schedule.length == 0) {
-    freeHoursTree.insert({
-      user_schedule_id: 1,
-      event_title: "Free",
-      start_date_time: startingDay,
-      end_date_time: finishDay,
-      r_rule: null,
-      ex_dates: null,
-      user_id: user.id,
-    });
+    // If there are multiple days in the event, they are divided into multiple events.
+    if (tempEndDay.getDate() != tempStartDay.getDate()) {
+      convertToOneDayEvents(
+        tempStartDay,
+        tempEndDay,
+        amountHours,
+        amountMinutes,
+        user.preferredStartHours,
+        user.preferredEndHours,
+        1,
+        user.id,
+        freeHoursTree
+      );
+    } else {
+      freeHoursTree.insert({
+        user_schedule_id: 1,
+        event_title: "Free",
+        start_date_time: startingDay,
+        end_date_time: finishDay,
+        r_rule: null,
+        ex_dates: null,
+        user_id: user.id,
+      });
+    }
   } else {
-    var countId = 1;
+    var countId = freeHoursTree.getLength();
     var hours = diffHoursAndMinutes(
       startingDay,
       user.schedule[0].start_date_time
     );
 
     if (hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60) {
-      data = {
-        user_schedule_id: countId,
-        event_title: "Free",
-        start_date_time: startingDay,
-        end_date_time: user.schedule[0].start_date_time,
-        r_rule: null,
-        ex_dates: null,
-        user_id: user.id,
-      };
-      countId++;
-      freeHoursTree.insert(data);
+      var temp = new Date(user.schedule[0].start_date_time);
+      if (
+        temp.getHours() + temp.getMinutes() / 60 >= userPreferredStart &&
+        temp.getHours() + temp.getMinutes() / 60 <= userPreferredEnd
+      ) {
+        if (temp.getDate() != tempStartDay.getDate()) {
+          convertToOneDayEvents(
+            tempStartDay,
+            temp,
+            amountHours,
+            amountMinutes,
+            user.preferredStartHours,
+            user.preferredEndHours,
+            countId,
+            user.id,
+            freeHoursTree
+          );
+        } else {
+          data = {
+            user_schedule_id: countId,
+            event_title: "Free",
+            start_date_time: startingDay,
+            end_date_time: user.schedule[0].start_date_time,
+            r_rule: null,
+            ex_dates: null,
+            user_id: user.id,
+          };
+          countId++;
+          freeHoursTree.insert(data);
+        }
+      }
     }
     data = null;
 
+    var countId = freeHoursTree.getLength();
     for (let i = 0; i < user.schedule.length - 1; i++) {
       hours = diffHoursAndMinutes(
         user.schedule[i].end_date_time,
@@ -578,36 +665,88 @@ function getUserFreeHoursTree(
       );
 
       if (hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60) {
-        data = {
-          user_schedule_id: countId,
-          event_title: "Free",
-          start_date_time: user.schedule[i].end_date_time,
-          end_date_time: user.schedule[i + 1].start_date_time,
-          r_rule: null,
-          ex_dates: null,
-          user_id: user.id,
-        };
-        countId++;
-        freeHoursTree.insert(data);
+        var tempStart = new Date(user.schedule[i].end_date_time);
+        var tempEnd = new Date(user.schedule[i + 1].start_date_time);
+        if (
+          tempStart.getHours() + tempStart.getMinutes() / 60 >=
+            userPreferredStart &&
+          tempStart.getHours() + tempStart.getMinutes() / 60 <=
+            userPreferredEnd &&
+          tempEnd.getHours() + tempEnd.getMinutes() / 60 >=
+            userPreferredStart &&
+          tempEnd.getHours() + tempEnd.getMinutes() / 60 <= userPreferredEnd
+        ) {
+          // If there are multiple days in the event, they are divided into multiple events.
+          if (tempEnd.getDate() != tempStart.getDate()) {
+            convertToOneDayEvents(
+              tempStart,
+              tempEnd,
+              amountHours,
+              amountMinutes,
+              user.preferredStartHours,
+              user.preferredEndHours,
+              countId,
+              user.id,
+              freeHoursTree
+            );
+          } else {
+            data = {
+              user_schedule_id: countId,
+              event_title: "Free",
+              start_date_time: user.schedule[i].end_date_time,
+              end_date_time: user.schedule[i + 1].start_date_time,
+              r_rule: null,
+              ex_dates: null,
+              user_id: user.id,
+            };
+            freeHoursTree.insert(data);
+          }
+          countId++;
+        }
       }
     }
 
+    var countId = freeHoursTree.getLength();
     hours = diffHoursAndMinutes(
       user.schedule[user.schedule.length - 1].end_date_time,
       finishDay
     );
 
     if (hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60) {
-      data = {
-        user_schedule_id: countId,
-        event_title: "Free",
-        start_date_time: user.schedule[user.schedule.length - 1].end_date_time,
-        end_date_time: finishDay,
-        r_rule: null,
-        ex_dates: null,
-        user_id: user.id,
-      };
-      freeHoursTree.insert(data);
+      var temp = new Date(
+        user.schedule[user.schedule.length - 1].end_date_time
+      );
+
+      if (
+        temp.getHours() + temp.getMinutes() / 60 >= userPreferredStart &&
+        temp.getHours() + temp.getMinutes() / 60 <= userPreferredEnd
+      ) {
+        if (temp.getDate() != tempEndDay.getDate()) {
+          convertToOneDayEvents(
+            temp,
+            tempEndDay,
+            amountHours,
+            amountMinutes,
+            user.preferredStartHours,
+            user.preferredEndHours,
+            countId,
+            user.id,
+            freeHoursTree
+          );
+        } else {
+          data = {
+            user_schedule_id: countId,
+            event_title: "Free",
+            start_date_time:
+              user.schedule[user.schedule.length - 1].end_date_time,
+            end_date_time: finishDay,
+            r_rule: null,
+            ex_dates: null,
+            user_id: user.id,
+          };
+          freeHoursTree.insert(data);
+        }
+      }
     }
   }
 
@@ -842,8 +981,123 @@ function diffHoursAndMinutes(dt2, dt1) {
   return [Math.abs(parseInt(diffHours)), Math.abs(Math.round(diffMinutes))];
 }
 
+/**
+ * Converts a multi-day event into multiple daily events that meet the user's available range of hours. These events are added to the BST that the function receives.
+ * @param {Date} dt1 Start date of the multi-day event to be processed.
+ * @param {Date} dt2 End date of the multi-day event to be processed.
+ * @param {Integer} amountHours The minimum number of hours for the meeting.
+ * @param {Integer} amountMinutes The minimum number of minutes for the meeting.
+ * @param {String} startWork Start time when the user is available or working.
+ * @param {String} endWork End time when the user is available or working.
+ * @param {Integer} scheduleId Identification number of the event to be processed.
+ * @param {Integer} userId Identification number of the user or team.
+ * @param {BinarySearchTree} treeToAdd BST where the new events will be added.
+ *
+ */
+function convertToOneDayEvents(
+  dt1,
+  dt2,
+  amountHours,
+  amountMinutes,
+  startWork,
+  endWork,
+  scheduleId,
+  userId,
+  treeToAdd
+) {
+  // Time difference between two dates
+  var differenceTime = dt2.getTime() - dt1.getTime();
+  // Number of days between two dates
+  var differenceDays = differenceTime / (1000 * 3600 * 24);
+  differenceDays = Math.round(differenceDays);
+
+  var sumDay = 1;
+  var tempEndDt = new Date();
+  tempEndDt.setDate(dt1.getDate());
+  tempEndDt.setHours(
+    parseInt(endWork.split(":")[0]),
+    parseInt(endWork.split(":")[1]),
+    0,
+    0
+  );
+  var hours = diffHoursAndMinutes(dt1.toISOString(), tempEndDt.toISOString());
+
+  if (hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60) {
+    treeToAdd.insert({
+      user_schedule_id: scheduleId,
+      event_title: "Free",
+      start_date_time: dt1.toISOString(),
+      end_date_time: tempEndDt.toISOString(),
+      r_rule: null,
+      ex_dates: null,
+      user_id: userId,
+    });
+    scheduleId++;
+  }
+
+  if (differenceDays > 1) {
+    for (sumDay = 2; sumDay < differenceDays - 1; sumDay++) {
+      var tempStartDt = new Date();
+      tempStartDt.setDate(dt1.getDate() + sumDay);
+      tempStartDt.setHours(
+        parseInt(startWork.split(":")[0]),
+        parseInt(startWork.split(":")[1]),
+        0,
+        0
+      );
+      tempEndDt = tempStartDt;
+      tempEndDt.setHours(
+        parseInt(endWork.split(":")[0]),
+        parseInt(endWork.split(":")[1]),
+        0,
+        0
+      );
+      hours = diffHoursAndMinutes(
+        tempStartDt.toISOString(),
+        tempEndDt.toISOString()
+      );
+
+      if (hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60) {
+        treeToAdd.insert({
+          user_schedule_id: scheduleId,
+          event_title: "Free",
+          start_date_time: tempStartDt.toISOString(),
+          end_date_time: tempEndDt.toISOString(),
+          r_rule: null,
+          ex_dates: null,
+          user_id: userId,
+        });
+        scheduleId++;
+      }
+    }
+  }
+
+  tempStartDt = new Date();
+  tempStartDt.setDate(dt1.getDate() + sumDay);
+  tempStartDt.setHours(
+    parseInt(startWork.split(":")[0]),
+    parseInt(startWork.split(":")[1]),
+    0,
+    0
+  );
+  hours = diffHoursAndMinutes(tempStartDt.toISOString(), dt2.toISOString());
+
+  if (hours[0] + hours[1] / 60 >= amountHours + amountMinutes / 60) {
+    treeToAdd.insert({
+      user_schedule_id: scheduleId,
+      event_title: "Free",
+      start_date_time: tempStartDt.toISOString(),
+      end_date_time: dt2.toISOString(),
+      r_rule: null,
+      ex_dates: null,
+      user_id: userId,
+    });
+    scheduleId++;
+  }
+}
+
 //Testing purposes
-// To run this code use the following command: node Algorithm.js
+// To run this code use the following command: node CalculateMeetingHour.js
 
 var MariaSchedule = [
   {
@@ -1234,21 +1488,107 @@ var OrlandoSchedule = [
   },
 ];
 
+// Test main algorithm
 var team = getMeetingHours(
   [
-    { id: 2, schedule: OrlandoSchedule },
-    { id: 3, schedule: FernandoSchedule },
-    { id: 4, schedule: LuisSchedule },
-    { id: 5, schedule: YeranSchedule },
-    { id: 6, schedule: YaritzaSchedule },
+    {
+      id: 2,
+      schedule: OrlandoSchedule,
+      preferredStartHours: "7:30",
+      preferredEndHours: "22:00",
+    },
+    {
+      id: 3,
+      schedule: FernandoSchedule,
+      preferredStartHours: "7:30",
+      preferredEndHours: "22:00",
+    },
+    {
+      id: 4,
+      schedule: LuisSchedule,
+      preferredStartHours: "7:30",
+      preferredEndHours: "22:00",
+    },
+    {
+      id: 5,
+      schedule: YeranSchedule,
+      preferredStartHours: "7:30",
+      preferredEndHours: "22:00",
+    },
+    {
+      id: 6,
+      schedule: YaritzaSchedule,
+      preferredStartHours: "7:30",
+      preferredEndHours: "22:00",
+    },
   ],
-  { id: 1, schedule: MariaSchedule },
-  "2020-11-16T10:30:00.000Z",
-  "2020-11-20T19:30:00.000Z",
+  {
+    id: 1,
+    schedule: MariaSchedule,
+    preferredStartHours: "7:30",
+    preferredEndHours: "20:00",
+  },
+  "2020-11-16T00:00:00.000Z",
+  "2020-11-20T00:00:00.000Z",
   1,
   0,
   "Finally Done",
   "TeamID"
 );
 
-console.log(team);
+// console.log(team);
+// team.forEach((element) => {
+//   console.log("-------------");
+//   console.log(new Date(element.start_date_time).toLocaleString());
+//   console.log(new Date(element.end_date_time).toLocaleString());
+//   console.log("-------------");
+// });
+
+// Test getUserFreeHoursTree
+
+// var leaderSc = convertToOneTimeAppointments(
+//   MariaSchedule,
+//   "2020-11-16T00:00:00.000Z",
+//   "2020-11-20T00:00:00.000Z"
+// );
+
+// var tempLeader = {
+//   id: 1,
+//   schedule: leaderSc,
+//   preferredStartHours: "7:30",
+//   preferredEndHours: "22:00",
+// };
+
+// var teamLeaderPro = getUserFreeHoursTree(
+//   tempLeader,
+//   "2020-11-16T00:00:00.000Z",
+//   "2020-11-20T00:00:00.000Z",
+//   4,
+//   0
+// );
+
+// teamLeaderPro.inorderArray(teamLeaderPro.root, []).forEach((element) => {
+//   console.log("-------------");
+//   console.log(new Date(element.start_date_time).toLocaleString());
+//   console.log(new Date(element.end_date_time).toLocaleString());
+//   console.log("-------------");
+// });
+// console.log(teamLeaderPro.inorderArray(teamLeaderPro.root, []));
+
+// Test convertToOneDayEvents
+
+// var tempStart = new Date("2020-11-17T19:15:00.000Z");
+// var tempEnd = new Date("2020-11-18T15:00:00.000Z");
+
+// var resultTree = new BinarySearchTree();
+// convertToOneDayEvents(
+//   tempStart,
+//   tempEnd,
+//   "8:00",
+//   "22:00",
+//   1,
+//   1,
+//   resultTree
+// );
+
+// console.log(resultTree.inorderArray(resultTree.root, []));

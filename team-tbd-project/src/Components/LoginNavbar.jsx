@@ -1,13 +1,51 @@
 import React from "react";
 import { Navbar, Nav, Button, Image, Dropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import mainLogo from "../Images/synLogoNM.png";
 import profilePic from "../Images/HomeBackground.jpg";
+import placeholder from "../Images/placeholder.png";
 import "../App/App.css";
 import CreateTeamForm from "../Components/CreateTeamForm";
 import Auth from "../utils/Auth";
-function LoginNavbar() {
+import { profileGetHandler } from "../Apis/UserProfile";
+import { getUserTeamsHandler } from "../Apis/Teams"
+
+function LoginNavbar(props) {
   const [modalShow, setModalShow] = React.useState(false);
+  const [profile_picture, setProfilePicture] = React.useState("");
+  const [userTeams, setUserTeams] = React.useState([]);
+
+  var today = new Date().toDateString().split(" ");
+  today = today[2] + "-" + today[1] + "-" + today[3];
+
+  React.useEffect(() =>{//Requested before the page is loaded
+    getUserTeamsHandler().then(res =>{//handler get the teams
+      if (res.status === 200){
+        setUserTeams(res.data.data.teams);
+      }else{//prints errors
+        console.log(res.msg);
+      }
+    }
+    )
+  },[]);
+
+  React.useEffect(() => {
+    profileGetHandler().then(res => {
+      const user = res.data.user;
+      if(user !== undefined) {
+        if (user.profile_picture) {
+          setProfilePicture("http://localhost:3001/" + user.profile_picture);
+        }
+        else {
+          setProfilePicture(placeholder);
+        }
+      }
+      else {
+        setProfilePicture(placeholder);
+      }
+
+    })
+  }, []);
 
   const navStyle = {
     textDecoration: "none",
@@ -24,7 +62,7 @@ function LoginNavbar() {
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
-      <Navbar.Brand href="/">
+      <Navbar.Brand onClick={() => {props.history.push("/")}}>
         <h2
           className="phoneDisplayNoText"
           style={{
@@ -70,10 +108,10 @@ function LoginNavbar() {
       >
         <Nav className="mr-auto"></Nav>
         <Nav>
-          <Nav.Link href="/" style={navStyle}>
+          <Nav.Link style={navStyle}onClick={() => {props.history.push("/")}}>
             HOME
           </Nav.Link>
-          <Nav.Link href="/UserSchedule" style={navStyle}>
+          <Nav.Link style={navStyle} onClick={() => {props.history.push(`/UserSchedule/${today}`)}}>
             MY SCHEDULE
           </Nav.Link>
           <Dropdown style={navStyle}>
@@ -86,10 +124,10 @@ function LoginNavbar() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu style={{ backgroundColor: "#36d1dc" }}>
-              {mostRecent.map((team) => {
+              {userTeams.map((team) => {
                 return (
-                  <Dropdown.Item key={team.name} href={team.link}>
-                    {team.name}
+                  <Dropdown.Item key={team.team_id} to={`/TeamProfile/${team.team_id}`}>
+                    {team.team_name}
                   </Dropdown.Item>
                 );
               })}
@@ -111,14 +149,27 @@ function LoginNavbar() {
             CREATE NEW TEAM
           </Button>
           <CreateTeamForm show={modalShow} onHide={() => setModalShow(false)} />
-          <Link to="/" style={{ textDecoration: "none", color: "white",alignItems: "center", }} onClick={() => window.location.assign("/")}>
-            <Button className="btn--primary" variant="primary" style={{
-              marginRight: "0.5rem",
+          <Link
+            to="/"
+            style={{
+              textDecoration: "none",
               color: "white",
-              textAlign: "center",
-              marginTop: "10px",
-              marginBottom: "15px",
-            }}onClick={() => Auth.deauthenticateUser()}>
+              alignItems: "center",
+            }}
+            onClick={() => window.location.assign("/")}
+          >
+            <Button
+              className="btn--primary"
+              variant="primary"
+              style={{
+                marginRight: "0.5rem",
+                color: "white",
+                textAlign: "center",
+                marginTop: "10px",
+                marginBottom: "15px",
+              }}
+              onClick={() => Auth.deauthenticateUser()}
+            >
               LOG OUT
             </Button>
           </Link>
@@ -132,7 +183,7 @@ function LoginNavbar() {
           >
             <Image
               className="d-inline-block"
-              src={profilePic}
+              src={profile_picture}
               width="60"
               height="60"
               roundedCircle
@@ -144,4 +195,4 @@ function LoginNavbar() {
   );
 }
 
-export default LoginNavbar;
+export default withRouter(LoginNavbar);

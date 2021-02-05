@@ -34,13 +34,14 @@ export const profileEmailUpdateHandler = (account) => {
     });
 };
 
-// export const profileAccountUpdateHander = (account) => {
-//     return axios
-//         .put(`/api/account/${account.account_id}`, {account})
-//         .then( response => {
-//             return response
-//         })
-//         .catch(err => {
-//             return err.response
-//         })
-// }
+export const profilePictureUpdateHandler = (formData, config) => {
+    return axios
+        .put(`/api/users/${Auth.getUserid()}/picture`, formData, config)
+        .then( response => {
+            return response
+        })
+        .catch(err => {
+            return err.response
+        })
+}
+

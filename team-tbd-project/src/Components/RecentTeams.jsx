@@ -1,20 +1,35 @@
 import React from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import CreateTeamForm from "../Components/CreateTeamForm";
-
+import { getRecentUserTeamsHandler } from "../Apis/Teams"
+import { propTypes } from "react-bootstrap/esm/Image";
+import {withRouter} from "react-router-dom";
 // TODO
 // 1. modificar texto para que cuando se achique la pantaya llege un punt que salgan 3... y tabien que suceda cuadno el nombre sea largo
 // 2. hacer los bordes mas redondos de los teams buttons
 // 10/18/2020 BY YERAN: ADDED THE MODAL(POP-UP) FOR THE TEAM CREATION.
 
-function RecentTeams() {
+function RecentTeams(props) {
   const [modalShow, setModalShow] = React.useState(false);
-  //Poner los tres teams más recientes del usuario.
-  var mostRecent = [
-    { name: "Team1", link: "/Team1" },
-    { name: "Team2", link: "/Team2" },
-    { name: "Team3", link: "/Team3" },
-  ];
+  const [userTeams, setUserTeams] = React.useState([]);
+
+  React.useEffect(() =>{//Requested before the page is loaded
+    getRecentUserTeamsHandler().then(res =>{//handler get the teams
+      if (res.status === 200){
+        // console.log(res.data.data.teams);
+        setUserTeams(res.data.data.teams);
+      }else{//prints errors
+        console.log(res.msg);
+      }
+    }
+    )
+  },[]);
+
+  // var mostRecent = [
+  //   { name: "Team1", link: "/TeamProfile" },
+  //   { name: "Team2", link: "/TeamProfile" },
+  //   { name: "Team3", link: "/TeamProfile" },
+  // ];
 
   var counterColors = 0;
   var mostRecentColors = ["#66D6F5", "#00BBF0", "#4993FA", "#005792"];
@@ -23,7 +38,7 @@ function RecentTeams() {
   var createTeamStyle = {
     marginTop: "1rem",
     marginBottom: "3rem",
-    backgroundColor: mostRecentColors[mostRecent.length],
+    backgroundColor: mostRecentColors[userTeams.length],
   };
 
   return (
@@ -31,7 +46,7 @@ function RecentTeams() {
       <Container>
         <h2 style={{ paddingTop: "2rem" }}>LATEST TEAMS</h2>
         <Row>
-          {mostRecent.map((team) => {
+          {userTeams.map((team) => {
             teamStyle = {
               marginTop: "1rem",
               marginBottom: "3rem",
@@ -39,7 +54,7 @@ function RecentTeams() {
             };
             counterColors++;
             return (
-              <Col key={team.name}>
+              <Col key={team.team_id}>
                 <center>
                   <Container>
                     <Card style={teamStyle}>
@@ -49,9 +64,9 @@ function RecentTeams() {
                       ></i>
                       <Card.Body>
                         <Card.Title style={{ color: "white" }}>
-                          {team.name}
+                          {team.team_name}
                         </Card.Title>
-                        <Button variant="light" href={team.link}>
+                        <Button variant="light" onClick={(e) => {props.history.push(`/TeamProfile/${team.team_id}`)}}>
                           ACCESS
                         </Button>
                       </Card.Body>
@@ -96,4 +111,4 @@ function RecentTeams() {
     </div>
   );
 }
-export default RecentTeams;
+export default withRouter(RecentTeams);

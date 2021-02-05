@@ -1,14 +1,16 @@
 import React from "react";
-import "../../App/App.css"
+import "../../App/App.css";
 import backgroundH from "../../Images/SyncLinkLogged.gif";
 import RecentTeams from "../RecentTeams";
 import { Button, Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 /* TO DO CHANGE THE LINK PATH WHEN THE PROFILE SECTION IS COMPLETED LINE 90*/
 /* ADD THE CORRECT LINK PATH WHEN CREATED AT MY SCHEDULE BUTTON LINE 147*/
 /* MODIFY THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS LINE 212*/
 
-function HomeLogged() {
+function HomeLogged(props) {
+  var today = new Date().toDateString().split(" ");
+  today = today[2] + "-" + today[1] + "-" + today[3];
   return (
     <div>
       <div className="SyncLinkWelcome">
@@ -27,7 +29,7 @@ function HomeLogged() {
               style={{
                 textAlign: "center",
                 marginTop: "50%",
-                marginBottom: "45%",
+                marginBottom: "50%",
                 marginLeft: "18%",
               }}
               sm
@@ -81,10 +83,10 @@ function HomeLogged() {
                   Take the first step towards organizing your team
                 </div>
                 <div style={{ marginTop: "0.5rem", fontSize: "2vw" }}>
+                  <Link  to="/Profile">
                   <Button
                     className="btn--secondary"
                     variant="primary"
-                    href="/Profile"
                     style={{
                       margin: "0.5rem",
                       fontSize: "2vw",
@@ -92,6 +94,7 @@ function HomeLogged() {
                   >
                     MY PROFILE
                   </Button>
+                  </Link>
                 </div>
               </div>
             </Col>
@@ -134,7 +137,10 @@ function HomeLogged() {
               <div>
                 <div>
                   {/* ADD THE CORECT LINK PATH WHEN CREATED AT  MY SCHEDULE BUTTON */}
-                  <Link to="/UserSchedule" style={{textDecoration: "none",color: "white",}}>
+                  <Link
+                    onClick={(e) => {props.history.push(`/UserSchedule/${today}`)}}
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
                     <Button
                       className="btn--primary"
                       variant="primary"
@@ -195,10 +201,11 @@ function HomeLogged() {
                 Create or edit a team and share it with your group or join a
                 team that was shared to you
                 <div>
+                  <Link to="/Teams">
                   <Button
                     className="btn--secondary"
                     variant="primary"
-                    href="/Teams"
+                    
                     style={{
                       margin: "0.5rem",
                       fontSize: "2vw",
@@ -206,6 +213,7 @@ function HomeLogged() {
                   >
                     MY TEAMS
                   </Button>
+                  </Link>
                 </div>
               </div>
             </Col>
@@ -276,4 +284,4 @@ function HomeLogged() {
   );
 }
 
-export default HomeLogged;
+export default withRouter(HomeLogged);
