@@ -161,11 +161,9 @@ function HomeLogged(props) {
               xs={4}
             >
               {" "}
-              <img
-                className="d-block w-100"
-                src={require("../../Images/LaptopSyncLink.gif")}
-                alt="Laptop"
-              />
+              <video width="100%" height="100%" autoPlay="true" loop="true" muted="true">
+              <source  src={require("../../Images/LaptopSyncLink.mp4")} type="video/mp4"/>
+              </video>
             </Col>
           </Row>
           <Row className="ManageTeams d-flex justify-content-center align-items-center">
