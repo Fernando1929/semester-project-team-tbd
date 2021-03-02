@@ -2,7 +2,6 @@ import React from "react";
 import { Navbar, Nav, Button, Image, Dropdown } from "react-bootstrap";
 import { Link, withRouter } from "react-router-dom";
 import mainLogo from "../Images/synLogoNM.png";
-import profilePic from "../Images/HomeBackground.jpg";
 import placeholder from "../Images/placeholder.png";
 import "../App/App.css";
 import CreateTeamForm from "../Components/CreateTeamForm";

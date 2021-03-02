@@ -1,6 +1,6 @@
 import React from "react";
 import "../../App/App.css";
-import backgroundH from "../../Images/newHomeBk.gif";
+import backgroundH from "../../Images/newHomeBk.mp4";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import tablet from "../../Images/TabletSyncLink.mp4";
@@ -10,13 +10,17 @@ function HomeUnLogged() {
   return (
     <div>
       <div className="SyncLinkWelcome">
+      <video width="100%" height="100%" autoPlay loop muted style={{}}>
+      <source  src={backgroundH} type="video/mp4"/>
+      </video>
         <Container
           fluid
           className="d-flex align-items-start"
           style={{
-            backgroundImage: "url(" + backgroundH + ")",
-            backgroundSize: "100% auto",
-            backgroundRepeat: "no-repeat",
+            position:"absolute",
+            paddingTop: "5.5rem",
+            top: "0",
+            right: "0",
             height: "100%",
           }}
         >
@@ -171,7 +175,7 @@ function HomeUnLogged() {
               xs={4}
             >
               {" "}
-              <video width="100%" height="100%" autoPlay="true" loop="true" muted="true">
+              <video width="100%" height="100%" autoPlay loop muted>
               <source  src={monitor} type="video/mp4"/>
               </video>
             </Col>
@@ -230,7 +234,7 @@ function HomeUnLogged() {
               xs={4}
             >
               {" "}
-              <video width="100%" height="100%" autoPlay="true" loop="true" muted="true">
+              <video width="100%" height="100%" autoPlay loop muted>
               <source  src={tablet} type="video/mp4"/>
               </video>
             </Col>
