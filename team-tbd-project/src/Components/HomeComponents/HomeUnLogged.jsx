@@ -3,6 +3,8 @@ import "../../App/App.css";
 import backgroundH from "../../Images/newHomeBk.gif";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import tablet from "../../Images/TabletSyncLink.mp4";
+import monitor from "../../Images/MonitorSyncLink.mp4";
 
 function HomeUnLogged() {
   return (
@@ -170,7 +172,7 @@ function HomeUnLogged() {
             >
               {" "}
               <video width="100%" height="100%" autoPlay="true" loop="true" muted="true">
-              <source  src={require("../../Images/LaptopSyncLink.mp4")} type="video/mp4"/>
+              <source  src={monitor} type="video/mp4"/>
               </video>
             </Col>
           </Row>
@@ -228,11 +230,9 @@ function HomeUnLogged() {
               xs={4}
             >
               {" "}
-              <img
-                className="d-block w-100"
-                src={require("../../Images/TabletSyncLink.gif")}
-                alt="Tablet"
-              />
+              <video width="100%" height="100%" autoPlay="true" loop="true" muted="true">
+              <source  src={tablet} type="video/mp4"/>
+              </video>
             </Col>
             <Col style={{ marginTop: "2rem", marginBottom: "2rem" }} xs={4}>
               <div style={{ textAlign: "left" }}>

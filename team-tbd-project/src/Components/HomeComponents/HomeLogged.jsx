@@ -4,6 +4,8 @@ import backgroundH from "../../Images/SyncLinkLogged.gif";
 import RecentTeams from "../RecentTeams";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { Link, withRouter } from "react-router-dom";
+import tablet from "../../Images/TabletSyncLink.mp4";
+import monitor from "../../Images/MonitorSyncLink.mp4";
 /* TO DO CHANGE THE LINK PATH WHEN THE PROFILE SECTION IS COMPLETED LINE 90*/
 /* ADD THE CORRECT LINK PATH WHEN CREATED AT MY SCHEDULE BUTTON LINE 147*/
 /* MODIFY THE LINK TO GO TO THE PROPER PAGE TO SHOW THE TEAMS LINE 212*/
@@ -162,7 +164,7 @@ function HomeLogged(props) {
             >
               {" "}
               <video width="100%" height="100%" autoPlay="true" loop="true" muted="true">
-              <source  src={require("../../Images/LaptopSyncLink.mp4")} type="video/mp4"/>
+              <source  src={monitor} type="video/mp4"/>
               </video>
             </Col>
           </Row>
@@ -236,11 +238,9 @@ function HomeLogged(props) {
               xs={4}
             >
               {" "}
-              <img
-                className="d-block w-100"
-                src={require("../../Images/TabletSyncLink.gif")}
-                alt="Tablet"
-              />
+              <video width="100%" height="100%" autoPlay="true" loop="true" muted="true">
+              <source  src={tablet} type="video/mp4"/>
+              </video>
             </Col>
             <Col
               style={{
